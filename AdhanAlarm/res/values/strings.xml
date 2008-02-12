@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Adh&#257;n Alarm</string>
+    <string name="welcome">Welcome to Adh&#257;n Alarm</string>
+    <string name="calculation_methods">Calculation Methods</string>
 </resources>
