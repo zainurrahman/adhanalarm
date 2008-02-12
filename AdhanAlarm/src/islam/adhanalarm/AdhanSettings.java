@@ -1,4 +1,4 @@
-package adhanalarm.settings;
+package islam.adhanalarm;
 
 import android.app.Activity;
 import android.os.Bundle;
