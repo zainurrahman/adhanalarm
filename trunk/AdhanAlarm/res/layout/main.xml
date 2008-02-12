@@ -15,7 +15,7 @@
     android:text="@string/calculation_methods"
 />
 <Spinner
-    id="@+id/method"
+    id="@+id/calculation_methods"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:drawSelectorOnTop="true"
