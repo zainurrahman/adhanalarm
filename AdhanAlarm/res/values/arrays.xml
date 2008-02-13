@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="calculation_methods">
-        <item>None</item>
+        <item>Normal</item>
         <item>Egyptian General Authority of Survey</item>
-        <item>University of Islamic Sciences, Karachi\n(Shaf'i)</item>
+        <item>University of Islamic Sciences, Karachi (Shaf'i)</item>
         <item>University of Islamic Sciences, Karachi (Hanafi)</item>
         <item>Islamic Society of North America</item>
-        <item>Muslim World League (MWL)</item>
+        <item>Muslim World League</item>
         <item>Umm Al-Qurra, Saudi Arabia</item>
         <item>Fixed Ishaa Interval (always 90)</item>
+    </array>
+    <array name="notification_methods">
+        <item>Beep</item>
+        <item>Vibrate</item>
+        <item>Beep and Vibrate</item>
+        <item>Recite Adh&#257;n</item>
+        <item>Display Only</item>
+        <item>None</item>
     </array>
 </resources>
