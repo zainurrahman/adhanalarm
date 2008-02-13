@@ -2,5 +2,8 @@
 <resources>
     <string name="app_name">Adh&#257;n Alarm</string>
     <string name="welcome">Welcome to Adh&#257;n Alarm</string>
-    <string name="calculation_methods">Calculation Methods</string>
+    <string name="notification">Notification</string>
+    <string name="calculation">Calculation</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
 </resources>
