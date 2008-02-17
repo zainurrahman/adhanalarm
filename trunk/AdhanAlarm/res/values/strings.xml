@@ -21,6 +21,9 @@
     <string name="save_and_apply_location">Save And Apply Location</string>
     <string name="advanced">Advanced</string>
     <string name="calculation">Calculation</string>
+    <string name="sea_level">Sea Level</string>
+    <string name="pressure">Pressure</string>
+    <string name="temperature">Temperature</string>
     <string name="reset_advanced">Reset Advanced</string>
     <string name="save_and_apply_advanced">Save and Apply Advanced</string>
 </resources>
