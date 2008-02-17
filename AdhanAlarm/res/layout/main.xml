@@ -137,22 +137,22 @@
 							android:layout_height="wrap_content"
 							android:layout_width="fill_parent">
 							<TextView android:text="@string/latitude"
-								android:layout_width="80px"
+								android:layout_width="65px"
 								android:layout_height="wrap_content" />
 							<EditText android:id="@+id/latitude"
 								android:text="47.682" android:layout_width="fill_parent"
-								android:layout_height="wrap_content" android:numeric="true"
+								android:layout_height="wrap_content" android:numeric="false"
 								android:phoneNumber="false" android:autoText="false" />
 						</LinearLayout>
 						<LinearLayout android:orientation="horizontal"
 							android:layout_height="wrap_content"
 							android:layout_width="fill_parent">
 							<TextView android:text="@string/longitude"
-								android:layout_width="80px"
+								android:layout_width="65px"
 								android:layout_height="wrap_content" />
 							<EditText android:id="@+id/longitude"
 								android:text="-122.132" android:layout_width="fill_parent"
-								android:layout_height="wrap_content" android:numeric="true"
+								android:layout_height="wrap_content" android:numeric="false"
 								android:phoneNumber="false" android:autoText="false" />
 						</LinearLayout>
 					</LinearLayout>
@@ -176,13 +176,43 @@
 				<LinearLayout android:orientation="horizontal"
 					android:layout_height="wrap_content"
 					android:layout_width="fill_parent">
-					<TextView android:layout_width="80px"
+					<TextView android:layout_width="85px"
 						android:layout_height="wrap_content"
 						android:text="@string/calculation" />
 					<Spinner android:id="@+id/calculation_methods"
 						android:layout_width="fill_parent"
 						android:layout_height="wrap_content"
 						android:drawSelectorOnTop="true" android:singleLine="false" />
+				</LinearLayout>
+				<LinearLayout android:orientation="horizontal"
+					android:layout_height="wrap_content"
+					android:layout_width="fill_parent">
+					<TextView android:text="@string/sea_level"
+						android:layout_width="85px"
+						android:layout_height="wrap_content" />
+					<EditText android:id="@+id/sea_level"
+						android:text="0" android:layout_width="fill_parent"
+						android:layout_height="wrap_content" android:numeric="false" />
+				</LinearLayout>
+				<LinearLayout android:orientation="horizontal"
+					android:layout_height="wrap_content"
+					android:layout_width="fill_parent">
+					<TextView android:text="@string/pressure"
+						android:layout_width="85px"
+						android:layout_height="wrap_content" />
+					<EditText android:id="@+id/pressure"
+						android:text="1010" android:layout_width="fill_parent"
+						android:layout_height="wrap_content" android:numeric="false" />
+				</LinearLayout>
+				<LinearLayout android:orientation="horizontal"
+					android:layout_height="wrap_content"
+					android:layout_width="fill_parent">
+					<TextView android:text="@string/temperature"
+						android:layout_width="85px"
+						android:layout_height="wrap_content" />
+					<EditText android:id="@+id/temperature"
+						android:text="10" android:layout_width="fill_parent"
+						android:layout_height="wrap_content" android:numeric="false" />
 				</LinearLayout>
 				<LinearLayout android:orientation="horizontal"
 					android:layout_height="wrap_content"

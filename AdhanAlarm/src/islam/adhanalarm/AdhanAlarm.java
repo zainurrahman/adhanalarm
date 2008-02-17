@@ -102,6 +102,9 @@ public class AdhanAlarm extends Activity {
         Button resetAdvanced = (Button)findViewById(R.id.reset_advanced);
         resetAdvanced.setOnClickListener(new Button.OnClickListener() {  
         	public void onClick(View v) {
+        		((EditText)findViewById(R.id.sea_level)).setText("0");
+        		((EditText)findViewById(R.id.pressure)).setText("1010");
+        		((EditText)findViewById(R.id.temperature)).setText("10");
         	}
         });
 
