@@ -8,12 +8,13 @@
 	<FrameLayout android:id="@android:id/tabcontent"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:paddingTop="65px">
-		<LinearLayout android:orientation="vertical"
+		<LinearLayout android:orientation="horizontal"
 			android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:padding="2px"
+			android:layout_height="wrap_content"
 			android:id="@+id/content1">
-			<TextView android:layout_width="fill_parent"
-				android:layout_height="wrap_content" android:text="@string/welcome" />
+		<LinearLayout android:orientation="vertical"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
 			<LinearLayout android:orientation="horizontal"
 				android:layout_height="wrap_content"
 				android:layout_width="wrap_content" android:background="#FFFF00">
@@ -21,7 +22,7 @@
 					android:textColor="#000000" android:layout_height="wrap_content"
 					android:text="@string/fajr" />
 				<TextView android:id="@+id/fajr"
-					android:textColor="#000000" android:layout_width="80px"
+					android:textColor="#000000" android:layout_width="50px"
 					android:layout_height="wrap_content" android:text="~" />
 			</LinearLayout>
 			<LinearLayout android:orientation="horizontal"
@@ -30,7 +31,7 @@
 				<TextView android:layout_width="80px"
 					android:layout_height="wrap_content" android:text="@string/dhuhr" />
 				<TextView android:id="@+id/dhuhr"
-					android:layout_width="80px" android:layout_height="wrap_content"
+					android:layout_width="50px" android:layout_height="wrap_content"
 					android:text="~" />
 			</LinearLayout>
 			<LinearLayout android:orientation="horizontal"
@@ -40,7 +41,7 @@
 					android:textColor="#000000" android:layout_height="wrap_content"
 					android:text="@string/asr" />
 				<TextView android:id="@+id/asr"
-					android:textColor="#000000" android:layout_width="80px"
+					android:textColor="#000000" android:layout_width="50px"
 					android:layout_height="wrap_content" android:text="~" />
 			</LinearLayout>
 			<LinearLayout android:orientation="horizontal"
@@ -50,7 +51,7 @@
 					android:layout_height="wrap_content"
 					android:text="@string/maghrib" />
 				<TextView android:id="@+id/maghrib"
-					android:layout_width="80px" android:layout_height="wrap_content"
+					android:layout_width="50px" android:layout_height="wrap_content"
 					android:text="~" />
 			</LinearLayout>
 			<LinearLayout android:orientation="horizontal"
@@ -60,7 +61,7 @@
 					android:textColor="#000000" android:layout_height="wrap_content"
 					android:text="@string/ishaa" />
 				<TextView android:id="@+id/ishaa"
-					android:textColor="#000000" android:layout_width="80px"
+					android:textColor="#000000" android:layout_width="50px"
 					android:layout_height="wrap_content" android:text="~" />
 			</LinearLayout>
 			<LinearLayout android:orientation="horizontal"
@@ -69,7 +70,7 @@
 				<TextView android:layout_width="80px"
 					android:layout_height="wrap_content" android:text="@string/dawn" />
 				<TextView android:id="@+id/dawn"
-					android:layout_width="80px" android:layout_height="wrap_content"
+					android:layout_width="50px" android:layout_height="wrap_content"
 					android:text="~" />
 			</LinearLayout>
 			<LinearLayout android:orientation="horizontal"
@@ -79,15 +80,18 @@
 					android:layout_height="wrap_content" android:textColor="#000000"
 					android:text="@string/next_fajr" />
 				<TextView android:id="@+id/next_fajr"
-					android:textColor="#000000" android:layout_width="80px"
+					android:textColor="#000000" android:layout_width="50px"
 					android:layout_height="wrap_content" android:text="~" />
 			</LinearLayout>
+			</LinearLayout>
+			<TextView android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:text="@string/welcome" android:paddingLeft="5px" />
 		</LinearLayout>
 		<ScrollView android:layout_width="fill_parent"
 			android:layout_height="wrap_content">
 			<LinearLayout android:orientation="vertical"
 				android:layout_width="fill_parent"
-				android:layout_height="wrap_content" android:padding="2px"
+				android:layout_height="wrap_content"
 				android:id="@+id/content2">
 				<LinearLayout android:orientation="horizontal"
 					android:layout_height="wrap_content"
@@ -111,17 +115,18 @@
 						android:layout_height="wrap_content"
 						android:drawSelectorOnTop="true" android:singleLine="false" />
 				</LinearLayout>
-				<LinearLayout android:orientation="horizontal"
-					android:layout_height="wrap_content"
-					android:layout_width="fill_parent">
-					<TextView android:layout_width="80px"
-						android:layout_height="wrap_content"
-						android:text="@string/calculation" />
-					<Spinner android:id="@+id/calculation_methods"
-						android:layout_width="fill_parent"
-						android:layout_height="wrap_content"
-						android:drawSelectorOnTop="true" android:singleLine="false" />
-				</LinearLayout>
+				<Button android:id="@+id/save_and_apply_alert"
+					android:text="@string/save_and_apply_alert"
+					android:layout_width="fill_parent"
+					android:layout_height="fill_parent" />
+			</LinearLayout>
+		</ScrollView>
+		<ScrollView android:layout_width="fill_parent"
+			android:layout_height="wrap_content">
+			<LinearLayout android:orientation="vertical"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/content3">
 				<LinearLayout android:orientation="horizontal"
 					android:layout_height="wrap_content"
 					android:layout_width="fill_parent">
@@ -136,7 +141,7 @@
 								android:layout_height="wrap_content" />
 							<EditText android:id="@+id/latitude"
 								android:text="47.682" android:layout_width="fill_parent"
-								android:layout_height="wrap_content" android:numeric="false"
+								android:layout_height="wrap_content" android:numeric="true"
 								android:phoneNumber="false" android:autoText="false" />
 						</LinearLayout>
 						<LinearLayout android:orientation="horizontal"
@@ -147,7 +152,7 @@
 								android:layout_height="wrap_content" />
 							<EditText android:id="@+id/longitude"
 								android:text="-122.132" android:layout_width="fill_parent"
-								android:layout_height="wrap_content" android:numeric="false"
+								android:layout_height="wrap_content" android:numeric="true"
 								android:phoneNumber="false" android:autoText="false" />
 						</LinearLayout>
 					</LinearLayout>
@@ -156,10 +161,41 @@
 						android:layout_width="wrap_content"
 						android:layout_height="fill_parent" />
 				</LinearLayout>
-				<Button android:id="@+id/save_and_apply_settings"
-					android:text="@string/save_and_apply_settings"
+				<Button android:id="@+id/save_and_apply_location"
+					android:text="@string/save_and_apply_location"
 					android:layout_width="fill_parent"
 					android:layout_height="fill_parent" />
+			</LinearLayout>
+		</ScrollView>
+		<ScrollView android:layout_width="fill_parent"
+			android:layout_height="wrap_content">
+			<LinearLayout android:orientation="vertical"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:id="@+id/content4">
+				<LinearLayout android:orientation="horizontal"
+					android:layout_height="wrap_content"
+					android:layout_width="fill_parent">
+					<TextView android:layout_width="80px"
+						android:layout_height="wrap_content"
+						android:text="@string/calculation" />
+					<Spinner android:id="@+id/calculation_methods"
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:drawSelectorOnTop="true" android:singleLine="false" />
+				</LinearLayout>
+				<LinearLayout android:orientation="horizontal"
+					android:layout_height="wrap_content"
+					android:layout_width="fill_parent">
+				<Button android:id="@+id/reset_advanced"
+					android:text="@string/reset_advanced"
+					android:layout_width="wrap_content"
+					android:layout_height="fill_parent" />
+				<Button android:id="@+id/save_and_apply_advanced"
+					android:text="@string/save_and_apply_advanced"
+					android:layout_width="fill_parent"
+					android:layout_height="fill_parent" />
+				</LinearLayout>
 			</LinearLayout>
 		</ScrollView>
 	</FrameLayout>
