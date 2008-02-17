@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Adh&#257;n Alarm</string>
     <string name="welcome">Welcome to Adh&#257;n Alarm</string>
-    <string name="prayer_times">Prayer Times</string>
+    <string name="schedule">Schedule</string>
     <string name="fajr">Fajr</string>
     <string name="dhuhr">Dhuhr</string>
     <string name="asr">`Asr</string>
@@ -10,12 +10,17 @@
     <string name="ishaa">`Ishaa\'</string>
     <string name="dawn">Dawn</string>
     <string name="next_fajr">Next Fajr</string>
-    <string name="settings">Settings</string>
+    <string name="alert">Alert</string>
     <string name="notification">Notification</string>
     <string name="offset">Offset</string>
-    <string name="calculation">Calculation</string>
+    <string name="save_and_apply_alert">Save And Apply Alert</string>
+    <string name="location">Location</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
     <string name="lookup_gps">Lookup\nGPS</string>
-    <string name="save_and_apply_settings">Save and Apply Settings</string>
+    <string name="save_and_apply_location">Save And Apply Location</string>
+    <string name="advanced">Advanced</string>
+    <string name="calculation">Calculation</string>
+    <string name="reset_advanced">Reset Advanced</string>
+    <string name="save_and_apply_advanced">Save and Apply Advanced</string>
 </resources>
