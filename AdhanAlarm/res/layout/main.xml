@@ -17,8 +17,17 @@
 			android:layout_height="wrap_content">
 			<LinearLayout android:orientation="horizontal"
 				android:layout_height="wrap_content"
+				android:layout_width="wrap_content">
+				<TextView android:layout_width="65px"
+					android:layout_height="wrap_content" android:text="@string/dawn" />
+				<TextView android:id="@+id/dawn"
+					android:layout_width="50px" android:layout_height="wrap_content"
+					android:text="~" />
+			</LinearLayout>
+			<LinearLayout android:orientation="horizontal"
+				android:layout_height="wrap_content"
 				android:layout_width="wrap_content" android:background="#FFFF00">
-				<TextView android:layout_width="80px"
+				<TextView android:layout_width="65px"
 					android:textColor="#000000" android:layout_height="wrap_content"
 					android:text="@string/fajr" />
 				<TextView android:id="@+id/fajr"
@@ -28,7 +37,16 @@
 			<LinearLayout android:orientation="horizontal"
 				android:layout_height="wrap_content"
 				android:layout_width="wrap_content">
-				<TextView android:layout_width="80px"
+				<TextView android:layout_width="65px"
+					android:layout_height="wrap_content" android:text="@string/sunrise" />
+				<TextView android:id="@+id/sunrise"
+					android:layout_width="50px" android:layout_height="wrap_content"
+					android:text="~" />
+			</LinearLayout>
+			<LinearLayout android:orientation="horizontal"
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content">
+				<TextView android:layout_width="65px"
 					android:layout_height="wrap_content" android:text="@string/dhuhr" />
 				<TextView android:id="@+id/dhuhr"
 					android:layout_width="50px" android:layout_height="wrap_content"
@@ -37,7 +55,7 @@
 			<LinearLayout android:orientation="horizontal"
 				android:layout_height="wrap_content"
 				android:layout_width="wrap_content" android:background="#FFFF00">
-				<TextView android:layout_width="80px"
+				<TextView android:layout_width="65px"
 					android:textColor="#000000" android:layout_height="wrap_content"
 					android:text="@string/asr" />
 				<TextView android:id="@+id/asr"
@@ -47,7 +65,7 @@
 			<LinearLayout android:orientation="horizontal"
 				android:layout_height="wrap_content"
 				android:layout_width="wrap_content">
-				<TextView android:layout_width="80px"
+				<TextView android:layout_width="65px"
 					android:layout_height="wrap_content"
 					android:text="@string/maghrib" />
 				<TextView android:id="@+id/maghrib"
@@ -57,7 +75,7 @@
 			<LinearLayout android:orientation="horizontal"
 				android:layout_height="wrap_content"
 				android:layout_width="wrap_content" android:background="#FFFF00">
-				<TextView android:layout_width="80px"
+				<TextView android:layout_width="65px"
 					android:textColor="#000000" android:layout_height="wrap_content"
 					android:text="@string/ishaa" />
 				<TextView android:id="@+id/ishaa"
@@ -67,16 +85,16 @@
 			<LinearLayout android:orientation="horizontal"
 				android:layout_height="wrap_content"
 				android:layout_width="wrap_content">
-				<TextView android:layout_width="80px"
-					android:layout_height="wrap_content" android:text="@string/dawn" />
-				<TextView android:id="@+id/dawn"
+				<TextView android:layout_width="65px"
+					android:layout_height="wrap_content" android:text="@string/next_dawn" />
+				<TextView android:id="@+id/next_dawn"
 					android:layout_width="50px" android:layout_height="wrap_content"
 					android:text="~" />
 			</LinearLayout>
 			<LinearLayout android:orientation="horizontal"
 				android:layout_height="wrap_content"
 				android:layout_width="wrap_content" android:background="#FFFF00">
-				<TextView android:layout_width="80px"
+				<TextView android:layout_width="65px"
 					android:layout_height="wrap_content" android:textColor="#000000"
 					android:text="@string/next_fajr" />
 				<TextView android:id="@+id/next_fajr"

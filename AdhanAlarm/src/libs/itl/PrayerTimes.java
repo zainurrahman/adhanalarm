@@ -29,318 +29,319 @@ package libs.itl;
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-/* This holds the current date info. structure Date */
-class PrayerDate {
-    private int day;
-    private int month;
-    private int year;
-    PrayerDate(){day=0;month=0;year=0;}
-    int getDay(){return day; }
-    int getMonth(){return month;}
-    int getYear(){return year;}
-    void setDay(int aDay){day = aDay;}
-    void setMonth(int aMonth){month = aMonth;}
-    void setYear(int aYear){year = aYear;}
-    PrayerDate getPrayerDate(){
-    	PrayerDate tPrayerDate = new PrayerDate();
-    	tPrayerDate.day=day;
-    	tPrayerDate.month=month;
-    	tPrayerDate.year=year;
-    	return tPrayerDate;
-    }
-}
-
-
-/* This holds the location info. */
-class Location {
-    private double degreeLong;  /* Longitude in decimal degree. */
-    private double degreeLat;   /* Latitude in decimal degree. */
-    private double gmtDiff;     /* GMT difference. */
-    private int dst;            /*
-								 * Daylight savings time switch (0 if not used).
-								 * Setting this to 1 should add 1 hour to all
-								 * the calculated prayer times
-								 */
-    private double seaLevel;    /* Height above Sea level in meters */
-    private double pressure;    /*
-								 * Atmospheric pressure in millibars (the
-								 * astronomical standard value is 1010)
-								 */
-    private double temperature; /*
-								 * Temperature in Celsius degree (the
-								 * astronomical standard value is 10)
-								 */
-    Location(){degreeLong=0;degreeLat=0;gmtDiff=0;dst=0;seaLevel=0;pressure=0;temperature=0;}
-    double getDegreeLong(){return degreeLong;}
-    double getDegreeLat(){return degreeLat;}
-    double getGmtDiff(){return gmtDiff;}
-    int getDst(){return dst;}
-    double getSeaLevel(){return seaLevel;}
-    double getPressure(){return pressure;}
-    double getTemperature(){return temperature;}
-
-    void setDegreeLong(double aDegreeLong){degreeLong=aDegreeLong;}
-    void setDegreeLat(double aDegreeLat){degreeLat=aDegreeLat;}
-    void setGmtDiff(double aGmtDiff){gmtDiff=aGmtDiff;}
-    void setDst(int aDst){dst=aDst;}
-    void setSeaLevel(double aSeaLevel){seaLevel=aSeaLevel;}
-    void setPressure(double aPressure){pressure=aPressure;}
-    void setTemperature(double aTemperature){temperature=aTemperature;}
-    Location getLocation() {	//clone the class
-    	Location tLocation=new Location();
-    	tLocation.degreeLat=degreeLat;
-    	tLocation.gmtDiff=gmtDiff;
-    	tLocation.dst=dst;
-    	tLocation.seaLevel=seaLevel;
-    	tLocation.pressure=pressure;
-    	tLocation.temperature=temperature;
-    	return tLocation;
-    }
-}
-
-
-/*
- * This class holds the calculation method used. NOTE: Before explicitly setting
- * any of these values, it is more safe to default initialize them by calling
- * 'getMethod(0, &method)'
- */
-class Method
-{
-    private double fajrAng;     /* Fajr angle */
-    private double ishaaAng;    /* Ishaa angle */
-    private double imsaakAng;   /* Imsaak angle and Fajr difference is 1.5 */
-    private int fajrInv;        /*
-								 * Fajr Interval is the amount of minutes
-								 * between Fajr and Shurooq (0 if not used)
-								 */
-    private int ishaaInv;       /*
-								 * Ishaa Interval is the amount if minutes
-								 * between Ishaa and Maghrib (0 if not used)
-								 */
-    private int imsaakInv;      /*
-								 * Imsaak Interval is the amount of minutes
-								 * between Imsaak and Fajr. The default is 10
-								 * minutes before Fajr if Fajr Interval is set
-								 */
-    private int round;          /*
-								 * Method used for rounding seconds: 0: No
-								 * Rounding. "Prayer.seconds" is set to the
-								 * amount of computed seconds. 1: Normal
-								 * Rounding. If seconds are equal to 30 or
-								 * above, add 1 minute. Sets "Prayer.seconds" to
-								 * zero. 2: Special Rounding. Similar to normal
-								 * rounding but we always round down for Shurooq
-								 * and Imsaak times. (default) 3: Aggressive
-								 * Rounding. Similar to Special Rounding but we
-								 * add 1 minute if the seconds value are equal
-								 * to 1 second or more.
-								 */
-    private int mathhab;        /*
-								 * Assr prayer shadow ratio: 1: Shaf'i (default)
-								 * 2: Hanafi
-								 */
-    private double nearestLat;  /*
-								 * Latitude Used for the 'Nearest Latitude'
-								 * extreme methods. The default is 48.5
-								 */
-    private int extreme;        /*
-								 * Extreme latitude calculation method (see
-								 * below)
-								 */
-    private int offset;         /*
-								 * Enable Offsets switch (set this to 1 to
-								 * activate). This option allows you to add or
-								 * subtract any amount of minutes to the daily
-								 * computed prayer times based on values (in
-								 * minutes) for each prayer in the offList array
-								 */
-    private double offList[];  /*
-							    * For Example: If you want to add 30 seconds to
-							    * Maghrib and subtract 2 minutes from Ishaa:
-							    * offset = 1 offList[4] = 0.5 offList[5] = -2
-							    * ..and then call getPrayerTimes as usual.
-							    */
-    Method(){
-    	offList = new double[6];
-    	offset=0; extreme=0;nearestLat=0;mathhab=1;round=0;
-    	fajrAng=0;ishaaAng=0;imsaakAng=0;fajrInv=0;ishaaInv=0;imsaakInv=0;
-    }
-    int getOffset(){return offset;}
-    int getExtreme(){return extreme;}
-    double getNearestLat(){return nearestLat;}
-    int getMathhab(){return mathhab;}
-    int getRound(){return round;}
-    double getFajrAng(){return fajrAng;}
-    double getIshaaAng(){return ishaaAng;}
-    double getImsaakAng(){return imsaakAng;}
-    int getFajrInv(){return fajrInv;}
-    int getIshaaInv(){return ishaaInv;}
-    int getImsaakInv(){return imsaakInv;}
-    double getOffList(int i){return offList[i];}
-
-    void setOffset(int aOffset){offset=aOffset;}
-    void setExtreme(int aExtreme){extreme=aExtreme;}
-    void setNearestLat(double aNearestLat){nearestLat=aNearestLat;}
-    void setMathhab(int aMathhab){mathhab=aMathhab;}
-    void setRound(int aRound){round=aRound;}
-    void setFajrAng(double aFajrAng){fajrAng=aFajrAng;}
-    void setIshaaAng(double aIshaaAng){ishaaAng=aIshaaAng;}
-    void setImsaakAng(double aImsaakAng){imsaakAng=aImsaakAng;}
-    void setFajrInv(int aFajrInv){fajrInv=aFajrInv;}
-    void setIshaaInv(int aIshaaInv){ishaaInv=aIshaaInv;}
-    void setImsaakInv(int aImsaakInv){imsaakInv=aImsaakInv;}
-    void setOffList(int i, double aOffList){offList[i]=aOffList;}
-    public static final int NONE = 0;
-	public static final int EGYPT_SURVEY = 1;
-	public static final int KARACHI_SHAF = 2;
-	public static final int KARACHI_HANAF = 3;
-	public static final int NORTH_AMERICA = 4;
-	public static final int MUSLIM_LEAGUE = 5;
-	public static final int UMM_ALQURRA = 6;
-	public static final int FIXED_ISHAA = 7;
-
-    Method getMethod(){
-    	Method tMethod = new Method();
-    	tMethod.extreme=extreme;
-    	tMethod.fajrAng = fajrAng;
-    	tMethod.fajrInv = fajrInv;
-    	tMethod.imsaakAng = imsaakAng;
-    	tMethod.imsaakInv = imsaakInv;
-    	tMethod.ishaaAng = ishaaAng;
-    	tMethod.ishaaInv=ishaaInv;
-    	tMethod.mathhab = mathhab;
-    	tMethod.nearestLat = nearestLat;
-    	tMethod.offset = offset;
-    	tMethod.round = round;
-    	for (int i=0;i<offList.length;i++){
-    		tMethod.offList[i]=offList[i];
-    	}
-    	return tMethod;
-    }
-
-    void autoFillPrayerMethod(int n){
-	    int i;
-
-	    setFajrInv(0);
-	    setIshaaInv(0);
-	    setImsaakInv(0);
-	    setMathhab(1);
-	    setRound(2);
-	    setNearestLat(PrayerTimes.DEF_NEAREST_LATITUDE);
-	    setImsaakAng(PrayerTimes.DEF_IMSAAK_ANGLE);
-	    setExtreme(5);
-	    setOffset(0);
-	    for (int j = 0; j < 6; j++) {
-	        setOffList(j,0);
-	    }
-
-	    switch(n)
-	    {
-	    case NONE:
-	        setFajrAng(0.0);
-	        setIshaaAng(0.0);
-	        break;
-
-	    case EGYPT_SURVEY:
-	        setFajrAng(20);
-	        setIshaaAng(18);
-	        break;
-
-	    case KARACHI_SHAF:
-	        setFajrAng(18);
-	        setIshaaAng(18);
-	        break;
-
-	    case KARACHI_HANAF:
-	        setFajrAng(18);
-	        setIshaaAng(18);
-	        setMathhab(2);
-	        break;
-
-	    case NORTH_AMERICA:
-	        setFajrAng(15);
-	        setIshaaAng(15);
-	        break;
-
-	    case MUSLIM_LEAGUE:
-	        setFajrAng(18);
-	        setIshaaAng(17);
-	        break;
-
-	    case UMM_ALQURRA:
-	        setFajrAng(19);
-	        setIshaaAng(0.0);
-	        setIshaaInv(90);
-	        break;
-
-	    case FIXED_ISHAA:
-	        setFajrAng(19.5);
-	        setIshaaAng(0.0);
-	        setIshaaInv(90);
-	        break;
-	    }
-   	}
-
-}
-
-/*
- * Supported methods for Extreme Latitude calculations (Method.extreme):
- *
- * 0: none. if unable to calculate, leave as 99:99 1: Nearest Latitude: All
- * prayers Always 2: Nearest Latitude: Fajr Ishaa Always 3: Nearest Latitude:
- * Fajr Ishaa if invalid 4: Nearest Good Day: All prayers Always 5: Nearest Good
- * Day: Fajr Ishaa if invalid (default) 6: 1/7th of Night: Fajr Ishaa Always 7:
- * 1/7th of Night: Fajr Ishaa if invalid 8: 1/7th of Day: Fajr Ishaa Always 9:
- * 1/7th of Day: Fajr Ishaa if invalid 10: Half of the Night: Fajr Ishaa Always
- * 11: Half of the Night: Fajr Ishaa if invalid 12: Minutes from
- * Shorooq/Maghrib: Fajr Ishaa Always (e.g. Maghrib=Ishaa) 13: Minutes from
- * Shorooq/Maghrib: Fajr Ishaa If invalid
- *
- */
-
-class Prayer {
-    private int hour;       /* prayer time hour */
-    private int minute;     /* prayer time minute */
-    private int second;     /* prayer time second */
-    private int isExtreme;  /*
-							 * Extreme calculation switch. The 'getPrayerTimes'
-							 * function sets this switch to 1 to indicate that
-							 * this particular prayer time has been calculated
-							 * through extreme latitude methods and NOT by
-							 * conventional means of calculation.
-							 */
-    Prayer(){hour=0;minute=0;second=0;isExtreme=0;}
-    int getHour(){return hour;}
-    int getMinute(){return minute;}
-    int getSecond(){return second;}
-    int getIsExtreme(){return isExtreme;}
-
-    void setHour(int aHour){hour = aHour;}
-	void setMinute(int aMinute){minute = aMinute;}
-	void setSecond(int aSecond){second = aSecond;}
-	void setIsExtreme(int aIsExtreme){isExtreme = aIsExtreme;}
-	Prayer getPrayer(){
-		Prayer tPrayer = new Prayer();
-		tPrayer.hour=hour;
-		tPrayer.minute=minute;
-		tPrayer.second=second;
-		tPrayer.isExtreme=isExtreme;
-		return tPrayer;
-	}
-}
-
-class DayInfo {
-	private int lastDay;
-	private double julianDay;
-	DayInfo(){lastDay=0; julianDay=0;}
-	DayInfo(int aLastDay, double aJulianDay){lastDay=aLastDay; julianDay=aJulianDay;}
-	int getLastDay(){return lastDay;}
-	double getJulianDay(){return julianDay;}
-	void setLastDay(int aLastDay){lastDay=aLastDay;}
-	void setJulianDay(double aJulianDay){julianDay=aJulianDay;}
-}
 
 public class PrayerTimes {
+	/*
+	 * Supported methods for Extreme Latitude calculations (Method.extreme):
+	 *
+	 * 0: none. if unable to calculate, leave as 99:99 1: Nearest Latitude: All
+	 * prayers Always 2: Nearest Latitude: Fajr Ishaa Always 3: Nearest Latitude:
+	 * Fajr Ishaa if invalid 4: Nearest Good Day: All prayers Always 5: Nearest Good
+	 * Day: Fajr Ishaa if invalid (default) 6: 1/7th of Night: Fajr Ishaa Always 7:
+	 * 1/7th of Night: Fajr Ishaa if invalid 8: 1/7th of Day: Fajr Ishaa Always 9:
+	 * 1/7th of Day: Fajr Ishaa if invalid 10: Half of the Night: Fajr Ishaa Always
+	 * 11: Half of the Night: Fajr Ishaa if invalid 12: Minutes from
+	 * Shorooq/Maghrib: Fajr Ishaa Always (e.g. Maghrib=Ishaa) 13: Minutes from
+	 * Shorooq/Maghrib: Fajr Ishaa If invalid
+	 *
+	 */
+
+	public class Prayer {
+	    private int hour;       /* prayer time hour */
+	    private int minute;     /* prayer time minute */
+	    private int second;     /* prayer time second */
+	    private int isExtreme;  /*
+								 * Extreme calculation switch. The 'getPrayerTimes'
+								 * function sets this switch to 1 to indicate that
+								 * this particular prayer time has been calculated
+								 * through extreme latitude methods and NOT by
+								 * conventional means of calculation.
+								 */
+	    public Prayer(){hour=0;minute=0;second=0;isExtreme=0;}
+	    public int getHour(){return hour;}
+	    public int getMinute(){return minute;}
+	    int getSecond(){return second;}
+	    int getIsExtreme(){return isExtreme;}
+
+	    void setHour(int aHour){hour = aHour;}
+		void setMinute(int aMinute){minute = aMinute;}
+		void setSecond(int aSecond){second = aSecond;}
+		void setIsExtreme(int aIsExtreme){isExtreme = aIsExtreme;}
+		Prayer getPrayer(){
+			Prayer tPrayer = new Prayer();
+			tPrayer.hour=hour;
+			tPrayer.minute=minute;
+			tPrayer.second=second;
+			tPrayer.isExtreme=isExtreme;
+			return tPrayer;
+		}
+	}
+
+	public class DayInfo {
+		private int lastDay;
+		private double julianDay;
+		public DayInfo(){lastDay=0; julianDay=0;}
+		public DayInfo(int aLastDay, double aJulianDay){lastDay=aLastDay; julianDay=aJulianDay;}
+		int getLastDay(){return lastDay;}
+		double getJulianDay(){return julianDay;}
+		void setLastDay(int aLastDay){lastDay=aLastDay;}
+		void setJulianDay(double aJulianDay){julianDay=aJulianDay;}
+	}
+
+	/*
+	 * This class holds the calculation method used. NOTE: Before explicitly setting
+	 * any of these values, it is more safe to default initialize them by calling
+	 * 'getMethod(0, &method)'
+	 */
+	public class Method
+	{
+	    private double fajrAng;     /* Fajr angle */
+	    private double ishaaAng;    /* Ishaa angle */
+	    private double imsaakAng;   /* Imsaak angle and Fajr difference is 1.5 */
+	    private int fajrInv;        /*
+									 * Fajr Interval is the amount of minutes
+									 * between Fajr and Shurooq (0 if not used)
+									 */
+	    private int ishaaInv;       /*
+									 * Ishaa Interval is the amount if minutes
+									 * between Ishaa and Maghrib (0 if not used)
+									 */
+	    private int imsaakInv;      /*
+									 * Imsaak Interval is the amount of minutes
+									 * between Imsaak and Fajr. The default is 10
+									 * minutes before Fajr if Fajr Interval is set
+									 */
+	    private int round;          /*
+									 * Method used for rounding seconds: 0: No
+									 * Rounding. "Prayer.seconds" is set to the
+									 * amount of computed seconds. 1: Normal
+									 * Rounding. If seconds are equal to 30 or
+									 * above, add 1 minute. Sets "Prayer.seconds" to
+									 * zero. 2: Special Rounding. Similar to normal
+									 * rounding but we always round down for Shurooq
+									 * and Imsaak times. (default) 3: Aggressive
+									 * Rounding. Similar to Special Rounding but we
+									 * add 1 minute if the seconds value are equal
+									 * to 1 second or more.
+									 */
+	    private int mathhab;        /*
+									 * Assr prayer shadow ratio: 1: Shaf'i (default)
+									 * 2: Hanafi
+									 */
+	    private double nearestLat;  /*
+									 * Latitude Used for the 'Nearest Latitude'
+									 * extreme methods. The default is 48.5
+									 */
+	    private int extreme;        /*
+									 * Extreme latitude calculation method (see
+									 * below)
+									 */
+	    private int offset;         /*
+									 * Enable Offsets switch (set this to 1 to
+									 * activate). This option allows you to add or
+									 * subtract any amount of minutes to the daily
+									 * computed prayer times based on values (in
+									 * minutes) for each prayer in the offList array
+									 */
+	    private double offList[];  /*
+								    * For Example: If you want to add 30 seconds to
+								    * Maghrib and subtract 2 minutes from Ishaa:
+								    * offset = 1 offList[4] = 0.5 offList[5] = -2
+								    * ..and then call getPrayerTimes as usual.
+								    */
+	    public Method(){
+	    	offList = new double[6];
+	    	offset=0; extreme=0;nearestLat=0;mathhab=1;round=0;
+	    	fajrAng=0;ishaaAng=0;imsaakAng=0;fajrInv=0;ishaaInv=0;imsaakInv=0;
+	    }
+	    int getOffset(){return offset;}
+	    int getExtreme(){return extreme;}
+	    double getNearestLat(){return nearestLat;}
+	    int getMathhab(){return mathhab;}
+	    int getRound(){return round;}
+	    double getFajrAng(){return fajrAng;}
+	    double getIshaaAng(){return ishaaAng;}
+	    double getImsaakAng(){return imsaakAng;}
+	    int getFajrInv(){return fajrInv;}
+	    int getIshaaInv(){return ishaaInv;}
+	    int getImsaakInv(){return imsaakInv;}
+	    double getOffList(int i){return offList[i];}
+
+	    void setOffset(int aOffset){offset=aOffset;}
+	    void setExtreme(int aExtreme){extreme=aExtreme;}
+	    void setNearestLat(double aNearestLat){nearestLat=aNearestLat;}
+	    void setMathhab(int aMathhab){mathhab=aMathhab;}
+	    public void setRound(int aRound){round=aRound;}
+	    void setFajrAng(double aFajrAng){fajrAng=aFajrAng;}
+	    void setIshaaAng(double aIshaaAng){ishaaAng=aIshaaAng;}
+	    void setImsaakAng(double aImsaakAng){imsaakAng=aImsaakAng;}
+	    void setFajrInv(int aFajrInv){fajrInv=aFajrInv;}
+	    void setIshaaInv(int aIshaaInv){ishaaInv=aIshaaInv;}
+	    void setImsaakInv(int aImsaakInv){imsaakInv=aImsaakInv;}
+	    void setOffList(int i, double aOffList){offList[i]=aOffList;}
+	    public static final int NONE = 0;
+		public static final int EGYPT_SURVEY = 1;
+		public static final int KARACHI_SHAF = 2;
+		public static final int KARACHI_HANAF = 3;
+		public static final int NORTH_AMERICA = 4;
+		public static final int MUSLIM_LEAGUE = 5;
+		public static final int UMM_ALQURRA = 6;
+		public static final int FIXED_ISHAA = 7;
+
+	    Method getMethod(){
+	    	Method tMethod = new Method();
+	    	tMethod.extreme=extreme;
+	    	tMethod.fajrAng = fajrAng;
+	    	tMethod.fajrInv = fajrInv;
+	    	tMethod.imsaakAng = imsaakAng;
+	    	tMethod.imsaakInv = imsaakInv;
+	    	tMethod.ishaaAng = ishaaAng;
+	    	tMethod.ishaaInv=ishaaInv;
+	    	tMethod.mathhab = mathhab;
+	    	tMethod.nearestLat = nearestLat;
+	    	tMethod.offset = offset;
+	    	tMethod.round = round;
+	    	for (int i=0;i<offList.length;i++){
+	    		tMethod.offList[i]=offList[i];
+	    	}
+	    	return tMethod;
+	    }
+
+	    public void autoFillPrayerMethod(int n){
+		    int i;
+
+		    setFajrInv(0);
+		    setIshaaInv(0);
+		    setImsaakInv(0);
+		    setMathhab(1);
+		    setRound(2);
+		    setNearestLat(PrayerTimes.DEF_NEAREST_LATITUDE);
+		    setImsaakAng(PrayerTimes.DEF_IMSAAK_ANGLE);
+		    setExtreme(5);
+		    setOffset(0);
+		    for (int j = 0; j < 6; j++) {
+		        setOffList(j,0);
+		    }
+
+		    switch(n)
+		    {
+		    case NONE:
+		        setFajrAng(0.0);
+		        setIshaaAng(0.0);
+		        break;
+
+		    case EGYPT_SURVEY:
+		        setFajrAng(20);
+		        setIshaaAng(18);
+		        break;
+
+		    case KARACHI_SHAF:
+		        setFajrAng(18);
+		        setIshaaAng(18);
+		        break;
+
+		    case KARACHI_HANAF:
+		        setFajrAng(18);
+		        setIshaaAng(18);
+		        setMathhab(2);
+		        break;
+
+		    case NORTH_AMERICA:
+		        setFajrAng(15);
+		        setIshaaAng(15);
+		        break;
+
+		    case MUSLIM_LEAGUE:
+		        setFajrAng(18);
+		        setIshaaAng(17);
+		        break;
+
+		    case UMM_ALQURRA:
+		        setFajrAng(19);
+		        setIshaaAng(0.0);
+		        setIshaaInv(90);
+		        break;
+
+		    case FIXED_ISHAA:
+		        setFajrAng(19.5);
+		        setIshaaAng(0.0);
+		        setIshaaInv(90);
+		        break;
+		    }
+	   	}
+
+	}
+
+
+	/* This holds the current date info. structure Date */
+	public class PrayerDate {
+	    private int day;
+	    private int month;
+	    private int year;
+	    public PrayerDate(){day=0;month=0;year=0;}
+	    int getDay(){return day; }
+	    int getMonth(){return month;}
+	    int getYear(){return year;}
+	    public void setDay(int aDay){day = aDay;}
+	    public void setMonth(int aMonth){month = aMonth;}
+	    public void setYear(int aYear){year = aYear;}
+	    PrayerDate getPrayerDate(){
+	    	PrayerDate tPrayerDate = new PrayerDate();
+	    	tPrayerDate.day=day;
+	    	tPrayerDate.month=month;
+	    	tPrayerDate.year=year;
+	    	return tPrayerDate;
+	    }
+	}
+
+
+	public class Location {
+	    private double degreeLong;  /* Longitude in decimal degree. */
+	    private double degreeLat;   /* Latitude in decimal degree. */
+	    private double gmtDiff;     /* GMT difference. */
+	    private int dst;            /*
+									 * Daylight savings time switch (0 if not used).
+									 * Setting this to 1 should add 1 hour to all
+									 * the calculated prayer times
+									 */
+	    private double seaLevel;    /* Height above Sea level in meters */
+	    private double pressure;    /*
+									 * Atmospheric pressure in millibars (the
+									 * astronomical standard value is 1010)
+									 */
+	    private double temperature; /*
+									 * Temperature in Celsius degree (the
+									 * astronomical standard value is 10)
+									 */
+	    public Location(){degreeLong=0;degreeLat=0;gmtDiff=0;dst=0;seaLevel=0;pressure=0;temperature=0;}
+	    double getDegreeLong(){return degreeLong;}
+	    double getDegreeLat(){return degreeLat;}
+	    double getGmtDiff(){return gmtDiff;}
+	    int getDst(){return dst;}
+	    double getSeaLevel(){return seaLevel;}
+	    double getPressure(){return pressure;}
+	    double getTemperature(){return temperature;}
+
+	    public void setDegreeLong(double aDegreeLong){degreeLong=aDegreeLong;}
+	    public void setDegreeLat(double aDegreeLat){degreeLat=aDegreeLat;}
+	    public void setGmtDiff(double aGmtDiff){gmtDiff=aGmtDiff;}
+	    public void setDst(int aDst){dst=aDst;}
+	    public void setSeaLevel(double aSeaLevel){seaLevel=aSeaLevel;}
+	    public void setPressure(double aPressure){pressure=aPressure;}
+	    public void setTemperature(double aTemperature){temperature=aTemperature;}
+	    Location getLocation() {	//clone the class
+	    	Location tLocation=new Location();
+	    	tLocation.degreeLat=degreeLat;
+	    	tLocation.gmtDiff=gmtDiff;
+	    	tLocation.dst=dst;
+	    	tLocation.seaLevel=seaLevel;
+	    	tLocation.pressure=pressure;
+	    	tLocation.temperature=temperature;
+	    	return tLocation;
+	    }
+	}
+
+
 	public static final double KAABA_LAT = 21.423333;
 	public static final double KAABA_LONG = 39.823333;
 	public static final double DEF_NEAREST_LATITUDE = 48.5;
@@ -1535,7 +1536,7 @@ public class PrayerTimes {
 		pt.setSecond((int)sec);
     }
 
-    Prayer getImsaak (Location loc, Method conf, PrayerDate date){
+    public Prayer getImsaak (Location loc, Method conf, PrayerDate date){
 
 		Method tmpConf;
 		int lastDay;
@@ -1590,7 +1591,7 @@ public class PrayerTimes {
 		return tPrayer;
 	}
 
-	Prayer getNextDayImsaak (Location loc, Method conf, PrayerDate date){
+	public Prayer getNextDayImsaak (Location loc, Method conf, PrayerDate date){
 	/* Copy the date structure and increment for next day.  The getImsaak
 	* function will handle bad day values */
 		Prayer temppt;
@@ -1604,7 +1605,7 @@ public class PrayerTimes {
 
 	}
 
-	Prayer getNextDayFajr (Location loc, Method conf, PrayerDate date){
+	public Prayer getNextDayFajr (Location loc, Method conf, PrayerDate date){
 		Prayer[] temp;
 		int lastDay;
 		double julianDay;
@@ -1729,76 +1730,76 @@ public class PrayerTimes {
 	    return RAD_TO_DEG (Math.atan2 (num, denom));
     }
 
-}
-
-class DMS {
-	int deg, min, sec;
-	DMS (){deg=min=sec=0;}
-	void set(int d,int m, int s){
-		deg = d; min = m; sec = s;
+	public class DMS {
+		int deg, min, sec;
+		public DMS (){deg=min=sec=0;}
+		void set(int d,int m, int s){
+			deg = d; min = m; sec = s;
+		}
+		int getDegree(){return deg;}
+		int getMinute(){return deg;}
+		int getSecond(){return deg;}
 	}
-	int getDegree(){return deg;}
-	int getMinute(){return deg;}
-	int getSecond(){return deg;}
-}
 
-class Astro {
-	private double jd;
-    private double dec[];
-    private double ra[];
-    private double sid[];
-    private double dra[];
+	public class Astro {
+		private double jd;
+	    private double dec[];
+	    private double ra[];
+	    private double sid[];
+	    private double dra[];
 
-    Astro(){
-    	dec = new double[3];
-    	ra = new double[3];
-    	sid = new double[3];
-    	dra = new double[3];
-    }
-    double getJd(){return jd;}
-    double getDec(int i){return dec[i];}
-    double getRa(int i){return ra[i];}
-    double getSid(int i){return sid[i];}
-    double getDra(int i){return dra[i];}
-    void setJd(double aJd){jd = aJd;};
-    void setDec(int i, double aDec){dec[i]=aDec;}
-    void setRa(int i, double aRa){ra[i]=aRa;}
-    void setSid(int i, double aSid){sid[i]=aSid;}
-    void setDra(int i, double aDra){dra[i]=aDra;}
-    Astro getAstro(){	//clone the class
-    	Astro tAstro = new Astro();
-    	for(int i=0;i<dec.length;i++){
-    		tAstro.dec[i]=dec[i];
-    	}
-    	for(int i=0;i<ra.length;i++){
-    		tAstro.ra[i]=ra[i];
-    	}
-    	for(int i=0;i<sid.length;i++){
-    		tAstro.sid[i]=sid[i];
-    	}
-    	for(int i=0;i<dra.length;i++){
-    		tAstro.dra[i]=dra[i];
-    	}
-    	return tAstro;
-    }
-}
-
-class AstroDay{
-	private double dec;
-	private double ra;
-	private double sidtime;
-	private double dra;
-
-	AstroDay(){
-		dec=0;ra=0;sidtime=0;dra=0;
+	    public Astro(){
+	    	dec = new double[3];
+	    	ra = new double[3];
+	    	sid = new double[3];
+	    	dra = new double[3];
+	    }
+	    double getJd(){return jd;}
+	    double getDec(int i){return dec[i];}
+	    double getRa(int i){return ra[i];}
+	    double getSid(int i){return sid[i];}
+	    double getDra(int i){return dra[i];}
+	    void setJd(double aJd){jd = aJd;};
+	    void setDec(int i, double aDec){dec[i]=aDec;}
+	    void setRa(int i, double aRa){ra[i]=aRa;}
+	    void setSid(int i, double aSid){sid[i]=aSid;}
+	    void setDra(int i, double aDra){dra[i]=aDra;}
+	    Astro getAstro(){	//clone the class
+	    	Astro tAstro = new Astro();
+	    	for(int i=0;i<dec.length;i++){
+	    		tAstro.dec[i]=dec[i];
+	    	}
+	    	for(int i=0;i<ra.length;i++){
+	    		tAstro.ra[i]=ra[i];
+	    	}
+	    	for(int i=0;i<sid.length;i++){
+	    		tAstro.sid[i]=sid[i];
+	    	}
+	    	for(int i=0;i<dra.length;i++){
+	    		tAstro.dra[i]=dra[i];
+	    	}
+	    	return tAstro;
+	    }
 	}
-	double getDec(){return dec;}
-	double getRa(){return ra;}
-	double getSidTime(){return sidtime;}
-	double getDra(){return dra;}
 
-	void setDec(double aDec){dec = aDec;}
-	void setRa(double aRa){ra = aRa;}
-	void setSidTime(double aSidTime){sidtime = aSidTime;}
-	void setDra(double aDra){dra = aDra;}
+	public class AstroDay{
+		private double dec;
+		private double ra;
+		private double sidtime;
+		private double dra;
+
+		public AstroDay(){
+			dec=0;ra=0;sidtime=0;dra=0;
+		}
+		double getDec(){return dec;}
+		double getRa(){return ra;}
+		double getSidTime(){return sidtime;}
+		double getDra(){return dra;}
+
+		void setDec(double aDec){dec = aDec;}
+		void setRa(double aRa){ra = aRa;}
+		void setSidTime(double aSidTime){sidtime = aSidTime;}
+		void setDra(double aDra){dra = aDra;}
+	}
+
 }

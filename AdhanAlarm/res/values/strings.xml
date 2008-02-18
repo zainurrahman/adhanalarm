@@ -3,12 +3,14 @@
     <string name="app_name">Adh&#257;n Alarm</string>
     <string name="welcome">Welcome to Adh&#257;n Alarm</string>
     <string name="schedule">Schedule</string>
+    <string name="dawn">Dawn</string>
     <string name="fajr">Fajr</string>
+    <string name="sunrise">Sunrise</string>
     <string name="dhuhr">Dhuhr</string>
     <string name="asr">`Asr</string>
     <string name="maghrib">Maghrib</string>
     <string name="ishaa">`Ishaa\'</string>
-    <string name="dawn">Dawn</string>
+    <string name="next_dawn">Next Dawn</string>
     <string name="next_fajr">Next Fajr</string>
     <string name="alert">Alert</string>
     <string name="notification">Notification</string>
