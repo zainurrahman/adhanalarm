@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <array name="calculation_methods">
-        <item>Normal</item>
-        <item>Egyptian General Authority of Survey</item>
-        <item>University of Islamic Sciences, Karachi (Shaf'i)</item>
-        <item>University of Islamic Sciences, Karachi (Hanafi)</item>
-        <item>Islamic Society of North America</item>
-        <item>Muslim World League</item>
-        <item>Umm Al-Qurra, Saudi Arabia</item>
-        <item>Fixed Ishaa Interval (always 90)</item>
-    </array>
     <array name="notification_methods">
         <item>Beep</item>
         <item>Vibrate</item>
@@ -30,5 +20,90 @@
         <item>-8 minutes</item>
         <item>-9 minutes</item>
         <item>-10 minutes</item>
+    </array>
+    <array name="extra_alerts">
+        <item>None</item>
+        <item>Dawn</item>
+        <item>Sunrise</item>
+        <item>Dawn and Sunrise</item>
+    </array>
+    <array name="gmt_differences">
+        <item>GMT -15:00</item>
+        <item>GMT -14:30</item>
+        <item>GMT -14:00</item>
+        <item>GMT -13:30</item>
+        <item>GMT -13:00</item>
+        <item>GMT -12:30</item>
+        <item>GMT -12:00</item>
+        <item>GMT -11:30</item>
+        <item>GMT -11:00</item>
+        <item>GMT -10:30</item>
+        <item>GMT -10:00</item>
+        <item>GMT -9:30</item>
+        <item>GMT -9:00</item>
+        <item>GMT -8:30</item>
+        <item>GMT -8:00</item>
+        <item>GMT -7:30</item>
+        <item>GMT -7:00</item>
+        <item>GMT -6:30</item>
+        <item>GMT -6:00</item>
+        <item>GMT -5:30</item>
+        <item>GMT -5:00</item>
+        <item>GMT -4:30</item>
+        <item>GMT -4:00</item>
+        <item>GMT -3:30</item>
+        <item>GMT -3:00</item>
+        <item>GMT -2:30</item>
+        <item>GMT -2:00</item>
+        <item>GMT -1:30</item>
+        <item>GMT -1:00</item>
+        <item>GMT -0:30</item>
+        <item>GMT</item>
+        <item>GMT +0:30</item>
+        <item>GMT +1:00</item>
+        <item>GMT +1:30</item>
+        <item>GMT +2:00</item>
+        <item>GMT +2:30</item>
+        <item>GMT +3:00</item>
+        <item>GMT +3:30</item>
+        <item>GMT +4:00</item>
+        <item>GMT +4:30</item>
+        <item>GMT +5:00</item>
+        <item>GMT +5:30</item>
+        <item>GMT +6:00</item>
+        <item>GMT +6:30</item>
+        <item>GMT +7:00</item>
+        <item>GMT +7:30</item>
+        <item>GMT +8:00</item>
+        <item>GMT +8:30</item>
+        <item>GMT +9:00</item>
+        <item>GMT +9:30</item>
+        <item>GMT +10:00</item>
+        <item>GMT +10:30</item>
+        <item>GMT +11:00</item>
+        <item>GMT +11:30</item>
+        <item>GMT +12:00</item>
+        <item>GMT +12:30</item>
+        <item>GMT +13:00</item>
+        <item>GMT +13:30</item>
+        <item>GMT +14:00</item>
+        <item>GMT +14:30</item>
+        <item>GMT +15:00</item>
+    </array>
+    <array name="calculation_methods">
+        <item>Normal</item>
+        <item>Egyptian General Authority of Survey</item>
+        <item>University of Islamic Sciences, Karachi (Shaf'i)</item>
+        <item>University of Islamic Sciences, Karachi (Hanafi)</item>
+        <item>Islamic Society of North America</item>
+        <item>Muslim World League</item>
+        <item>Umm Al-Qurra, Saudi Arabia</item>
+        <item>Fixed Ishaa Interval (always 90)</item>
+    </array>
+    <array name="rounding_types">
+        <item>None</item>
+        <item>Normal</item>
+        <item>Special</item>
+        <item>Aggressive</item>
     </array>
 </resources>

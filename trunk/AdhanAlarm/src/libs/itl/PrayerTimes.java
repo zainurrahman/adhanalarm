@@ -60,7 +60,7 @@ public class PrayerTimes {
 	    public Prayer(){hour=0;minute=0;second=0;isExtreme=0;}
 	    public int getHour(){return hour;}
 	    public int getMinute(){return minute;}
-	    int getSecond(){return second;}
+	    public int getSecond(){return second;}
 	    int getIsExtreme(){return isExtreme;}
 
 	    void setHour(int aHour){hour = aHour;}
@@ -314,8 +314,8 @@ public class PrayerTimes {
 									 * astronomical standard value is 10)
 									 */
 	    public Location(){degreeLong=0;degreeLat=0;gmtDiff=0;dst=0;seaLevel=0;pressure=0;temperature=0;}
-	    double getDegreeLong(){return degreeLong;}
-	    double getDegreeLat(){return degreeLat;}
+	    public double getDegreeLong(){return degreeLong;}
+	    public double getDegreeLat(){return degreeLat;}
 	    double getGmtDiff(){return gmtDiff;}
 	    int getDst(){return dst;}
 	    double getSeaLevel(){return seaLevel;}
@@ -1707,7 +1707,7 @@ public class PrayerTimes {
 	    return sum;
 	}
 
-	DMS decimal2Dms(double decimal){
+	public DMS decimal2Dms(double decimal){
 	    double tempmin, tempsec, n1, n2;
 
 	    tempmin = (decimal-Math.round(decimal)) * 60.0;
@@ -1718,7 +1718,7 @@ public class PrayerTimes {
 	}
 
 
-	double getNorthQibla(Location loc)	{
+	public double getNorthQibla(Location loc)	{
 	    /* xxxthamer: reduce DEG_TO_RAD usage */
 	    double num, denom;
 	    num = Math.sin (DEG_TO_RAD (loc.getDegreeLong()) - DEG_TO_RAD (KAABA_LONG));
@@ -1736,9 +1736,9 @@ public class PrayerTimes {
 		void set(int d,int m, int s){
 			deg = d; min = m; sec = s;
 		}
-		int getDegree(){return deg;}
-		int getMinute(){return deg;}
-		int getSecond(){return deg;}
+		public int getDegree(){return deg;}
+		public int getMinute(){return min;}
+		public int getSecond(){return sec;}
 	}
 
 	public class Astro {
