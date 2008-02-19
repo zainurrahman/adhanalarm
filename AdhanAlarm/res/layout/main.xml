@@ -8,109 +8,179 @@
 	<FrameLayout android:id="@android:id/tabcontent"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:paddingTop="65px">
-		<LinearLayout android:orientation="horizontal"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:id="@+id/content1">
-		<LinearLayout android:orientation="vertical"
-			android:layout_width="wrap_content"
+		<ScrollView android:layout_width="fill_parent"
 			android:layout_height="wrap_content">
 			<LinearLayout android:orientation="horizontal"
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content">
-				<TextView android:layout_width="65px"
-					android:layout_height="wrap_content" android:text="@string/dawn" />
-				<TextView android:id="@+id/dawn"
-					android:layout_width="50px" android:layout_height="wrap_content"
-					android:text="~" />
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:id="@+id/content1">
+				<LinearLayout android:orientation="vertical"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content">
+					<LinearLayout android:orientation="horizontal"
+						android:layout_height="wrap_content"
+						android:layout_width="wrap_content"
+						android:background="#FFFF00">
+						<TextView android:layout_width="75px"
+							android:textColor="#000000" android:layout_height="wrap_content"
+							android:text="@string/dawn" />
+						<TextView android:id="@+id/dawn"
+							android:textColor="#000000" android:layout_width="65px"
+							android:layout_height="wrap_content" android:text="~" />
+						<TextView android:id="@+id/mark_dawn"
+							android:textColor="#000000" android:layout_width="5px"
+							android:layout_height="wrap_content" />
+					</LinearLayout>
+					<LinearLayout android:orientation="horizontal"
+						android:layout_height="wrap_content"
+						android:layout_width="wrap_content">
+						<TextView android:layout_width="75px"
+							android:layout_height="wrap_content" android:text="@string/fajr" />
+						<TextView android:id="@+id/fajr"
+							android:layout_width="65px" android:layout_height="wrap_content"
+							android:text="~" />
+						<TextView android:id="@+id/mark_fajr"
+							android:layout_width="5px" android:layout_height="wrap_content" />
+					</LinearLayout>
+					<LinearLayout android:orientation="horizontal"
+						android:layout_height="wrap_content"
+						android:layout_width="wrap_content"
+						android:background="#FFFF00">
+						<TextView android:layout_width="75px"
+							android:textColor="#000000" android:layout_height="wrap_content"
+							android:text="@string/sunrise" />
+						<TextView android:id="@+id/sunrise"
+							android:textColor="#000000" android:layout_width="65px"
+							android:layout_height="wrap_content" android:text="~" />
+						<TextView android:id="@+id/mark_sunrise"
+							android:textColor="#000000" android:layout_width="5px"
+							android:layout_height="wrap_content" />
+					</LinearLayout>
+					<LinearLayout android:orientation="horizontal"
+						android:layout_height="wrap_content"
+						android:layout_width="wrap_content">
+						<TextView android:layout_width="75px"
+							android:layout_height="wrap_content"
+							android:text="@string/dhuhr" />
+						<TextView android:id="@+id/dhuhr"
+							android:layout_width="65px" android:layout_height="wrap_content"
+							android:text="~" />
+						<TextView android:id="@+id/mark_dhuhr"
+							android:layout_width="5px" android:layout_height="wrap_content" />
+					</LinearLayout>
+					<LinearLayout android:orientation="horizontal"
+						android:layout_height="wrap_content"
+						android:layout_width="wrap_content"
+						android:background="#FFFF00">
+						<TextView android:layout_width="75px"
+							android:textColor="#000000" android:layout_height="wrap_content"
+							android:text="@string/asr" />
+						<TextView android:id="@+id/asr"
+							android:textColor="#000000" android:layout_width="65px"
+							android:layout_height="wrap_content" android:text="~" />
+						<TextView android:id="@+id/mark_asr"
+							android:textColor="#000000" android:layout_width="5px"
+							android:layout_height="wrap_content" />
+					</LinearLayout>
+					<LinearLayout android:orientation="horizontal"
+						android:layout_height="wrap_content"
+						android:layout_width="wrap_content">
+						<TextView android:layout_width="75px"
+							android:layout_height="wrap_content"
+							android:text="@string/maghrib" />
+						<TextView android:id="@+id/maghrib"
+							android:layout_width="65px" android:layout_height="wrap_content"
+							android:text="~" />
+						<TextView android:id="@+id/mark_maghrib"
+							android:layout_width="5px" android:layout_height="wrap_content" />
+					</LinearLayout>
+					<LinearLayout android:orientation="horizontal"
+						android:layout_height="wrap_content"
+						android:layout_width="wrap_content"
+						android:background="#FFFF00">
+						<TextView android:layout_width="75px"
+							android:textColor="#000000" android:layout_height="wrap_content"
+							android:text="@string/ishaa" />
+						<TextView android:id="@+id/ishaa"
+							android:textColor="#000000" android:layout_width="65px"
+							android:layout_height="wrap_content" android:text="~" />
+						<TextView android:id="@+id/mark_ishaa"
+							android:textColor="#000000" android:layout_width="5px"
+							android:layout_height="wrap_content" />
+					</LinearLayout>
+					<LinearLayout android:orientation="horizontal"
+						android:layout_height="wrap_content"
+						android:layout_width="wrap_content">
+						<TextView android:layout_width="75px"
+							android:layout_height="wrap_content"
+							android:text="@string/next_dawn" />
+						<TextView android:id="@+id/next_dawn"
+							android:layout_width="65px" android:layout_height="wrap_content"
+							android:text="~" />
+						<TextView android:id="@+id/mark_next_dawn"
+							android:layout_width="5px" android:layout_height="wrap_content" />
+					</LinearLayout>
+					<LinearLayout android:orientation="horizontal"
+						android:layout_height="wrap_content"
+						android:layout_width="wrap_content"
+						android:background="#FFFF00">
+						<TextView android:layout_width="75px"
+							android:layout_height="wrap_content" android:textColor="#000000"
+							android:text="@string/next_fajr" />
+						<TextView android:id="@+id/next_fajr"
+							android:textColor="#000000" android:layout_width="65px"
+							android:layout_height="wrap_content" android:text="~" />
+						<TextView android:id="@+id/mark_next_fajr"
+							android:textColor="#000000" android:layout_width="5px"
+							android:layout_height="wrap_content" />
+					</LinearLayout>
+				</LinearLayout>
+				<LinearLayout android:orientation="vertical"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content" android:paddingLeft="5px">
+					<TextView android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:text="@string/welcome" />
+					<LinearLayout android:orientation="horizontal"
+						android:layout_height="wrap_content"
+						android:layout_width="wrap_content">
+						<TextView android:layout_width="70px"
+							android:layout_height="wrap_content"
+							android:text="@string/latitude" />
+						<TextView android:id="@+id/current_latitude"
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content"
+							android:text="~" />
+					</LinearLayout>
+					<LinearLayout android:orientation="horizontal"
+						android:layout_height="wrap_content"
+						android:layout_width="wrap_content">
+						<TextView android:layout_width="70px"
+							android:layout_height="wrap_content"
+							android:text="@string/longitude" />
+						<TextView android:id="@+id/current_longitude"
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content"
+							android:text="~" />
+					</LinearLayout>
+					<LinearLayout android:orientation="horizontal"
+						android:layout_height="wrap_content"
+						android:layout_width="wrap_content">
+						<TextView android:layout_width="70px"
+							android:layout_height="wrap_content"
+							android:text="@string/qibla" />
+						<TextView android:id="@+id/current_qibla"
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content"
+							android:text="~" />
+					</LinearLayout>
+				</LinearLayout>
 			</LinearLayout>
-			<LinearLayout android:orientation="horizontal"
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content" android:background="#FFFF00">
-				<TextView android:layout_width="65px"
-					android:textColor="#000000" android:layout_height="wrap_content"
-					android:text="@string/fajr" />
-				<TextView android:id="@+id/fajr"
-					android:textColor="#000000" android:layout_width="50px"
-					android:layout_height="wrap_content" android:text="~" />
-			</LinearLayout>
-			<LinearLayout android:orientation="horizontal"
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content">
-				<TextView android:layout_width="65px"
-					android:layout_height="wrap_content" android:text="@string/sunrise" />
-				<TextView android:id="@+id/sunrise"
-					android:layout_width="50px" android:layout_height="wrap_content"
-					android:text="~" />
-			</LinearLayout>
-			<LinearLayout android:orientation="horizontal"
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content">
-				<TextView android:layout_width="65px"
-					android:layout_height="wrap_content" android:text="@string/dhuhr" />
-				<TextView android:id="@+id/dhuhr"
-					android:layout_width="50px" android:layout_height="wrap_content"
-					android:text="~" />
-			</LinearLayout>
-			<LinearLayout android:orientation="horizontal"
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content" android:background="#FFFF00">
-				<TextView android:layout_width="65px"
-					android:textColor="#000000" android:layout_height="wrap_content"
-					android:text="@string/asr" />
-				<TextView android:id="@+id/asr"
-					android:textColor="#000000" android:layout_width="50px"
-					android:layout_height="wrap_content" android:text="~" />
-			</LinearLayout>
-			<LinearLayout android:orientation="horizontal"
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content">
-				<TextView android:layout_width="65px"
-					android:layout_height="wrap_content"
-					android:text="@string/maghrib" />
-				<TextView android:id="@+id/maghrib"
-					android:layout_width="50px" android:layout_height="wrap_content"
-					android:text="~" />
-			</LinearLayout>
-			<LinearLayout android:orientation="horizontal"
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content" android:background="#FFFF00">
-				<TextView android:layout_width="65px"
-					android:textColor="#000000" android:layout_height="wrap_content"
-					android:text="@string/ishaa" />
-				<TextView android:id="@+id/ishaa"
-					android:textColor="#000000" android:layout_width="50px"
-					android:layout_height="wrap_content" android:text="~" />
-			</LinearLayout>
-			<LinearLayout android:orientation="horizontal"
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content">
-				<TextView android:layout_width="65px"
-					android:layout_height="wrap_content" android:text="@string/next_dawn" />
-				<TextView android:id="@+id/next_dawn"
-					android:layout_width="50px" android:layout_height="wrap_content"
-					android:text="~" />
-			</LinearLayout>
-			<LinearLayout android:orientation="horizontal"
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content" android:background="#FFFF00">
-				<TextView android:layout_width="65px"
-					android:layout_height="wrap_content" android:textColor="#000000"
-					android:text="@string/next_fajr" />
-				<TextView android:id="@+id/next_fajr"
-					android:textColor="#000000" android:layout_width="50px"
-					android:layout_height="wrap_content" android:text="~" />
-			</LinearLayout>
-			</LinearLayout>
-			<TextView android:layout_width="fill_parent"
-				android:layout_height="wrap_content" android:text="@string/welcome" android:paddingLeft="5px" />
-		</LinearLayout>
+		</ScrollView>
 		<ScrollView android:layout_width="fill_parent"
 			android:layout_height="wrap_content">
 			<LinearLayout android:orientation="vertical"
 				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:id="@+id/content2">
+				android:layout_height="wrap_content" android:id="@+id/content2">
 				<LinearLayout android:orientation="horizontal"
 					android:layout_height="wrap_content"
 					android:layout_width="fill_parent">
@@ -131,7 +201,18 @@
 					<Spinner android:id="@+id/minutes_offset"
 						android:layout_width="fill_parent"
 						android:layout_height="wrap_content"
-						android:drawSelectorOnTop="true" android:singleLine="false" />
+						android:drawSelectorOnTop="true" />
+				</LinearLayout>
+				<LinearLayout android:orientation="horizontal"
+					android:layout_height="wrap_content"
+					android:layout_width="fill_parent">
+					<TextView android:layout_width="80px"
+						android:layout_height="wrap_content"
+						android:text="@string/extra_alerts" />
+					<Spinner android:id="@+id/extra_alerts"
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:drawSelectorOnTop="true" />
 				</LinearLayout>
 				<Button android:id="@+id/save_and_apply_alert"
 					android:text="@string/save_and_apply_alert"
@@ -143,8 +224,28 @@
 			android:layout_height="wrap_content">
 			<LinearLayout android:orientation="vertical"
 				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:id="@+id/content3">
+				android:layout_height="wrap_content" android:id="@+id/content3">
+				<LinearLayout android:orientation="horizontal"
+					android:layout_height="wrap_content"
+					android:layout_width="fill_parent">
+					<TextView android:layout_width="75px"
+						android:layout_height="wrap_content"
+						android:text="@string/time_zone" />
+					<Spinner android:id="@+id/gmt_difference"
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:drawSelectorOnTop="true" />
+				</LinearLayout>
+				<LinearLayout android:orientation="horizontal"
+					android:layout_height="wrap_content"
+					android:layout_width="fill_parent">
+					<TextView android:layout_width="150px"
+						android:layout_height="wrap_content"
+						android:text="@string/daylight_savings_time" />
+					<CheckBox android:id="@+id/daylight_savings_time"
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content" />
+				</LinearLayout>
 				<LinearLayout android:orientation="horizontal"
 					android:layout_height="wrap_content"
 					android:layout_width="fill_parent">
@@ -155,7 +256,7 @@
 							android:layout_height="wrap_content"
 							android:layout_width="fill_parent">
 							<TextView android:text="@string/latitude"
-								android:layout_width="65px"
+								android:layout_width="75px"
 								android:layout_height="wrap_content" />
 							<EditText android:id="@+id/latitude"
 								android:text="47.682" android:layout_width="fill_parent"
@@ -166,7 +267,7 @@
 							android:layout_height="wrap_content"
 							android:layout_width="fill_parent">
 							<TextView android:text="@string/longitude"
-								android:layout_width="65px"
+								android:layout_width="75px"
 								android:layout_height="wrap_content" />
 							<EditText android:id="@+id/longitude"
 								android:text="-122.132" android:layout_width="fill_parent"
@@ -189,8 +290,7 @@
 			android:layout_height="wrap_content">
 			<LinearLayout android:orientation="vertical"
 				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:id="@+id/content4">
+				android:layout_height="wrap_content" android:id="@+id/content4">
 				<LinearLayout android:orientation="horizontal"
 					android:layout_height="wrap_content"
 					android:layout_width="fill_parent">
@@ -200,14 +300,24 @@
 					<Spinner android:id="@+id/calculation_methods"
 						android:layout_width="fill_parent"
 						android:layout_height="wrap_content"
-						android:drawSelectorOnTop="true" android:singleLine="false" />
+						android:drawSelectorOnTop="true" />
+				</LinearLayout>
+				<LinearLayout android:orientation="horizontal"
+					android:layout_height="wrap_content"
+					android:layout_width="fill_parent">
+					<TextView android:layout_width="85px"
+						android:layout_height="wrap_content"
+						android:text="@string/rounding" />
+					<Spinner android:id="@+id/rounding_types"
+						android:layout_width="fill_parent"
+						android:layout_height="wrap_content"
+						android:drawSelectorOnTop="true" />
 				</LinearLayout>
 				<LinearLayout android:orientation="horizontal"
 					android:layout_height="wrap_content"
 					android:layout_width="fill_parent">
 					<TextView android:text="@string/sea_level"
-						android:layout_width="85px"
-						android:layout_height="wrap_content" />
+						android:layout_width="85px" android:layout_height="wrap_content" />
 					<EditText android:id="@+id/sea_level"
 						android:text="0" android:layout_width="fill_parent"
 						android:layout_height="wrap_content" android:numeric="false" />
@@ -216,8 +326,7 @@
 					android:layout_height="wrap_content"
 					android:layout_width="fill_parent">
 					<TextView android:text="@string/pressure"
-						android:layout_width="85px"
-						android:layout_height="wrap_content" />
+						android:layout_width="85px" android:layout_height="wrap_content" />
 					<EditText android:id="@+id/pressure"
 						android:text="1010" android:layout_width="fill_parent"
 						android:layout_height="wrap_content" android:numeric="false" />
@@ -226,8 +335,7 @@
 					android:layout_height="wrap_content"
 					android:layout_width="fill_parent">
 					<TextView android:text="@string/temperature"
-						android:layout_width="85px"
-						android:layout_height="wrap_content" />
+						android:layout_width="85px" android:layout_height="wrap_content" />
 					<EditText android:id="@+id/temperature"
 						android:text="10" android:layout_width="fill_parent"
 						android:layout_height="wrap_content" android:numeric="false" />
@@ -235,14 +343,14 @@
 				<LinearLayout android:orientation="horizontal"
 					android:layout_height="wrap_content"
 					android:layout_width="fill_parent">
-				<Button android:id="@+id/reset_advanced"
-					android:text="@string/reset_advanced"
-					android:layout_width="wrap_content"
-					android:layout_height="fill_parent" />
-				<Button android:id="@+id/save_and_apply_advanced"
-					android:text="@string/save_and_apply_advanced"
-					android:layout_width="fill_parent"
-					android:layout_height="fill_parent" />
+					<Button android:id="@+id/reset_advanced"
+						android:text="@string/reset_advanced"
+						android:layout_width="wrap_content"
+						android:layout_height="fill_parent" />
+					<Button android:id="@+id/save_and_apply_advanced"
+						android:text="@string/save_and_apply_advanced"
+						android:layout_width="fill_parent"
+						android:layout_height="fill_parent" />
 				</LinearLayout>
 			</LinearLayout>
 		</ScrollView>

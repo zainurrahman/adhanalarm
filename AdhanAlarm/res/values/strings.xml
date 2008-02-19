@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Adh&#257;n Alarm</string>
-    <string name="welcome">Welcome to Adh&#257;n Alarm</string>
     <string name="schedule">Schedule</string>
     <string name="dawn">Dawn</string>
     <string name="fajr">Fajr</string>
@@ -12,17 +11,27 @@
     <string name="ishaa">`Ishaa\'</string>
     <string name="next_dawn">Next Dawn</string>
     <string name="next_fajr">Next Fajr</string>
+    <string name="welcome">Welcome to Adh&#257;n Alarm</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="qibla">Qibla</string>
+    <string name="north">North</string>
+    <string name="south">South</string>
+    <string name="east">East</string>
+    <string name="west">West</string>
     <string name="alert">Alert</string>
     <string name="notification">Notification</string>
     <string name="offset">Offset</string>
+    <string name="extra_alerts">Extra Alerts</string>
     <string name="save_and_apply_alert">Save And Apply Alert</string>
     <string name="location">Location</string>
-    <string name="latitude">Latitude</string>
-    <string name="longitude">Longitude</string>
     <string name="lookup_gps">Lookup\nGPS</string>
+    <string name="time_zone">Time Zone</string>
+    <string name="daylight_savings_time">Daylight Savings Time?</string>
     <string name="save_and_apply_location">Save And Apply Location</string>
     <string name="advanced">Advanced</string>
     <string name="calculation">Calculation</string>
+    <string name="rounding">Rounding</string>
     <string name="sea_level">Sea Level</string>
     <string name="pressure">Pressure</string>
     <string name="temperature">Temperature</string>
