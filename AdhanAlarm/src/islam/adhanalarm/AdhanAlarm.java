@@ -70,7 +70,7 @@ public class AdhanAlarm extends Activity {
 
         TabHost.TabSpec one = tabs.newTabSpec("one");
         one.setContent(R.id.content1);
-        one.setIndicator(getString(R.string.schedule), getResources().getDrawable(R.drawable.calendar));
+        one.setIndicator(getString(R.string.today), getResources().getDrawable(R.drawable.calendar));
         tabs.addTab(one);
 
         TabHost.TabSpec two = tabs.newTabSpec("two");
@@ -80,12 +80,12 @@ public class AdhanAlarm extends Activity {
 
         TabHost.TabSpec three = tabs.newTabSpec("three");
         three.setContent(R.id.content3);
-        three.setIndicator(getString(R.string.location), getResources().getDrawable(R.drawable.globe));
+        three.setIndicator(getString(R.string.place), getResources().getDrawable(R.drawable.globe));
         tabs.addTab(three);
 
         TabHost.TabSpec four = tabs.newTabSpec("four");
         four.setContent(R.id.content4);
-        four.setIndicator(getString(R.string.advanced), getResources().getDrawable(R.drawable.calculator));
+        four.setIndicator(getString(R.string.extra), getResources().getDrawable(R.drawable.calculator));
         tabs.addTab(four);
 
         tabs.setCurrentTab(0);
@@ -118,8 +118,8 @@ public class AdhanAlarm extends Activity {
             }
         });
 
-        Button saveAndApplyLocation = (Button)findViewById(R.id.save_and_apply_location);
-        saveAndApplyLocation.setOnClickListener(new Button.OnClickListener() {  
+        Button saveAndApplyPlace = (Button)findViewById(R.id.save_and_apply_place);
+        saveAndApplyPlace.setOnClickListener(new Button.OnClickListener() {  
             public void onClick(View v) {
                 updateScheduleAndNotification();
                 TabHost tabs = (TabHost)findViewById(R.id.tabs);
@@ -127,19 +127,18 @@ public class AdhanAlarm extends Activity {
             }
         });
 
-        Button resetAdvanced = (Button)findViewById(R.id.reset_advanced);
-        resetAdvanced.setOnClickListener(new Button.OnClickListener() {  
+        Button resetExtra = (Button)findViewById(R.id.reset_extra);
+        resetExtra.setOnClickListener(new Button.OnClickListener() {  
             public void onClick(View v) {
                 ((Spinner)findViewById(R.id.calculation_methods)).setSelection(0);
                 ((Spinner)findViewById(R.id.rounding_types)).setSelection(1);
-                ((EditText)findViewById(R.id.sea_level)).setText("0");
                 ((EditText)findViewById(R.id.pressure)).setText("1010");
                 ((EditText)findViewById(R.id.temperature)).setText("10");
             }
         });
 
-        Button saveAndApplyAdvanced = (Button)findViewById(R.id.save_and_apply_advanced);
-        saveAndApplyAdvanced.setOnClickListener(new Button.OnClickListener() {  
+        Button saveAndApplyExtra = (Button)findViewById(R.id.save_and_apply_extra);
+        saveAndApplyExtra.setOnClickListener(new Button.OnClickListener() {  
             public void onClick(View v) {
                 updateScheduleAndNotification();
                 TabHost tabs = (TabHost)findViewById(R.id.tabs);
@@ -204,47 +203,56 @@ public class AdhanAlarm extends Activity {
         ((TextView)findViewById(R.id.next_dawn)).setText(timeFormat.format(currentNotificationTimes[7].getTime()));
         currentNotificationTimes[8] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH) + 1, nextFajr.getHour(), nextFajr.getMinute(), nextFajr.getSecond());
         ((TextView)findViewById(R.id.next_fajr)).setText(timeFormat.format(currentNotificationTimes[8].getTime()));
-        
+
         // Set the marker indicating the next time (remove for previous time)
         if(currentTime.compareTo(currentNotificationTimes[0]) < 0) {
             ((TextView)findViewById(R.id.mark_next_fajr)).setText("");
-            ((TextView)findViewById(R.id.mark_dawn)).setText("<");
+            ((TextView)findViewById(R.id.mark_dawn)).setText(getString(R.string.marker));
+            ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.dawn));
         } else if(currentTime.compareTo(currentNotificationTimes[1]) < 0) {
             ((TextView)findViewById(R.id.mark_dawn)).setText("");
-            ((TextView)findViewById(R.id.mark_fajr)).setText("<");
+            ((TextView)findViewById(R.id.mark_fajr)).setText(getString(R.string.marker));
+            ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.fajr));
         } else if(currentTime.compareTo(currentNotificationTimes[2]) < 0) {
             ((TextView)findViewById(R.id.mark_fajr)).setText("");
-            ((TextView)findViewById(R.id.mark_sunrise)).setText("<");
+            ((TextView)findViewById(R.id.mark_sunrise)).setText(getString(R.string.marker));
+            ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.sunrise));
         } else if(currentTime.compareTo(currentNotificationTimes[3]) < 0) {
             ((TextView)findViewById(R.id.mark_sunrise)).setText("");
-            ((TextView)findViewById(R.id.mark_dhuhr)).setText("<");
+            ((TextView)findViewById(R.id.mark_dhuhr)).setText(getString(R.string.marker));
+            ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.dhuhr));
         } else if(currentTime.compareTo(currentNotificationTimes[4]) < 0) {
             ((TextView)findViewById(R.id.mark_dhuhr)).setText("");
-            ((TextView)findViewById(R.id.mark_asr)).setText("<");
+            ((TextView)findViewById(R.id.mark_asr)).setText(getString(R.string.marker));
+            ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.asr));
         } else if(currentTime.compareTo(currentNotificationTimes[5]) < 0) {
             ((TextView)findViewById(R.id.mark_asr)).setText("");
-            ((TextView)findViewById(R.id.mark_maghrib)).setText("<");
+            ((TextView)findViewById(R.id.mark_maghrib)).setText(getString(R.string.marker));
+            ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.maghrib));
         } else if(currentTime.compareTo(currentNotificationTimes[6]) < 0) {
             ((TextView)findViewById(R.id.mark_maghrib)).setText("");
-            ((TextView)findViewById(R.id.mark_ishaa)).setText("<");
+            ((TextView)findViewById(R.id.mark_ishaa)).setText(getString(R.string.marker));
+            ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.ishaa));
         } else if(currentTime.compareTo(currentNotificationTimes[7]) < 0) {
             ((TextView)findViewById(R.id.mark_ishaa)).setText("");
-            ((TextView)findViewById(R.id.mark_next_dawn)).setText("<");
+            ((TextView)findViewById(R.id.mark_next_dawn)).setText(getString(R.string.marker));
+            ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.next_dawn));
         } else if(currentTime.compareTo(currentNotificationTimes[8]) < 0) {
             ((TextView)findViewById(R.id.mark_next_dawn)).setText("");
-            ((TextView)findViewById(R.id.mark_next_fajr)).setText("<");
+            ((TextView)findViewById(R.id.mark_next_fajr)).setText(getString(R.string.marker));
+            ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.next_fajr));
         }
         
         // Add Latitude, Longitude and Qibla DMS location to front panel
         PrayerTimes.DMS dms = prayerTimes.decimal2Dms(loc.getDegreeLat());
         double qibla = prayerTimes.getNorthQibla(loc);
-	    String current_latitude = Math.abs(dms.getDegree()) + " " + Math.abs(dms.getMinute())+ " " + Math.abs(dms.getSecond()) + " " + ((loc.getDegreeLat() >= 0) ? getString(R.string.north) : getString(R.string.south));
+	    String current_latitude = Math.abs(dms.getDegree()) + "° " + Math.abs(dms.getMinute())+ "' " + Math.abs(dms.getSecond()) + "\" " + ((loc.getDegreeLat() >= 0) ? getString(R.string.north) : getString(R.string.south));
 	    ((TextView)findViewById(R.id.current_latitude)).setText(current_latitude);
 	    dms = prayerTimes.decimal2Dms(loc.getDegreeLong());
-	    String current_longitude = Math.abs(dms.getDegree()) + " " + Math.abs(dms.getMinute()) + " " + Math.abs(dms.getSecond()) + " " + ((loc.getDegreeLong() >= 0) ? getString(R.string.east) : getString(R.string.west));
+	    String current_longitude = Math.abs(dms.getDegree()) + "° " + Math.abs(dms.getMinute()) + "' " + Math.abs(dms.getSecond()) + "\" " + ((loc.getDegreeLong() >= 0) ? getString(R.string.east) : getString(R.string.west));
 	    ((TextView)findViewById(R.id.current_longitude)).setText(current_longitude);
 	    dms = prayerTimes.decimal2Dms(qibla);
-	    String current_qibla = Math.abs(dms.getDegree()) + " " + Math.abs(dms.getMinute()) + " " + Math.abs(dms.getSecond()) + " " + ((qibla >= 0) ? getString(R.string.west) : getString(R.string.east));
+	    String current_qibla = Math.abs(dms.getDegree()) + "° " + Math.abs(dms.getMinute()) + "' " + Math.abs(dms.getSecond()) + "\" " + ((qibla >= 0) ? getString(R.string.west) : getString(R.string.east));
 	    ((TextView)findViewById(R.id.current_qibla)).setText(current_qibla);
         
         // TODO: Start notification if appropriate

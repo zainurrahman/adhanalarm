@@ -13,166 +13,137 @@
 			<LinearLayout android:orientation="horizontal"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content" android:id="@+id/content1">
-				<LinearLayout android:orientation="vertical"
+				<LinearLayout android:orientation="horizontal"
 					android:layout_width="wrap_content"
-					android:layout_height="wrap_content">
-					<LinearLayout android:orientation="horizontal"
+					android:layout_height="wrap_content" android:paddingRight="5px">
+					<LinearLayout android:orientation="vertical"
 						android:layout_height="wrap_content"
-						android:layout_width="wrap_content"
-						android:background="#FFFF00">
-						<TextView android:layout_width="75px"
-							android:textColor="#000000" android:layout_height="wrap_content"
-							android:text="@string/dawn" />
-						<TextView android:id="@+id/dawn"
-							android:textColor="#000000" android:layout_width="65px"
-							android:layout_height="wrap_content" android:text="~" />
+						android:layout_width="10px">
 						<TextView android:id="@+id/mark_dawn"
-							android:textColor="#000000" android:layout_width="5px"
-							android:layout_height="wrap_content" />
-					</LinearLayout>
-					<LinearLayout android:orientation="horizontal"
-						android:layout_height="wrap_content"
-						android:layout_width="wrap_content">
-						<TextView android:layout_width="75px"
-							android:layout_height="wrap_content" android:text="@string/fajr" />
-						<TextView android:id="@+id/fajr"
-							android:layout_width="65px" android:layout_height="wrap_content"
-							android:text="~" />
+							android:textColor="#000000" android:layout_height="wrap_content"
+							android:background="#FFFF00" android:layout_width="fill_parent" />
 						<TextView android:id="@+id/mark_fajr"
-							android:layout_width="5px" android:layout_height="wrap_content" />
-					</LinearLayout>
-					<LinearLayout android:orientation="horizontal"
-						android:layout_height="wrap_content"
-						android:layout_width="wrap_content"
-						android:background="#FFFF00">
-						<TextView android:layout_width="75px"
-							android:textColor="#000000" android:layout_height="wrap_content"
-							android:text="@string/sunrise" />
-						<TextView android:id="@+id/sunrise"
-							android:textColor="#000000" android:layout_width="65px"
-							android:layout_height="wrap_content" android:text="~" />
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content" />
 						<TextView android:id="@+id/mark_sunrise"
-							android:textColor="#000000" android:layout_width="5px"
-							android:layout_height="wrap_content" />
-					</LinearLayout>
-					<LinearLayout android:orientation="horizontal"
-						android:layout_height="wrap_content"
-						android:layout_width="wrap_content">
-						<TextView android:layout_width="75px"
-							android:layout_height="wrap_content"
-							android:text="@string/dhuhr" />
-						<TextView android:id="@+id/dhuhr"
-							android:layout_width="65px" android:layout_height="wrap_content"
-							android:text="~" />
+							android:textColor="#000000" android:layout_height="wrap_content"
+							android:background="#FFFF00" android:layout_width="fill_parent" />
 						<TextView android:id="@+id/mark_dhuhr"
-							android:layout_width="5px" android:layout_height="wrap_content" />
-					</LinearLayout>
-					<LinearLayout android:orientation="horizontal"
-						android:layout_height="wrap_content"
-						android:layout_width="wrap_content"
-						android:background="#FFFF00">
-						<TextView android:layout_width="75px"
-							android:textColor="#000000" android:layout_height="wrap_content"
-							android:text="@string/asr" />
-						<TextView android:id="@+id/asr"
-							android:textColor="#000000" android:layout_width="65px"
-							android:layout_height="wrap_content" android:text="~" />
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content" />
 						<TextView android:id="@+id/mark_asr"
-							android:textColor="#000000" android:layout_width="5px"
-							android:layout_height="wrap_content" />
-					</LinearLayout>
-					<LinearLayout android:orientation="horizontal"
-						android:layout_height="wrap_content"
-						android:layout_width="wrap_content">
-						<TextView android:layout_width="75px"
-							android:layout_height="wrap_content"
-							android:text="@string/maghrib" />
-						<TextView android:id="@+id/maghrib"
-							android:layout_width="65px" android:layout_height="wrap_content"
-							android:text="~" />
-						<TextView android:id="@+id/mark_maghrib"
-							android:layout_width="5px" android:layout_height="wrap_content" />
-					</LinearLayout>
-					<LinearLayout android:orientation="horizontal"
-						android:layout_height="wrap_content"
-						android:layout_width="wrap_content"
-						android:background="#FFFF00">
-						<TextView android:layout_width="75px"
 							android:textColor="#000000" android:layout_height="wrap_content"
-							android:text="@string/ishaa" />
-						<TextView android:id="@+id/ishaa"
-							android:textColor="#000000" android:layout_width="65px"
-							android:layout_height="wrap_content" android:text="~" />
-						<TextView android:id="@+id/mark_ishaa"
-							android:textColor="#000000" android:layout_width="5px"
+							android:background="#FFFF00" android:layout_width="fill_parent" />
+						<TextView android:id="@+id/mark_maghrib"
+							android:layout_width="fill_parent"
 							android:layout_height="wrap_content" />
+						<TextView android:id="@+id/mark_ishaa"
+							android:textColor="#000000" android:layout_height="wrap_content"
+							android:background="#FFFF00" android:layout_width="fill_parent" />
+						<TextView android:id="@+id/mark_next_dawn"
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content" />
+						<TextView android:id="@+id/mark_next_fajr"
+							android:textColor="#000000" android:layout_height="wrap_content"
+							android:background="#FFFF00" android:layout_width="fill_parent" />
 					</LinearLayout>
-					<LinearLayout android:orientation="horizontal"
+					<LinearLayout android:orientation="vertical"
 						android:layout_height="wrap_content"
 						android:layout_width="wrap_content">
-						<TextView android:layout_width="75px"
+						<TextView android:textColor="#000000"
+							android:layout_height="wrap_content" android:text="@string/dawn"
+							android:background="#FFFF00" android:layout_width="fill_parent"
+							android:paddingRight="5px" />
+						<TextView android:layout_height="wrap_content"
+							android:text="@string/fajr" android:layout_width="fill_parent"
+							android:paddingRight="5px" />
+						<TextView android:textColor="#000000"
 							android:layout_height="wrap_content"
-							android:text="@string/next_dawn" />
-						<TextView android:id="@+id/next_dawn"
-							android:layout_width="65px" android:layout_height="wrap_content"
-							android:text="~" />
-						<TextView android:id="@+id/mark_next_dawn"
-							android:layout_width="5px" android:layout_height="wrap_content" />
+							android:text="@string/sunrise" android:background="#FFFF00"
+							android:layout_width="fill_parent" android:paddingRight="5px" />
+						<TextView android:layout_height="wrap_content"
+							android:text="@string/dhuhr" android:layout_width="fill_parent"
+							android:paddingRight="5px" />
+						<TextView android:textColor="#000000"
+							android:layout_height="wrap_content" android:text="@string/asr"
+							android:background="#FFFF00" android:layout_width="fill_parent"
+							android:paddingRight="5px" />
+						<TextView android:layout_height="wrap_content"
+							android:text="@string/maghrib" android:layout_width="fill_parent"
+							android:paddingRight="5px" />
+						<TextView android:textColor="#000000"
+							android:layout_height="wrap_content" android:text="@string/ishaa"
+							android:background="#FFFF00" android:layout_width="fill_parent"
+							android:paddingRight="5px" />
+						<TextView android:layout_height="wrap_content"
+							android:text="@string/next_dawn"
+							android:layout_width="fill_parent" android:paddingRight="5px" />
+						<TextView android:layout_height="wrap_content"
+							android:textColor="#000000" android:text="@string/next_fajr"
+							android:background="#FFFF00" android:layout_width="fill_parent"
+							android:paddingRight="5px" />
 					</LinearLayout>
-					<LinearLayout android:orientation="horizontal"
+					<LinearLayout android:orientation="vertical"
 						android:layout_height="wrap_content"
-						android:layout_width="wrap_content"
-						android:background="#FFFF00">
-						<TextView android:layout_width="75px"
-							android:layout_height="wrap_content" android:textColor="#000000"
-							android:text="@string/next_fajr" />
-						<TextView android:id="@+id/next_fajr"
-							android:textColor="#000000" android:layout_width="65px"
+						android:layout_width="wrap_content">
+						<TextView android:id="@+id/dawn"
+							android:textColor="#000000" android:layout_height="wrap_content"
+							android:text="~" android:background="#FFFF00"
+							android:layout_width="fill_parent" />
+						<TextView android:id="@+id/fajr"
+							android:layout_width="fill_parent"
 							android:layout_height="wrap_content" android:text="~" />
-						<TextView android:id="@+id/mark_next_fajr"
-							android:textColor="#000000" android:layout_width="5px"
-							android:layout_height="wrap_content" />
+						<TextView android:id="@+id/sunrise"
+							android:textColor="#000000" android:layout_height="wrap_content"
+							android:text="~" android:background="#FFFF00"
+							android:layout_width="fill_parent" />
+						<TextView android:id="@+id/dhuhr"
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content" android:text="~" />
+						<TextView android:id="@+id/asr"
+							android:textColor="#000000" android:layout_height="wrap_content"
+							android:text="~" android:background="#FFFF00"
+							android:layout_width="fill_parent" />
+						<TextView android:id="@+id/maghrib"
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content" android:text="~" />
+						<TextView android:id="@+id/ishaa"
+							android:textColor="#000000" android:layout_height="wrap_content"
+							android:text="~" android:background="#FFFF00"
+							android:layout_width="fill_parent" />
+						<TextView android:id="@+id/next_dawn"
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content" android:text="~" />
+						<TextView android:id="@+id/next_fajr"
+							android:textColor="#000000" android:layout_height="wrap_content"
+							android:text="~" android:background="#FFFF00"
+							android:layout_width="fill_parent" />
 					</LinearLayout>
 				</LinearLayout>
 				<LinearLayout android:orientation="vertical"
 					android:layout_width="fill_parent"
-					android:layout_height="wrap_content" android:paddingLeft="5px">
-					<TextView android:layout_width="fill_parent"
+					android:layout_height="wrap_content">
+					<TextView android:id="@+id/notes"
+						android:layout_width="fill_parent"
 						android:layout_height="wrap_content"
-						android:text="@string/welcome" />
-					<LinearLayout android:orientation="horizontal"
+						android:text="@string/introduction" android:paddingBottom="5px" />
+					<TextView android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
-						android:layout_width="wrap_content">
-						<TextView android:layout_width="70px"
-							android:layout_height="wrap_content"
-							android:text="@string/latitude" />
-						<TextView android:id="@+id/current_latitude"
-							android:layout_width="fill_parent"
-							android:layout_height="wrap_content"
-							android:text="~" />
-					</LinearLayout>
-					<LinearLayout android:orientation="horizontal"
+						android:text="@string/latitude" />
+					<TextView android:id="@+id/current_latitude"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content" android:text="~" />
+					<TextView android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
-						android:layout_width="wrap_content">
-						<TextView android:layout_width="70px"
-							android:layout_height="wrap_content"
-							android:text="@string/longitude" />
-						<TextView android:id="@+id/current_longitude"
-							android:layout_width="fill_parent"
-							android:layout_height="wrap_content"
-							android:text="~" />
-					</LinearLayout>
-					<LinearLayout android:orientation="horizontal"
-						android:layout_height="wrap_content"
-						android:layout_width="wrap_content">
-						<TextView android:layout_width="70px"
-							android:layout_height="wrap_content"
-							android:text="@string/qibla" />
-						<TextView android:id="@+id/current_qibla"
-							android:layout_width="fill_parent"
-							android:layout_height="wrap_content"
-							android:text="~" />
-					</LinearLayout>
+						android:text="@string/longitude" />
+					<TextView android:id="@+id/current_longitude"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content" android:text="~" />
+					<TextView android:layout_width="wrap_content"
+						android:layout_height="wrap_content" android:text="@string/qibla" />
+					<TextView android:id="@+id/current_qibla"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content" android:text="~" />
 				</LinearLayout>
 			</LinearLayout>
 		</ScrollView>
@@ -184,35 +155,38 @@
 				<LinearLayout android:orientation="horizontal"
 					android:layout_height="wrap_content"
 					android:layout_width="fill_parent">
-					<TextView android:layout_width="80px"
+					<LinearLayout android:orientation="vertical"
+						android:layout_height="fill_parent"
+						android:layout_width="wrap_content" android:paddingRight="5px">
+						<TextView android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/notification" android:layout_weight="1"
+							android:gravity="fill_vertical" />
+						<TextView android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/offset" android:layout_weight="1"
+							android:gravity="fill_vertical" />
+						<TextView android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/extra_alerts" android:layout_weight="1"
+							android:gravity="fill_vertical" />
+					</LinearLayout>
+					<LinearLayout android:orientation="vertical"
 						android:layout_height="wrap_content"
-						android:text="@string/notification" />
-					<Spinner android:id="@+id/notification_methods"
-						android:layout_width="fill_parent"
-						android:layout_height="wrap_content"
-						android:drawSelectorOnTop="true" />
-				</LinearLayout>
-				<LinearLayout android:orientation="horizontal"
-					android:layout_height="wrap_content"
-					android:layout_width="fill_parent">
-					<TextView android:layout_width="80px"
-						android:layout_height="wrap_content"
-						android:text="@string/offset" />
-					<Spinner android:id="@+id/minutes_offset"
-						android:layout_width="fill_parent"
-						android:layout_height="wrap_content"
-						android:drawSelectorOnTop="true" />
-				</LinearLayout>
-				<LinearLayout android:orientation="horizontal"
-					android:layout_height="wrap_content"
-					android:layout_width="fill_parent">
-					<TextView android:layout_width="80px"
-						android:layout_height="wrap_content"
-						android:text="@string/extra_alerts" />
-					<Spinner android:id="@+id/extra_alerts"
-						android:layout_width="fill_parent"
-						android:layout_height="wrap_content"
-						android:drawSelectorOnTop="true" />
+						android:layout_width="fill_parent">
+						<Spinner android:id="@+id/notification_methods"
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content"
+							android:drawSelectorOnTop="true" />
+						<Spinner android:id="@+id/minutes_offset"
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content"
+							android:drawSelectorOnTop="true" />
+						<Spinner android:id="@+id/extra_alerts"
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content"
+							android:drawSelectorOnTop="true" />
+					</LinearLayout>
 				</LinearLayout>
 				<Button android:id="@+id/save_and_apply_alert"
 					android:text="@string/save_and_apply_alert"
@@ -228,20 +202,10 @@
 				<LinearLayout android:orientation="horizontal"
 					android:layout_height="wrap_content"
 					android:layout_width="fill_parent">
-					<TextView android:layout_width="75px"
+					<TextView android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
-						android:text="@string/time_zone" />
-					<Spinner android:id="@+id/gmt_difference"
-						android:layout_width="fill_parent"
-						android:layout_height="wrap_content"
-						android:drawSelectorOnTop="true" />
-				</LinearLayout>
-				<LinearLayout android:orientation="horizontal"
-					android:layout_height="wrap_content"
-					android:layout_width="fill_parent">
-					<TextView android:layout_width="150px"
-						android:layout_height="wrap_content"
-						android:text="@string/daylight_savings_time" />
+						android:text="@string/daylight_savings_time"
+						android:paddingRight="5px" />
 					<CheckBox android:id="@+id/daylight_savings_time"
 						android:layout_width="fill_parent"
 						android:layout_height="wrap_content" />
@@ -250,38 +214,70 @@
 					android:layout_height="wrap_content"
 					android:layout_width="fill_parent">
 					<LinearLayout android:orientation="vertical"
-						android:layout_height="wrap_content"
-						android:layout_width="wrap_content" android:layout_weight="1">
-						<LinearLayout android:orientation="horizontal"
-							android:layout_height="wrap_content"
-							android:layout_width="fill_parent">
-							<TextView android:text="@string/latitude"
-								android:layout_width="75px"
-								android:layout_height="wrap_content" />
-							<EditText android:id="@+id/latitude"
-								android:text="47.682" android:layout_width="fill_parent"
-								android:layout_height="wrap_content" android:numeric="false"
-								android:phoneNumber="false" android:autoText="false" />
-						</LinearLayout>
-						<LinearLayout android:orientation="horizontal"
-							android:layout_height="wrap_content"
-							android:layout_width="fill_parent">
-							<TextView android:text="@string/longitude"
-								android:layout_width="75px"
-								android:layout_height="wrap_content" />
-							<EditText android:id="@+id/longitude"
-								android:text="-122.132" android:layout_width="fill_parent"
-								android:layout_height="wrap_content" android:numeric="false"
-								android:phoneNumber="false" android:autoText="false" />
-						</LinearLayout>
+						android:layout_height="fill_parent"
+						android:layout_width="wrap_content" android:paddingRight="5px">
+						<TextView android:text="@string/time_zone"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content" android:layout_weight="1"
+							android:gravity="fill_vertical" />
+						<TextView android:text="@string/latitude"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content" android:layout_weight="1"
+							android:gravity="fill_vertical" />
+						<TextView android:text="@string/longitude"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content" android:layout_weight="1"
+							android:gravity="fill_vertical" />
+						<TextView android:text="@string/altitude"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content" android:layout_weight="1"
+							android:gravity="fill_vertical" />
 					</LinearLayout>
-					<Button android:id="@+id/lookup_gps"
-						android:text="@string/lookup_gps"
-						android:layout_width="wrap_content"
-						android:layout_height="fill_parent" />
+					<LinearLayout android:orientation="vertical"
+						android:layout_height="wrap_content"
+						android:layout_width="fill_parent">
+						<Spinner android:id="@+id/gmt_difference"
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content"
+							android:drawSelectorOnTop="true" />
+						<LinearLayout android:orientation="horizontal"
+							android:layout_height="wrap_content"
+							android:layout_width="fill_parent">
+							<LinearLayout android:orientation="vertical"
+								android:layout_height="wrap_content"
+								android:layout_width="wrap_content" android:layout_weight="1">
+								<LinearLayout
+									android:orientation="horizontal"
+									android:layout_height="wrap_content"
+									android:layout_width="fill_parent">
+									<EditText android:id="@+id/latitude"
+										android:text="47.682" android:layout_width="fill_parent"
+										android:layout_height="wrap_content" android:numeric="false"
+										android:phoneNumber="false" android:autoText="false" />
+								</LinearLayout>
+								<LinearLayout
+									android:orientation="horizontal"
+									android:layout_height="wrap_content"
+									android:layout_width="fill_parent">
+									<EditText
+										android:id="@+id/longitude" android:text="-122.132"
+										android:layout_width="fill_parent"
+										android:layout_height="wrap_content" android:numeric="false"
+										android:phoneNumber="false" android:autoText="false" />
+								</LinearLayout>
+							</LinearLayout>
+							<Button android:id="@+id/lookup_gps"
+								android:text="@string/lookup_gps"
+								android:layout_width="wrap_content"
+								android:layout_height="fill_parent" />
+						</LinearLayout>
+						<EditText android:id="@+id/altitude"
+							android:text="0" android:layout_width="fill_parent"
+							android:layout_height="wrap_content" android:numeric="false" />
+					</LinearLayout>
 				</LinearLayout>
-				<Button android:id="@+id/save_and_apply_location"
-					android:text="@string/save_and_apply_location"
+				<Button android:id="@+id/save_and_apply_place"
+					android:text="@string/save_and_apply_place"
 					android:layout_width="fill_parent"
 					android:layout_height="fill_parent" />
 			</LinearLayout>
@@ -294,61 +290,54 @@
 				<LinearLayout android:orientation="horizontal"
 					android:layout_height="wrap_content"
 					android:layout_width="fill_parent">
-					<TextView android:layout_width="85px"
+					<LinearLayout android:orientation="vertical"
+						android:layout_height="fill_parent"
+						android:layout_width="wrap_content" android:paddingRight="5px">
+						<TextView android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/calculation" android:layout_weight="1"
+							android:gravity="fill_vertical" />
+						<TextView android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/rounding" android:layout_weight="1"
+							android:gravity="fill_vertical" />
+						<TextView android:text="@string/pressure"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content" android:layout_weight="1"
+							android:gravity="fill_vertical" />
+						<TextView android:text="@string/temperature"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content" android:layout_weight="1"
+							android:gravity="fill_vertical" />
+					</LinearLayout>
+					<LinearLayout android:orientation="vertical"
 						android:layout_height="wrap_content"
-						android:text="@string/calculation" />
-					<Spinner android:id="@+id/calculation_methods"
-						android:layout_width="fill_parent"
-						android:layout_height="wrap_content"
-						android:drawSelectorOnTop="true" />
+						android:layout_width="fill_parent">
+						<Spinner android:id="@+id/calculation_methods"
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content"
+							android:drawSelectorOnTop="true" />
+						<Spinner android:id="@+id/rounding_types"
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content"
+							android:drawSelectorOnTop="true" />
+						<EditText android:id="@+id/pressure"
+							android:text="1010" android:layout_width="fill_parent"
+							android:layout_height="wrap_content" android:numeric="false" />
+						<EditText android:id="@+id/temperature"
+							android:text="10" android:layout_width="fill_parent"
+							android:layout_height="wrap_content" android:numeric="false" />
+					</LinearLayout>
 				</LinearLayout>
 				<LinearLayout android:orientation="horizontal"
 					android:layout_height="wrap_content"
 					android:layout_width="fill_parent">
-					<TextView android:layout_width="85px"
-						android:layout_height="wrap_content"
-						android:text="@string/rounding" />
-					<Spinner android:id="@+id/rounding_types"
-						android:layout_width="fill_parent"
-						android:layout_height="wrap_content"
-						android:drawSelectorOnTop="true" />
-				</LinearLayout>
-				<LinearLayout android:orientation="horizontal"
-					android:layout_height="wrap_content"
-					android:layout_width="fill_parent">
-					<TextView android:text="@string/sea_level"
-						android:layout_width="85px" android:layout_height="wrap_content" />
-					<EditText android:id="@+id/sea_level"
-						android:text="0" android:layout_width="fill_parent"
-						android:layout_height="wrap_content" android:numeric="false" />
-				</LinearLayout>
-				<LinearLayout android:orientation="horizontal"
-					android:layout_height="wrap_content"
-					android:layout_width="fill_parent">
-					<TextView android:text="@string/pressure"
-						android:layout_width="85px" android:layout_height="wrap_content" />
-					<EditText android:id="@+id/pressure"
-						android:text="1010" android:layout_width="fill_parent"
-						android:layout_height="wrap_content" android:numeric="false" />
-				</LinearLayout>
-				<LinearLayout android:orientation="horizontal"
-					android:layout_height="wrap_content"
-					android:layout_width="fill_parent">
-					<TextView android:text="@string/temperature"
-						android:layout_width="85px" android:layout_height="wrap_content" />
-					<EditText android:id="@+id/temperature"
-						android:text="10" android:layout_width="fill_parent"
-						android:layout_height="wrap_content" android:numeric="false" />
-				</LinearLayout>
-				<LinearLayout android:orientation="horizontal"
-					android:layout_height="wrap_content"
-					android:layout_width="fill_parent">
-					<Button android:id="@+id/reset_advanced"
-						android:text="@string/reset_advanced"
+					<Button android:id="@+id/reset_extra"
+						android:text="@string/reset_extra"
 						android:layout_width="wrap_content"
 						android:layout_height="fill_parent" />
-					<Button android:id="@+id/save_and_apply_advanced"
-						android:text="@string/save_and_apply_advanced"
+					<Button android:id="@+id/save_and_apply_extra"
+						android:text="@string/save_and_apply_extra"
 						android:layout_width="fill_parent"
 						android:layout_height="fill_parent" />
 				</LinearLayout>
