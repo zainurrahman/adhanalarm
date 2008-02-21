@@ -1,6 +1,7 @@
 package islam.adhanalarm;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -14,14 +15,17 @@ import android.view.View;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 import libs.itl.PrayerTimes;
 
 public class AdhanAlarm extends Activity {
-    /** Called when the activity is first created. */
+	public static final String PREFS_NAME = "settingsFile";
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.main);
+        
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
         Spinner notification_methods = (Spinner)findViewById(R.id.notification_methods);
         notification_methods.setAllowWrap(true);
@@ -29,13 +33,7 @@ public class AdhanAlarm extends Activity {
                 this, R.array.notification_methods, android.R.layout.simple_spinner_item);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         notification_methods.setAdapter(adapter);
-
-        Spinner minutes_offset = (Spinner)findViewById(R.id.minutes_offset);
-        minutes_offset.setAllowWrap(true);
-        adapter = ArrayAdapter.createFromResource(
-                this, R.array.minute_offsets, android.R.layout.simple_spinner_item);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        minutes_offset.setAdapter(adapter);
+        notification_methods.setSelection(settings.getInt("notificationMethodIndex", 0));
 
         Spinner extra_alerts = (Spinner)findViewById(R.id.extra_alerts);
         extra_alerts.setAllowWrap(true);
@@ -43,13 +41,15 @@ public class AdhanAlarm extends Activity {
                 this, R.array.extra_alerts, android.R.layout.simple_spinner_item);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         extra_alerts.setAdapter(adapter);
+        extra_alerts.setSelection(settings.getInt("extraAlertsIndex", 0));
 
-        Spinner gmt_difference = (Spinner)findViewById(R.id.gmt_difference);
-        gmt_difference.setAllowWrap(true);
-        adapter = ArrayAdapter.createFromResource(
-                this, R.array.gmt_differences, android.R.layout.simple_spinner_item);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        gmt_difference.setAdapter(adapter);
+        ((EditText)findViewById(R.id.latitude)).setText(settings.getString("latitude", "47.682"));
+        ((EditText)findViewById(R.id.longitude)).setText(settings.getString("longitude", "-122.132"));
+        ((EditText)findViewById(R.id.altitude)).setText(Float.toString(settings.getFloat("altitude", 0)));
+        
+        if(settings.getString("latitude", "") != "" && settings.getString("longitude", "") != "") {
+        	updateScheduleAndNotification();
+        }
 
         Spinner calculation_methods = (Spinner)findViewById(R.id.calculation_methods);
         calculation_methods.setAllowWrap(true);
@@ -57,6 +57,7 @@ public class AdhanAlarm extends Activity {
                 this, R.array.calculation_methods, android.R.layout.simple_spinner_item);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         calculation_methods.setAdapter(adapter);
+        calculation_methods.setSelection(settings.getInt("calculationMethodsIndex", 0));
 
         Spinner rounding_types = (Spinner)findViewById(R.id.rounding_types);
         rounding_types.setAllowWrap(true);
@@ -64,6 +65,15 @@ public class AdhanAlarm extends Activity {
                 this, R.array.rounding_types, android.R.layout.simple_spinner_item);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
        rounding_types.setAdapter(adapter);
+       rounding_types.setSelection(settings.getInt("roundingTypesIndex", 1));
+
+       ((EditText)findViewById(R.id.pressure)).setText(Float.toString(settings.getFloat("pressure", 1010)));
+       ((EditText)findViewById(R.id.temperature)).setText(Float.toString(settings.getFloat("temperature", 10)));
+
+       double gmtOffset = getGMTOffset();
+       String plusMinusGMT = gmtOffset < 0 ? "" + gmtOffset : "+" + gmtOffset;
+       String daylightTime = isDaylightSavings() ? " " + getString(R.string.daylight_savings) : "";
+       ((TextView)findViewById(R.id.display_time_zone)).setText(getString(R.string.system_time_zone) + ": " + getString(R.string.gmt) + plusMinusGMT + " (" + new GregorianCalendar().getTimeZone().getDisplayName() + daylightTime + ")");
 
         TabHost tabs = (TabHost)findViewById(R.id.tabs);
         tabs.setup();
@@ -115,6 +125,11 @@ public class AdhanAlarm extends Activity {
                 updateScheduleAndNotification();
                 TabHost tabs = (TabHost)findViewById(R.id.tabs);
                 tabs.setCurrentTab(0);
+                SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putInt("notificationMethodIndex", ((Spinner)findViewById(R.id.notification_methods)).getSelectedItemPosition());
+                editor.putInt("extraAlertsIndex", ((Spinner)findViewById(R.id.extra_alerts)).getSelectedItemPosition());
+                editor.commit();
             }
         });
 
@@ -124,6 +139,12 @@ public class AdhanAlarm extends Activity {
                 updateScheduleAndNotification();
                 TabHost tabs = (TabHost)findViewById(R.id.tabs);
                 tabs.setCurrentTab(0);
+                SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString("latitude", ((EditText)findViewById(R.id.latitude)).getText().toString());
+                editor.putString("longitude", ((EditText)findViewById(R.id.longitude)).getText().toString());
+                editor.putFloat("altitude", Float.parseFloat(((EditText)findViewById(R.id.altitude)).getText().toString()));
+                editor.commit();
             }
         });
 
@@ -132,8 +153,8 @@ public class AdhanAlarm extends Activity {
             public void onClick(View v) {
                 ((Spinner)findViewById(R.id.calculation_methods)).setSelection(0);
                 ((Spinner)findViewById(R.id.rounding_types)).setSelection(1);
-                ((EditText)findViewById(R.id.pressure)).setText("1010");
-                ((EditText)findViewById(R.id.temperature)).setText("10");
+                ((EditText)findViewById(R.id.pressure)).setText("1010.0");
+                ((EditText)findViewById(R.id.temperature)).setText("10.0");
             }
         });
 
@@ -143,8 +164,28 @@ public class AdhanAlarm extends Activity {
                 updateScheduleAndNotification();
                 TabHost tabs = (TabHost)findViewById(R.id.tabs);
                 tabs.setCurrentTab(0);
+                SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putInt("calculationMethodsIndex", ((Spinner)findViewById(R.id.calculation_methods)).getSelectedItemPosition());
+                editor.putInt("roundingTypesIndex", ((Spinner)findViewById(R.id.rounding_types)).getSelectedItemPosition());
+                editor.putFloat("pressure", Float.parseFloat(((EditText)findViewById(R.id.pressure)).getText().toString()));
+                editor.putFloat("temperature", Float.parseFloat(((EditText)findViewById(R.id.temperature)).getText().toString()));
+                editor.commit();
             }
         });
+    }
+    
+    private double getGMTOffset() {
+        Calendar currentTime = new GregorianCalendar();
+        TimeZone timeZone = currentTime.getTimeZone();
+        int gmtOffset = timeZone.getOffset(currentTime.getTimeInMillis());
+        return gmtOffset / 3600000;
+    }
+    
+    private boolean isDaylightSavings() {
+        Calendar currentTime = new GregorianCalendar();
+        TimeZone timeZone = currentTime.getTimeZone();
+        return timeZone.inDaylightTime(currentTime.getTime());
     }
     
     // The notification times for the following: Dawn, Fajr, Sunrise, Dhuhr, Asr, Maghrib, Ishaa, Next Dawn, Next Fajr
@@ -166,10 +207,10 @@ public class AdhanAlarm extends Activity {
 
         // TODO: Set these values from stored data
         PrayerTimes.Location loc = prayerTimes.new Location();
-        loc.setDegreeLat(25.25);
-        loc.setDegreeLong(55.35);
-        loc.setGmtDiff(4);
-        loc.setDst(0);
+        loc.setDegreeLat(51.477222); // default greenwich
+        loc.setDegreeLong(0);
+        loc.setGmtDiff(getGMTOffset());
+        loc.setDst(isDaylightSavings() ? 1 : 0);
         loc.setSeaLevel(0);
         loc.setPressure(1010);
         loc.setTemperature(10);
@@ -186,23 +227,23 @@ public class AdhanAlarm extends Activity {
         // Set the times on the schedule
         DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
         currentNotificationTimes[0] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), dawn.getHour(), dawn.getMinute(), dawn.getSecond());
-        ((TextView)findViewById(R.id.dawn)).setText(timeFormat.format(currentNotificationTimes[0].getTime()));
+        ((TextView)findViewById(R.id.dawn)).setText(timeFormat.format(currentNotificationTimes[0].getTime()) + (dawn.getIsExtreme() == 1 ? "*" : ""));
         currentNotificationTimes[1] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[0].getHour(), ptList[0].getMinute(), ptList[0].getSecond());
-        ((TextView)findViewById(R.id.fajr)).setText(timeFormat.format(currentNotificationTimes[1].getTime()));
+        ((TextView)findViewById(R.id.fajr)).setText(timeFormat.format(currentNotificationTimes[1].getTime()) + (ptList[0].getIsExtreme() == 1 ? "*" : ""));
         currentNotificationTimes[2] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[1].getHour(), ptList[1].getMinute(),ptList[1] .getSecond());
-        ((TextView)findViewById(R.id.sunrise)).setText(timeFormat.format(currentNotificationTimes[2].getTime()));
+        ((TextView)findViewById(R.id.sunrise)).setText(timeFormat.format(currentNotificationTimes[2].getTime()) + (ptList[1].getIsExtreme() == 1 ? "*" : ""));
         currentNotificationTimes[3] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[2].getHour(), ptList[2].getMinute(), ptList[2].getSecond());
-        ((TextView)findViewById(R.id.dhuhr)).setText(timeFormat.format(currentNotificationTimes[3].getTime()));
+        ((TextView)findViewById(R.id.dhuhr)).setText(timeFormat.format(currentNotificationTimes[3].getTime()) + (ptList[2].getIsExtreme() == 1 ? "*" : ""));
         currentNotificationTimes[4] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[3].getHour(), ptList[3].getMinute(), ptList[3].getSecond());
-        ((TextView)findViewById(R.id.asr)).setText(timeFormat.format(currentNotificationTimes[4].getTime()));
+        ((TextView)findViewById(R.id.asr)).setText(timeFormat.format(currentNotificationTimes[4].getTime()) + (ptList[3].getIsExtreme() == 1 ? "*" : ""));
         currentNotificationTimes[5] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[4].getHour(), ptList[4].getMinute(), ptList[4].getSecond());
-        ((TextView)findViewById(R.id.maghrib)).setText(timeFormat.format(currentNotificationTimes[5].getTime()));
+        ((TextView)findViewById(R.id.maghrib)).setText(timeFormat.format(currentNotificationTimes[5].getTime()) + (ptList[4].getIsExtreme() == 1 ? "*" : ""));
         currentNotificationTimes[6] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[5].getHour(), ptList[5].getMinute(), ptList[5].getSecond());
-        ((TextView)findViewById(R.id.ishaa)).setText(timeFormat.format(currentNotificationTimes[6].getTime()));
+        ((TextView)findViewById(R.id.ishaa)).setText(timeFormat.format(currentNotificationTimes[6].getTime()) + (ptList[5].getIsExtreme() == 1 ? "*" : ""));
         currentNotificationTimes[7] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH) + 1, nextDawn.getHour(), nextDawn.getMinute(), nextDawn.getSecond());
-        ((TextView)findViewById(R.id.next_dawn)).setText(timeFormat.format(currentNotificationTimes[7].getTime()));
+        ((TextView)findViewById(R.id.next_dawn)).setText(timeFormat.format(currentNotificationTimes[7].getTime()) + (nextDawn.getIsExtreme() == 1 ? "*" : ""));
         currentNotificationTimes[8] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH) + 1, nextFajr.getHour(), nextFajr.getMinute(), nextFajr.getSecond());
-        ((TextView)findViewById(R.id.next_fajr)).setText(timeFormat.format(currentNotificationTimes[8].getTime()));
+        ((TextView)findViewById(R.id.next_fajr)).setText(timeFormat.format(currentNotificationTimes[8].getTime()) + (nextFajr.getIsExtreme() == 1 ? "*" : ""));
 
         // Set the marker indicating the next time (remove for previous time)
         if(currentTime.compareTo(currentNotificationTimes[0]) < 0) {
