@@ -61,7 +61,7 @@ public class PrayerTimes {
 	    public int getHour(){return hour;}
 	    public int getMinute(){return minute;}
 	    public int getSecond(){return second;}
-	    int getIsExtreme(){return isExtreme;}
+	    public int getIsExtreme(){return isExtreme;}
 
 	    void setHour(int aHour){hour = aHour;}
 		void setMinute(int aMinute){minute = aMinute;}
