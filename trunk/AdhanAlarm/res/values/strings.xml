@@ -11,7 +11,7 @@
     <string name="ishaa">`Ishaa\'</string>
     <string name="next_dawn">Next dawn</string>
     <string name="next_fajr">Next fajr</string>
-    <string name="marker">></string>
+    <string name="next_prayer_marker">></string>
     <string name="introduction">Please set <u>place</u></string>
     <string name="next_alert">Next alert</string>
     <string name="latitude">Latitude</string>
