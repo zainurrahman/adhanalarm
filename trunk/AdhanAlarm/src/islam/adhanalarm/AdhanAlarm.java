@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +22,7 @@ import libs.itl.PrayerTimes;
 
 public class AdhanAlarm extends Activity {
 	public static final String PREFS_NAME = "settingsFile";
+	private MediaPlayer mediaPlayer = null;
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -100,6 +103,41 @@ public class AdhanAlarm extends Activity {
 
         tabs.setCurrentTab(0);
 
+        Button playStop = (Button)findViewById(R.id.play_stop);
+        playStop.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+            	if(mediaPlayer != null && mediaPlayer.isPlaying()) {
+            		((Button)findViewById(R.id.play_stop)).setText(getString(R.string.preview));
+            		mediaPlayer.stop();
+            		//((Vibrator)getSystemService("vibrator")).cancel();
+            	} else {
+                    SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+            		int notificationMethodIndex = settings.getInt("notificationMethodIndex", 0);
+            		if(notificationMethodIndex == 1 || notificationMethodIndex == 2) {
+            			((Vibrator)getSystemService("vibrator")).vibrate(new long[]{0, 1000}, 15000);
+            		}
+            		if(notificationMethodIndex != 1) {
+            			int alarm = R.raw.beep;
+            			if(notificationMethodIndex == 3) {
+            				alarm = R.raw.adhan;
+            			}
+                        mediaPlayer = MediaPlayer.create(AdhanAlarm.this, alarm);
+                        try {
+                    		((Button)findViewById(R.id.play_stop)).setText(getString(R.string.stop));
+                        	mediaPlayer.start();
+                    		mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    			public void onCompletion(MediaPlayer mp) {
+                    				((Button)findViewById(R.id.play_stop)).setText(getString(R.string.preview));
+                    			}
+                    		});
+                        } catch(Exception ex) {
+                        	((TextView)findViewById(R.id.notes)).setText(getString(R.string.error_playing_alert) + "2");
+                        }
+                	}
+            		}
+            }
+        });
+
         Button lookupGPS = (Button)findViewById(R.id.lookup_gps);
         lookupGPS.setOnClickListener(new Button.OnClickListener() {  
             public void onClick(View v) {
@@ -116,7 +154,7 @@ public class AdhanAlarm extends Activity {
                     latitude.setText("");
                     longitude.setText("");
                  }
-            }  
+            }
         });
 
         Button saveAndApplyAlert = (Button)findViewById(R.id.save_and_apply_alert);
@@ -159,7 +197,7 @@ public class AdhanAlarm extends Activity {
         });
 
         Button saveAndApplyExtra = (Button)findViewById(R.id.save_and_apply_extra);
-        saveAndApplyExtra.setOnClickListener(new Button.OnClickListener() {  
+        saveAndApplyExtra.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 updateScheduleAndNotification();
                 TabHost tabs = (TabHost)findViewById(R.id.tabs);
@@ -219,10 +257,10 @@ public class AdhanAlarm extends Activity {
         PrayerTimes.Location loc = prayerTimes.new Location();
         loc.setDegreeLat(Float.parseFloat(settings.getString("latitude", "51.477222"))); // default greenwich
         loc.setDegreeLong(Float.parseFloat(settings.getString("longitude", "0")));
-        //loc.setGmtDiff(getGMTOffset());
-        //loc.setDst(isDaylightSavings() ? 1 : 0);
-        loc.setGmtDiff(-5);
-        loc.setDst(0);
+        loc.setGmtDiff(getGMTOffset());
+        loc.setDst(isDaylightSavings() ? 1 : 0);
+        //loc.setGmtDiff(-5);
+        //loc.setDst(0);
         loc.setSeaLevel(settings.getFloat("altitude", 0));
         loc.setPressure(settings.getFloat("pressure", 1010));
         loc.setTemperature(settings.getFloat("temperature", 10));
