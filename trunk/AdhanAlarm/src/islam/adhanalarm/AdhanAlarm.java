@@ -22,6 +22,17 @@ import libs.itl.PrayerTimes;
 
 public class AdhanAlarm extends Activity {
 	public static final String PREFS_NAME = "settingsFile";
+	
+	private static final int DAWN = 0;
+	private static final int FAJR = 1;
+	private static final int SUNRISE = 2;
+	private static final int DHUHR = 3;
+	private static final int ASR = 4;
+	private static final int MAGHRIB = 5;
+	private static final int ISHAA = 6;
+	private static final int NEXT_DAWN = 7;
+	private static final int NEXT_FAJR = 8;
+	
 	private MediaPlayer mediaPlayer = null;
     @Override
     public void onCreate(Bundle icicle) {
@@ -114,12 +125,26 @@ public class AdhanAlarm extends Activity {
                     SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
             		int notificationMethodIndex = settings.getInt("notificationMethodIndex", 0);
             		if(notificationMethodIndex == 1 || notificationMethodIndex == 2) {
-            			((Vibrator)getSystemService("vibrator")).vibrate(new long[]{0, 1000}, 15000);
+            			//((Vibrator)getSystemService("vibrator")).vibrate(new long[]{0, 1000}, 15000);
             		}
             		if(notificationMethodIndex != 1) {
             			int alarm = R.raw.beep;
+        				int nextTime = getNextTime();
+            			int extraAlertsIndex = settings.getInt("extraAlertsIndex", 0);
             			if(notificationMethodIndex == 3) {
-            				alarm = R.raw.adhan;
+            				if((nextTime == DAWN || nextTime == NEXT_DAWN) && (extraAlertsIndex == 1 || extraAlertsIndex == 3)) {
+                				alarm = R.raw.beep;
+            				} else if(nextTime == FAJR || nextTime == NEXT_FAJR) {
+            					alarm = R.raw.adhan_fajr;
+            				} else if(nextTime == SUNRISE && (extraAlertsIndex == 2 || extraAlertsIndex == 3)) {
+            					alarm = R.raw.beep;
+            				} else if(nextTime == DHUHR || nextTime == ASR || nextTime == MAGHRIB || nextTime == ISHAA) {
+            					alarm = R.raw.adhan;
+            				} else if(extraAlertsIndex == 0 && (nextTime == DAWN || nextTime == NEXT_DAWN)) {
+            					alarm = R.raw.adhan_fajr;
+            				} else if(extraAlertsIndex == 0 && nextTime == SUNRISE) {
+            					alarm = R.raw.adhan;
+            				}
             			}
                         mediaPlayer = MediaPlayer.create(AdhanAlarm.this, alarm);
                         try {
@@ -134,7 +159,7 @@ public class AdhanAlarm extends Activity {
                         	((TextView)findViewById(R.id.notes)).setText(getString(R.string.error_playing_alert) + "2");
                         }
                 	}
-            		}
+            	}
             }
         });
 
@@ -227,7 +252,6 @@ public class AdhanAlarm extends Activity {
     }
     
     private void clearAllMarkers() {
-        ((TextView)findViewById(R.id.mark_next_fajr)).setText("");
         ((TextView)findViewById(R.id.mark_dawn)).setText("");
         ((TextView)findViewById(R.id.mark_fajr)).setText("");
         ((TextView)findViewById(R.id.mark_sunrise)).setText("");
@@ -236,6 +260,29 @@ public class AdhanAlarm extends Activity {
         ((TextView)findViewById(R.id.mark_maghrib)).setText("");
         ((TextView)findViewById(R.id.mark_ishaa)).setText("");
         ((TextView)findViewById(R.id.mark_next_dawn)).setText("");
+        ((TextView)findViewById(R.id.mark_next_fajr)).setText("");
+    }
+    
+    private int getNextTime() {
+        if(((TextView)findViewById(R.id.mark_dawn)).getText() == getString(R.string.next_time_marker)) {
+        	return DAWN;
+        } else if(((TextView)findViewById(R.id.mark_fajr)).getText() == getString(R.string.next_time_marker)) {
+        	return FAJR;
+        } else if(((TextView)findViewById(R.id.mark_sunrise)).getText() == getString(R.string.next_time_marker)) {
+        	return SUNRISE;
+        } else if(((TextView)findViewById(R.id.mark_dhuhr)).getText() == getString(R.string.next_time_marker)) {
+        	return DHUHR;
+        } else if(((TextView)findViewById(R.id.mark_asr)).getText() == getString(R.string.next_time_marker)) {
+        	return ASR;
+        } else if(((TextView)findViewById(R.id.mark_maghrib)).getText() == getString(R.string.next_time_marker)) {
+        	return MAGHRIB;
+        } else if(((TextView)findViewById(R.id.mark_ishaa)).getText() == getString(R.string.next_time_marker)) {
+        	return ISHAA;
+        } else if(((TextView)findViewById(R.id.mark_next_dawn)).getText() == getString(R.string.next_time_marker)) {
+        	return NEXT_DAWN;
+        } else {
+        	return NEXT_FAJR;
+        }
     }
     
     // The notification times for the following: Dawn, Fajr, Sunrise, Dhuhr, Asr, Maghrib, Ishaa, Next Dawn, Next Fajr
@@ -297,32 +344,45 @@ public class AdhanAlarm extends Activity {
 
         // Set the marker indicating the next time (remove existing markers)
         clearAllMarkers();
+		int extraAlertsIndex = settings.getInt("extraAlertsIndex", 0);
         if(currentTime.compareTo(currentNotificationTimes[0]) < 0) {
-            ((TextView)findViewById(R.id.mark_dawn)).setText(getString(R.string.next_prayer_marker));
-            ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.dawn));
+            ((TextView)findViewById(R.id.mark_dawn)).setText(getString(R.string.next_time_marker));
+            if(extraAlertsIndex == 1 || extraAlertsIndex == 3) { // Only alert dawn if the user has specified
+                ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.dawn));
+            } else {
+                ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.fajr));
+            }
         } else if(currentTime.compareTo(currentNotificationTimes[1]) < 0) {
-            ((TextView)findViewById(R.id.mark_fajr)).setText(getString(R.string.next_prayer_marker));
+            ((TextView)findViewById(R.id.mark_fajr)).setText(getString(R.string.next_time_marker));
             ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.fajr));
         } else if(currentTime.compareTo(currentNotificationTimes[2]) < 0) {
-            ((TextView)findViewById(R.id.mark_sunrise)).setText(getString(R.string.next_prayer_marker));
-            ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.sunrise));
+            ((TextView)findViewById(R.id.mark_sunrise)).setText(getString(R.string.next_time_marker));
+            if(extraAlertsIndex == 2 || extraAlertsIndex == 3) { // Only alert sunrise if the user has specified
+                ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.sunrise));
+            } else {
+                ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.dhuhr));
+            }
         } else if(currentTime.compareTo(currentNotificationTimes[3]) < 0) {
-            ((TextView)findViewById(R.id.mark_dhuhr)).setText(getString(R.string.next_prayer_marker));
+            ((TextView)findViewById(R.id.mark_dhuhr)).setText(getString(R.string.next_time_marker));
             ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.dhuhr));
         } else if(currentTime.compareTo(currentNotificationTimes[4]) < 0) {
-            ((TextView)findViewById(R.id.mark_asr)).setText(getString(R.string.next_prayer_marker));
+            ((TextView)findViewById(R.id.mark_asr)).setText(getString(R.string.next_time_marker));
             ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.asr));
         } else if(currentTime.compareTo(currentNotificationTimes[5]) < 0) {
-            ((TextView)findViewById(R.id.mark_maghrib)).setText(getString(R.string.next_prayer_marker));
+            ((TextView)findViewById(R.id.mark_maghrib)).setText(getString(R.string.next_time_marker));
             ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.maghrib));
         } else if(currentTime.compareTo(currentNotificationTimes[6]) < 0) {
-            ((TextView)findViewById(R.id.mark_ishaa)).setText(getString(R.string.next_prayer_marker));
+            ((TextView)findViewById(R.id.mark_ishaa)).setText(getString(R.string.next_time_marker));
             ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.ishaa));
         } else if(currentTime.compareTo(currentNotificationTimes[7]) < 0) {
-            ((TextView)findViewById(R.id.mark_next_dawn)).setText(getString(R.string.next_prayer_marker));
-            ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.next_dawn));
+            ((TextView)findViewById(R.id.mark_next_dawn)).setText(getString(R.string.next_time_marker));
+            if(extraAlertsIndex == 2 || extraAlertsIndex == 3) { // Only alert dawn if the user has specified
+                ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.next_dawn));
+            } else {
+                ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.next_fajr));
+            }
         } else if(currentTime.compareTo(currentNotificationTimes[8]) < 0) {
-            ((TextView)findViewById(R.id.mark_next_fajr)).setText(getString(R.string.next_prayer_marker));
+            ((TextView)findViewById(R.id.mark_next_fajr)).setText(getString(R.string.next_time_marker));
             ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.next_fajr));
         }
         
