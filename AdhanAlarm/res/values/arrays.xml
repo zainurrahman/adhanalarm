@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="notification_methods">
-        <item>Beep</item>
+        <item>Display Only</item>
         <item>Vibrate</item>
+        <item>Beep</item>
         <item>Beep and Vibrate</item>
         <item>Recite Adh&#257;n</item>
-        <item>Display Only</item>
-        <item>None</item>
     </array>
     <array name="extra_alerts">
         <item>None</item>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest package="islam.adhanalarm" xmlns:android="http://schemas.android.com/apk/res/android">
-	<uses-permission android:name="android.Manifest.permission.ACCESS_LOCATION" />
-	<uses-permission android:name="android.Manifest.permission.ACCESS_GPS" />
+    <uses-permission android:name="android.Manifest.permission.ACCESS_LOCATION" />
+    <uses-permission android:name="android.Manifest.permission.ACCESS_GPS" />
     <application android:icon="@drawable/icon">
         <activity android:name=".AdhanAlarm" android:label="@string/app_name">
             <intent-filter>
@@ -9,6 +9,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    <receiver android:name="WakeUpAndDoSomething">
-</receiver></application>
+        <receiver android:name=".WakeUpAndDoSomething" />
+    </application>
 </manifest> 

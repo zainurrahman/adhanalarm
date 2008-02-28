@@ -20,21 +20,14 @@ import android.view.View;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.TimeZone;
 import libs.itl.PrayerTimes;
 
 public class AdhanAlarm extends Activity {
 	public static final String PREFS_NAME = "settingsFile";
-	
-	private static final int DAWN = 0;
-	private static final int FAJR = 1;
-	private static final int SUNRISE = 2;
-	private static final int DHUHR = 3;
-	private static final int ASR = 4;
-	private static final int MAGHRIB = 5;
-	private static final int ISHAA = 6;
-	private static final int NEXT_DAWN = 7;
-	private static final int NEXT_FAJR = 8;
+
+	private static final short DAWN = 0, FAJR = 1, SUNRISE = 2, DHUHR = 3, ASR = 4, MAGHRIB = 5, ISHAA = 6, NEXT_DAWN = 7, NEXT_FAJR = 8; // Notification Times
+	private static final short DISPLAY_ONLY = 0, VIBRATE = 1, BEEP = 2, BEEP_AND_VIBRATE = 3, RECITE_ADHAN = 4; // Notification Methods
+	private static final short ALERT_PRAYERS_ONLY = 0, ALERT_DAWN = 1, ALERT_SUNRISE = 2, ALERT_DAWN_AND_SUNRISE = 3; // Extra Alerts
 	
 	private MediaPlayer mediaPlayer = null;
     @Override
@@ -50,7 +43,7 @@ public class AdhanAlarm extends Activity {
                 this, R.array.notification_methods, android.R.layout.simple_spinner_item);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         notification_methods.setAdapter(adapter);
-        notification_methods.setSelection(settings.getInt("notificationMethodIndex", 0));
+        notification_methods.setSelection(settings.getInt("notificationMethodIndex", BEEP));
 
         Spinner extra_alerts = (Spinner)findViewById(R.id.extra_alerts);
         extra_alerts.setAllowWrap(true);
@@ -58,8 +51,9 @@ public class AdhanAlarm extends Activity {
                 this, R.array.extra_alerts, android.R.layout.simple_spinner_item);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         extra_alerts.setAdapter(adapter);
-        extra_alerts.setSelection(settings.getInt("extraAlertsIndex", 0));
+        extra_alerts.setSelection(settings.getInt("extraAlertsIndex", ALERT_PRAYERS_ONLY));
 
+        // TODO: Make all edit texts single line and numeric from main.xml in next SDK
         ((EditText)findViewById(R.id.latitude)).setText(settings.getString("latitude", "51.477222"));
         ((EditText)findViewById(R.id.longitude)).setText(settings.getString("longitude", "0"));
         ((EditText)findViewById(R.id.altitude)).setText(Float.toString(settings.getFloat("altitude", 0)));
@@ -115,17 +109,15 @@ public class AdhanAlarm extends Activity {
         four.setIndicator(getString(R.string.extra), getResources().getDrawable(R.drawable.calculator));
         tabs.addTab(four);
 
-        tabs.setCurrentTab(0);
-
         Button playStop = (Button)findViewById(R.id.play_stop);
         playStop.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
             	if(mediaPlayer != null && mediaPlayer.isPlaying()) {
-            		((Button)findViewById(R.id.play_stop)).setText(getString(R.string.preview));
+            		((Button)findViewById(R.id.play_stop)).setText(getString(R.string.preview_next_alarm));
             		mediaPlayer.stop();
             		//((Vibrator)getSystemService("vibrator")).cancel();
             	} else {
-    				playAlertIfAppropriate(getNextTime());
+    				playAlertIfAppropriate(getNextNotificationTime());
             	}
             }
         });
@@ -211,71 +203,54 @@ public class AdhanAlarm extends Activity {
             Toast.makeText(this, getString(R.string.time_for) + " " + getTimeName(notificationTime), Toast.LENGTH_LONG).show();
             playAlertIfAppropriate(notificationTime);
     	}
+    	getIntent().removeExtra("islam.adhanalarm.nextNotificationTime");
     	updateScheduleAndNotification();
+    	((TabHost)findViewById(R.id.tabs)).setCurrentTab(0);
     	super.onResume();
     }
     
     private double getGMTOffset() {
         Calendar currentTime = new GregorianCalendar();
-        TimeZone timeZone = currentTime.getTimeZone();
-        int gmtOffset = timeZone.getOffset(currentTime.getTimeInMillis());
+        int gmtOffset = currentTime.getTimeZone().getOffset(currentTime.getTimeInMillis());
         return gmtOffset / 3600000;
     }
     
     private boolean isDaylightSavings() {
         Calendar currentTime = new GregorianCalendar();
-        TimeZone timeZone = currentTime.getTimeZone();
-        return timeZone.inDaylightTime(currentTime.getTime());
+        return currentTime.getTimeZone().inDaylightTime(currentTime.getTime());
     }
     
-    private int getNextTime() {
-        if(((TextView)findViewById(R.id.mark_dawn)).getText() == getString(R.string.next_time_marker)) {
-        	return DAWN;
-        } else if(((TextView)findViewById(R.id.mark_fajr)).getText() == getString(R.string.next_time_marker)) {
-        	return FAJR;
-        } else if(((TextView)findViewById(R.id.mark_sunrise)).getText() == getString(R.string.next_time_marker)) {
-        	return SUNRISE;
-        } else if(((TextView)findViewById(R.id.mark_dhuhr)).getText() == getString(R.string.next_time_marker)) {
-        	return DHUHR;
-        } else if(((TextView)findViewById(R.id.mark_asr)).getText() == getString(R.string.next_time_marker)) {
-        	return ASR;
-        } else if(((TextView)findViewById(R.id.mark_maghrib)).getText() == getString(R.string.next_time_marker)) {
-        	return MAGHRIB;
-        } else if(((TextView)findViewById(R.id.mark_ishaa)).getText() == getString(R.string.next_time_marker)) {
-        	return ISHAA;
-        } else if(((TextView)findViewById(R.id.mark_next_dawn)).getText() == getString(R.string.next_time_marker)) {
-        	return NEXT_DAWN;
-        } else {
-        	return NEXT_FAJR;
-        }
+    private TextView[] getAllNotificationMarkers() {
+    	return new TextView[]{(TextView)findViewById(R.id.mark_dawn), (TextView)findViewById(R.id.mark_fajr), (TextView)findViewById(R.id.mark_sunrise), (TextView)findViewById(R.id.mark_dhuhr), (TextView)findViewById(R.id.mark_asr), (TextView)findViewById(R.id.mark_maghrib), (TextView)findViewById(R.id.mark_ishaa), (TextView)findViewById(R.id.mark_next_dawn), (TextView)findViewById(R.id.mark_next_fajr)};
     }
     
-    private String getTimeName(int i) {
-    	int[] times = new int[]{R.string.dawn, R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr, R.string.maghrib, R.string.ishaa, R.string.next_dawn, R.string.next_fajr};
-    	return getString(times[i]);
+    private String getTimeName(int time) {
+    	int[] timeNames = new int[]{R.string.dawn, R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr, R.string.maghrib, R.string.ishaa, R.string.next_dawn, R.string.next_fajr};
+    	return getString(timeNames[time]);
     }
     
     private void playAlertIfAppropriate(int time) {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-		int notificationMethodIndex = settings.getInt("notificationMethodIndex", 0);
-		if(notificationMethodIndex == 1 || notificationMethodIndex == 2) {
+		int notificationMethod = settings.getInt("notificationMethodIndex", BEEP);
+    	if(notificationMethod == DISPLAY_ONLY || time < DAWN || time > NEXT_FAJR) return;
+		if(notificationMethod == VIBRATE || notificationMethod == BEEP_AND_VIBRATE) {
 			//((Vibrator)getSystemService("vibrator")).vibrate(new long[]{0, 1000}, 15000);
 		}
-		if(notificationMethodIndex != 1) {
+		if(notificationMethod != VIBRATE) {
 			int alarm = R.raw.beep;
-			int extraAlertsIndex = settings.getInt("extraAlertsIndex", 0);
-			if(notificationMethodIndex == 3) {
-				if((time == DAWN || time == NEXT_DAWN) && (extraAlertsIndex == 1 || extraAlertsIndex == 3)) {
+			int extraAlerts = settings.getInt("extraAlertsIndex", ALERT_PRAYERS_ONLY);
+			if(notificationMethod == RECITE_ADHAN) {
+				if((time == DAWN || time == NEXT_DAWN) && (extraAlerts == ALERT_DAWN || extraAlerts == ALERT_DAWN_AND_SUNRISE)) {
 					alarm = R.raw.beep;
 				} else if(time == FAJR || time == NEXT_FAJR) {
 					alarm = R.raw.adhan_fajr;
-				} else if(time == SUNRISE && (extraAlertsIndex == 2 || extraAlertsIndex == 3)) {
+				} else if(time == SUNRISE && (extraAlerts == ALERT_SUNRISE || extraAlerts == ALERT_DAWN_AND_SUNRISE)) {
 					alarm = R.raw.beep;
 				} else if(time == DHUHR || time == ASR || time == MAGHRIB || time == ISHAA) {
 					alarm = R.raw.adhan;
-				} else if(extraAlertsIndex == 0 && (time == DAWN || time == NEXT_DAWN)) {
+				} else if(extraAlerts == ALERT_PRAYERS_ONLY && (time == DAWN || time == NEXT_DAWN)) {
 					alarm = R.raw.adhan_fajr;
-				} else if(extraAlertsIndex == 0 && time == SUNRISE) {
+				} else if(extraAlerts == ALERT_PRAYERS_ONLY && time == SUNRISE) {
 					alarm = R.raw.adhan;
 				}
 			}
@@ -285,7 +260,7 @@ public class AdhanAlarm extends Activity {
 	        	mediaPlayer.start();
 	    		mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 	    			public void onCompletion(MediaPlayer mp) {
-	    				((Button)findViewById(R.id.play_stop)).setText(getString(R.string.preview));
+	    				((Button)findViewById(R.id.play_stop)).setText(getString(R.string.preview_next_alarm));
 	    			}
 	    		});
 	        } catch(Exception ex) {
@@ -294,67 +269,64 @@ public class AdhanAlarm extends Activity {
     	}
     }
     
-    private void clearAllMarkers() {
-        ((TextView)findViewById(R.id.mark_dawn)).setText("");
-        ((TextView)findViewById(R.id.mark_fajr)).setText("");
-        ((TextView)findViewById(R.id.mark_sunrise)).setText("");
-        ((TextView)findViewById(R.id.mark_dhuhr)).setText("");
-        ((TextView)findViewById(R.id.mark_asr)).setText("");
-        ((TextView)findViewById(R.id.mark_maghrib)).setText("");
-        ((TextView)findViewById(R.id.mark_ishaa)).setText("");
-        ((TextView)findViewById(R.id.mark_next_dawn)).setText("");
-        ((TextView)findViewById(R.id.mark_next_fajr)).setText("");
+    private int getNextNotificationTime() {
+    	TextView[] markers = getAllNotificationMarkers();
+    	for(int i = DAWN; i < NEXT_FAJR; i++) {
+    		if(markers[i].getText() == getString(R.string.next_time_marker)) return i;
+    	}
+    	return -1;
     }
     
-    private void setNextTimeAndAlertMarkers(int time) {
+    private void indicateNextNotificationAndAlarmTimes(int nextNotificationTime) {
+    	TextView[] markers = getAllNotificationMarkers();
+    	TextView note = (TextView)findViewById(R.id.notes);
+    	// Clear all existing markers in case it was left from the previous day or while phone was turned off
+    	for(int i = DAWN; i < NEXT_FAJR; i++) {
+    		markers[i].setText("");
+    	}
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-		int extraAlertsIndex = settings.getInt("extraAlertsIndex", 0);
-        if(time == DAWN) {
-            ((TextView)findViewById(R.id.mark_dawn)).setText(getString(R.string.next_time_marker));
-            if(extraAlertsIndex == 1 || extraAlertsIndex == 3) { // Only alert dawn if the user has specified
-                ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.dawn));
+		int extraAlerts = settings.getInt("extraAlertsIndex", ALERT_PRAYERS_ONLY);
+        if(nextNotificationTime == DAWN) {
+            markers[DAWN].setText(getString(R.string.next_time_marker));
+            if(extraAlerts == ALERT_DAWN || extraAlerts == ALERT_DAWN_AND_SUNRISE) { // Only alert dawn if the user has specified
+                note.setText(getString(R.string.next_alert) + ": " + getString(R.string.dawn));
             } else {
-                ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.fajr));
+            	note.setText(getString(R.string.next_alert) + ": " + getString(R.string.fajr));
             }
-        } else if(time == FAJR) {
-            ((TextView)findViewById(R.id.mark_fajr)).setText(getString(R.string.next_time_marker));
-            ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.fajr));
-        } else if(time == SUNRISE) {
-            ((TextView)findViewById(R.id.mark_sunrise)).setText(getString(R.string.next_time_marker));
-            if(extraAlertsIndex == 2 || extraAlertsIndex == 3) { // Only alert sunrise if the user has specified
-                ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.sunrise));
+        } else if(nextNotificationTime == FAJR) {
+            markers[FAJR].setText(getString(R.string.next_time_marker));
+            note.setText(getString(R.string.next_alert) + ": " + getString(R.string.fajr));
+        } else if(nextNotificationTime == SUNRISE) {
+        	markers[SUNRISE].setText(getString(R.string.next_time_marker));
+            if(extraAlerts == ALERT_SUNRISE || extraAlerts == ALERT_DAWN_AND_SUNRISE) { // Only alert sunrise if the user has specified
+            	note.setText(getString(R.string.next_alert) + ": " + getString(R.string.sunrise));
             } else {
-                ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.dhuhr));
+                note.setText(getString(R.string.next_alert) + ": " + getString(R.string.dhuhr));
             }
-        } else if(time == DHUHR) {
-            ((TextView)findViewById(R.id.mark_dhuhr)).setText(getString(R.string.next_time_marker));
-            ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.dhuhr));
-        } else if(time == ASR) {
-            ((TextView)findViewById(R.id.mark_asr)).setText(getString(R.string.next_time_marker));
-            ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.asr));
-        } else if(time == MAGHRIB) {
-            ((TextView)findViewById(R.id.mark_maghrib)).setText(getString(R.string.next_time_marker));
-            ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.maghrib));
-        } else if(time == ISHAA) {
-            ((TextView)findViewById(R.id.mark_ishaa)).setText(getString(R.string.next_time_marker));
-            ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.ishaa));
-        } else if(time == NEXT_DAWN) {
-            ((TextView)findViewById(R.id.mark_next_dawn)).setText(getString(R.string.next_time_marker));
-            if(extraAlertsIndex == 2 || extraAlertsIndex == 3) { // Only alert dawn if the user has specified
-                ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.next_dawn));
+        } else if(nextNotificationTime == DHUHR) {
+        	markers[DHUHR].setText(getString(R.string.next_time_marker));
+        	note.setText(getString(R.string.next_alert) + ": " + getString(R.string.dhuhr));
+        } else if(nextNotificationTime == ASR) {
+        	markers[ASR].setText(getString(R.string.next_time_marker));
+        	note.setText(getString(R.string.next_alert) + ": " + getString(R.string.asr));
+        } else if(nextNotificationTime == MAGHRIB) {
+        	markers[MAGHRIB].setText(getString(R.string.next_time_marker));
+        	note.setText(getString(R.string.next_alert) + ": " + getString(R.string.maghrib));
+        } else if(nextNotificationTime == ISHAA) {
+        	markers[ISHAA].setText(getString(R.string.next_time_marker));
+        	note.setText(getString(R.string.next_alert) + ": " + getString(R.string.ishaa));
+        } else if(nextNotificationTime == NEXT_DAWN) {
+        	markers[NEXT_DAWN].setText(getString(R.string.next_time_marker));
+            if(extraAlerts == ALERT_DAWN || extraAlerts == ALERT_DAWN_AND_SUNRISE) { // Only alert dawn if the user has specified
+            	note.setText(getString(R.string.next_alert) + ": " + getString(R.string.next_dawn));
             } else {
-                ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.next_fajr));
+            	note.setText(getString(R.string.next_alert) + ": " + getString(R.string.next_fajr));
             }
-        } else if(time == NEXT_FAJR) {
-            ((TextView)findViewById(R.id.mark_next_fajr)).setText(getString(R.string.next_time_marker));
-            ((TextView)findViewById(R.id.notes)).setText(getString(R.string.next_alert) + ": " + getString(R.string.next_fajr));
+        } else if(nextNotificationTime == NEXT_FAJR) {
+        	markers[NEXT_FAJR].setText(getString(R.string.next_time_marker));
+        	note.setText(getString(R.string.next_alert) + ": " + getString(R.string.next_fajr));
         }
     }
-    
-    // The notification times for the following: Dawn, Fajr, Sunrise, Dhuhr, Asr, Maghrib, Ishaa, Next Dawn, Next Fajr
-    // Note 1: User may not choose to notify for Dawn and Sunrise
-    // Note 2: We never actually reach "Next Dawn".  Instead after Ishaa we set to wake up at midnight and then update schedule for next day which again starts at Dawn
-    private GregorianCalendar[] currentNotificationTimes = new GregorianCalendar[9];
     
     private void updateScheduleAndNotification() {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
@@ -388,47 +360,32 @@ public class AdhanAlarm extends Activity {
         PrayerTimes.Prayer nextFajr = prayerTimes.getNextDayFajr(loc, conf, date);
         
         // Set the times on the schedule
+        GregorianCalendar[] notificationTimes = new GregorianCalendar[9];
         DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
-        currentNotificationTimes[0] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), dawn.getHour(), dawn.getMinute(), dawn.getSecond());
-        ((TextView)findViewById(R.id.dawn)).setText(timeFormat.format(currentNotificationTimes[0].getTime()) + (dawn.getIsExtreme() == 1 ? "*" : ""));
-        currentNotificationTimes[1] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[0].getHour(), ptList[0].getMinute(), ptList[0].getSecond());
-        ((TextView)findViewById(R.id.fajr)).setText(timeFormat.format(currentNotificationTimes[1].getTime()) + (ptList[0].getIsExtreme() == 1 ? "*" : ""));
-        currentNotificationTimes[2] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[1].getHour(), ptList[1].getMinute(),ptList[1] .getSecond());
-        ((TextView)findViewById(R.id.sunrise)).setText(timeFormat.format(currentNotificationTimes[2].getTime()) + (ptList[1].getIsExtreme() == 1 ? "*" : ""));
-        currentNotificationTimes[3] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[2].getHour(), ptList[2].getMinute(), ptList[2].getSecond());
-        ((TextView)findViewById(R.id.dhuhr)).setText(timeFormat.format(currentNotificationTimes[3].getTime()) + (ptList[2].getIsExtreme() == 1 ? "*" : ""));
-        currentNotificationTimes[4] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[3].getHour(), ptList[3].getMinute(), ptList[3].getSecond());
-        ((TextView)findViewById(R.id.asr)).setText(timeFormat.format(currentNotificationTimes[4].getTime()) + (ptList[3].getIsExtreme() == 1 ? "*" : ""));
-        currentNotificationTimes[5] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[4].getHour(), ptList[4].getMinute(), ptList[4].getSecond());
-        ((TextView)findViewById(R.id.maghrib)).setText(timeFormat.format(currentNotificationTimes[5].getTime()) + (ptList[4].getIsExtreme() == 1 ? "*" : ""));
-        currentNotificationTimes[6] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[5].getHour(), ptList[5].getMinute(), ptList[5].getSecond());
-        ((TextView)findViewById(R.id.ishaa)).setText(timeFormat.format(currentNotificationTimes[6].getTime()) + (ptList[5].getIsExtreme() == 1 ? "*" : ""));
-        currentNotificationTimes[7] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH) + 1, nextDawn.getHour(), nextDawn.getMinute(), nextDawn.getSecond());
-        ((TextView)findViewById(R.id.next_dawn)).setText(timeFormat.format(currentNotificationTimes[7].getTime()) + (nextDawn.getIsExtreme() == 1 ? "*" : ""));
-        currentNotificationTimes[8] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH) + 1, nextFajr.getHour(), nextFajr.getMinute(), nextFajr.getSecond());
-        ((TextView)findViewById(R.id.next_fajr)).setText(timeFormat.format(currentNotificationTimes[8].getTime()) + (nextFajr.getIsExtreme() == 1 ? "*" : ""));
+        notificationTimes[DAWN] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), dawn.getHour(), dawn.getMinute(), dawn.getSecond());
+        ((TextView)findViewById(R.id.dawn)).setText(timeFormat.format(notificationTimes[0].getTime()) + (dawn.getIsExtreme() == 1 ? "*" : ""));
+        notificationTimes[FAJR] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[0].getHour(), ptList[0].getMinute(), ptList[0].getSecond());
+        ((TextView)findViewById(R.id.fajr)).setText(timeFormat.format(notificationTimes[1].getTime()) + (ptList[0].getIsExtreme() == 1 ? "*" : ""));
+        notificationTimes[SUNRISE] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[1].getHour(), ptList[1].getMinute(),ptList[1] .getSecond());
+        ((TextView)findViewById(R.id.sunrise)).setText(timeFormat.format(notificationTimes[2].getTime()) + (ptList[1].getIsExtreme() == 1 ? "*" : ""));
+        notificationTimes[DHUHR] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[2].getHour(), ptList[2].getMinute(), ptList[2].getSecond());
+        ((TextView)findViewById(R.id.dhuhr)).setText(timeFormat.format(notificationTimes[3].getTime()) + (ptList[2].getIsExtreme() == 1 ? "*" : ""));
+        notificationTimes[ASR] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[3].getHour(), ptList[3].getMinute(), ptList[3].getSecond());
+        ((TextView)findViewById(R.id.asr)).setText(timeFormat.format(notificationTimes[4].getTime()) + (ptList[3].getIsExtreme() == 1 ? "*" : ""));
+        notificationTimes[MAGHRIB] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[4].getHour(), ptList[4].getMinute(), ptList[4].getSecond());
+        ((TextView)findViewById(R.id.maghrib)).setText(timeFormat.format(notificationTimes[5].getTime()) + (ptList[4].getIsExtreme() == 1 ? "*" : ""));
+        notificationTimes[ISHAA] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[5].getHour(), ptList[5].getMinute(), ptList[5].getSecond());
+        ((TextView)findViewById(R.id.ishaa)).setText(timeFormat.format(notificationTimes[6].getTime()) + (ptList[5].getIsExtreme() == 1 ? "*" : ""));
+        notificationTimes[NEXT_DAWN] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH) + 1, nextDawn.getHour(), nextDawn.getMinute(), nextDawn.getSecond());
+        ((TextView)findViewById(R.id.next_dawn)).setText(timeFormat.format(notificationTimes[7].getTime()) + (nextDawn.getIsExtreme() == 1 ? "*" : ""));
+        notificationTimes[NEXT_FAJR] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH) + 1, nextFajr.getHour(), nextFajr.getMinute(), nextFajr.getSecond());
+        ((TextView)findViewById(R.id.next_fajr)).setText(timeFormat.format(notificationTimes[8].getTime()) + (nextFajr.getIsExtreme() == 1 ? "*" : ""));
 
-        // Set the marker indicating the next time (remove existing markers)
-        clearAllMarkers();
-        int nextTime = DAWN;
-        if(currentTime.compareTo(currentNotificationTimes[0]) < 0) {
-            nextTime = FAJR;
-        } else if(currentTime.compareTo(currentNotificationTimes[1]) < 0) {
-            nextTime = SUNRISE;
-        } else if(currentTime.compareTo(currentNotificationTimes[2]) < 0) {
-            nextTime = DHUHR;
-        } else if(currentTime.compareTo(currentNotificationTimes[3]) < 0) {
-            nextTime = ASR;
-        } else if(currentTime.compareTo(currentNotificationTimes[4]) < 0) {
-            nextTime = MAGHRIB;
-        } else if(currentTime.compareTo(currentNotificationTimes[5]) < 0) {
-            nextTime = ISHAA;
-        } else if(currentTime.compareTo(currentNotificationTimes[6]) < 0) {
-            nextTime = NEXT_DAWN;
-        } else if(currentTime.compareTo(currentNotificationTimes[7]) < 0) {
-            nextTime = NEXT_FAJR;
+        int nextNotificationTime;
+        for(nextNotificationTime = DAWN; nextNotificationTime < NEXT_FAJR; nextNotificationTime++) {
+        	if(currentTime.compareTo(notificationTimes[nextNotificationTime]) < 0) break;
         }
-        setNextTimeAndAlertMarkers(nextTime);
+        indicateNextNotificationAndAlarmTimes(nextNotificationTime);
         
         // Add Latitude, Longitude and Qibla DMS location to front panel
         PrayerTimes.DMS dms = prayerTimes.decimal2Dms(loc.getDegreeLat());
@@ -446,15 +403,19 @@ public class AdhanAlarm extends Activity {
 	    Intent intent = new Intent(AdhanAlarm.this, WakeUpAndDoSomething.class);
         AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
         am.cancel(intent);
+
+        // Schedule the alarm! (Pass the next notification time so we know which alarm to sound when nudged by WakeUpAndDoSomething)
+        intent.putExtra("islam.adhanalarm.nextNotificationTime", nextNotificationTime);
+        am.set(AlarmManager.RTC_WAKEUP, notificationTimes[nextNotificationTime].getTimeInMillis(), intent);
 	    
-        // TODO: Start new notification
+        // TODO: The following is just for testing so I don't have to actually wait for the real time
+        am.cancel(intent);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.add(Calendar.SECOND, 30);
-
-        // Schedule the alarm!
-        getIntent().putExtra("islam.adhanalarm.nextNotificationTime", nextTime); // Pass the next notification time into the current intent so we know which alarm to sound when nudged by WakeUpAndDoSomething
+        calendar.add(Calendar.SECOND, 10);
+        intent.putExtra("islam.adhanalarm.nextNotificationTime", nextNotificationTime);
         am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), intent);
         ((TextView)findViewById(R.id.notes)).setText("Alarm" + Math.random());
+        // TODO: Remove the above test code when ready
     }
 }
