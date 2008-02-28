@@ -12,7 +12,7 @@
     <string name="next_dawn">Next dawn</string>
     <string name="next_fajr">Next fajr</string>
     <string name="next_time_marker">></string>
-    <string name="preview">Preview</string>
+    <string name="preview_next_alarm">Preview Next Alarm</string>
     <string name="error_playing_alert">Error Playing Alert</string>
     <string name="stop">Stop</string>
     <string name="introduction">Please set <u>place</u></string>
