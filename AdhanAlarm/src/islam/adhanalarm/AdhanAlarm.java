@@ -156,7 +156,7 @@ public class AdhanAlarm extends Activity {
         });
 
         Button saveAndApplyPlace = (Button)findViewById(R.id.save_and_apply_place);
-        saveAndApplyPlace.setOnClickListener(new Button.OnClickListener() {  
+        saveAndApplyPlace.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 updateScheduleAndNotification();
                 TabHost tabs = (TabHost)findViewById(R.id.tabs);
@@ -409,13 +409,13 @@ public class AdhanAlarm extends Activity {
         am.set(AlarmManager.RTC_WAKEUP, notificationTimes[nextNotificationTime].getTimeInMillis(), intent);
 	    
         // TODO: The following is just for testing so I don't have to actually wait for the real time
-        am.cancel(intent);
+        /*am.cancel(intent);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.add(Calendar.SECOND, 10);
         intent.putExtra("islam.adhanalarm.nextNotificationTime", nextNotificationTime);
         am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), intent);
-        ((TextView)findViewById(R.id.notes)).setText("Alarm" + Math.random());
+        ((TextView)findViewById(R.id.notes)).setText("Alarm" + Math.random());*/
         // TODO: Remove the above test code when ready
     }
 }
