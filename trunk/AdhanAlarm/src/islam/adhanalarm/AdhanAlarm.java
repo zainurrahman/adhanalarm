@@ -2,6 +2,9 @@ package islam.adhanalarm;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
@@ -38,7 +41,6 @@ public class AdhanAlarm extends Activity {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
         Spinner notification_methods = (Spinner)findViewById(R.id.notification_methods);
-        notification_methods.setAllowWrap(true);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this, R.array.notification_methods, android.R.layout.simple_spinner_item);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -46,7 +48,6 @@ public class AdhanAlarm extends Activity {
         notification_methods.setSelection(settings.getInt("notificationMethodIndex", BEEP));
 
         Spinner extra_alerts = (Spinner)findViewById(R.id.extra_alerts);
-        extra_alerts.setAllowWrap(true);
         adapter = ArrayAdapter.createFromResource(
                 this, R.array.extra_alerts, android.R.layout.simple_spinner_item);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -54,8 +55,8 @@ public class AdhanAlarm extends Activity {
         extra_alerts.setSelection(settings.getInt("extraAlertsIndex", ALERT_PRAYERS_ONLY));
 
         // TODO: Make all edit texts single line and numeric from main.xml in next SDK
-        ((EditText)findViewById(R.id.latitude)).setText(settings.getString("latitude", "51.477222"));
-        ((EditText)findViewById(R.id.longitude)).setText(settings.getString("longitude", "0"));
+        ((EditText)findViewById(R.id.latitude)).setText(Float.toString(settings.getFloat("latitude", (float)51.477222)));
+        ((EditText)findViewById(R.id.longitude)).setText(Float.toString(settings.getFloat("longitude", (float)-122.132)));
         ((EditText)findViewById(R.id.altitude)).setText(Float.toString(settings.getFloat("altitude", 0)));
         
         if(settings.getString("latitude", "") != "" && settings.getString("longitude", "") != "") {
@@ -63,7 +64,6 @@ public class AdhanAlarm extends Activity {
         }
 
         Spinner calculation_methods = (Spinner)findViewById(R.id.calculation_methods);
-        calculation_methods.setAllowWrap(true);
         adapter = ArrayAdapter.createFromResource(
                 this, R.array.calculation_methods, android.R.layout.simple_spinner_item);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -71,7 +71,6 @@ public class AdhanAlarm extends Activity {
         calculation_methods.setSelection(settings.getInt("calculationMethodsIndex", 0));
 
         Spinner rounding_types = (Spinner)findViewById(R.id.rounding_types);
-        rounding_types.setAllowWrap(true);
         adapter = ArrayAdapter.createFromResource(
                 this, R.array.rounding_types, android.R.layout.simple_spinner_item);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -129,7 +128,7 @@ public class AdhanAlarm extends Activity {
                 EditText longitude = (EditText)findViewById(R.id.longitude);
 
                 LocationManager locationMananager = (LocationManager)getSystemService(LOCATION_SERVICE);
-                 Location location = locationMananager.getCurrentLocation("gps");
+                 Location location = locationMananager. getLastKnownLocation("gps");
 
                  if(location != null) {
                     latitude.setText(Double.toString(location.getLatitude()));
@@ -198,15 +197,20 @@ public class AdhanAlarm extends Activity {
     }
     
     public void onResume() {
-    	int notificationTime = getIntent().getIntExtra("islam.adhanalarm.nextNotificationTime", -1);
+    	int notificationTime = getIntent().getIntExtra("nextNotificationTime", -1);
     	if(notificationTime > 0) {
             Toast.makeText(this, getString(R.string.time_for) + " " + getTimeName(notificationTime), Toast.LENGTH_LONG).show();
             playAlertIfAppropriate(notificationTime);
     	}
-    	getIntent().removeExtra("islam.adhanalarm.nextNotificationTime");
+    	getIntent().removeExtra("nextNotificationTime");
     	updateScheduleAndNotification();
     	((TabHost)findViewById(R.id.tabs)).setCurrentTab(0);
     	super.onResume();
+    }
+    
+    public void onNewIntent(Intent intent) {
+    	setIntent(intent);
+    	super.onNewIntent(intent);
     }
     
     private double getGMTOffset() {
@@ -277,7 +281,7 @@ public class AdhanAlarm extends Activity {
     	return -1;
     }
     
-    private void indicateNextNotificationAndAlarmTimes(int nextNotificationTime) {
+    private void indicateNextNotificationAndAlarmTimes(short nextNotificationTime) {
     	TextView[] markers = getAllNotificationMarkers();
     	TextView note = (TextView)findViewById(R.id.notes);
     	// Clear all existing markers in case it was left from the previous day or while phone was turned off
@@ -340,8 +344,8 @@ public class AdhanAlarm extends Activity {
         date.setYear(currentTime.get(Calendar.YEAR));
 
         PrayerTimes.Location loc = prayerTimes.new Location();
-        loc.setDegreeLat(Float.parseFloat(settings.getString("latitude", "51.477222"))); // default greenwich
-        loc.setDegreeLong(Float.parseFloat(settings.getString("longitude", "0")));
+        loc.setDegreeLat(settings.getFloat("latitude", (float)51.477222)); // default greenwich
+        loc.setDegreeLong(settings.getFloat("longitude", (float)-122.132));
         loc.setGmtDiff(getGMTOffset());
         loc.setDst(isDaylightSavings() ? 1 : 0);
         //loc.setGmtDiff(-5);
@@ -381,7 +385,7 @@ public class AdhanAlarm extends Activity {
         notificationTimes[NEXT_FAJR] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH) + 1, nextFajr.getHour(), nextFajr.getMinute(), nextFajr.getSecond());
         ((TextView)findViewById(R.id.next_fajr)).setText(timeFormat.format(notificationTimes[8].getTime()) + (nextFajr.getIsExtreme() == 1 ? "*" : ""));
 
-        int nextNotificationTime;
+        short nextNotificationTime;
         for(nextNotificationTime = DAWN; nextNotificationTime < NEXT_FAJR; nextNotificationTime++) {
         	if(currentTime.compareTo(notificationTimes[nextNotificationTime]) < 0) break;
         }
@@ -398,24 +402,32 @@ public class AdhanAlarm extends Activity {
 	    dms = prayerTimes.decimal2Dms(qibla);
 	    String current_qibla = Math.abs(dms.getDegree()) + "° " + Math.abs(dms.getMinute()) + "' " + Math.abs(dms.getSecond()) + "\" " + ((qibla >= 0) ? getString(R.string.west) : getString(R.string.east));
 	    ((TextView)findViewById(R.id.current_qibla)).setText(current_qibla);
-
-        // Cancel existing notification if it exists
-	    Intent intent = new Intent(AdhanAlarm.this, WakeUpAndDoSomething.class);
-        AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
-        am.cancel(intent);
-
-        // Schedule the alarm! (Pass the next notification time so we know which alarm to sound when nudged by WakeUpAndDoSomething)
-        intent.putExtra("islam.adhanalarm.nextNotificationTime", nextNotificationTime);
-        am.set(AlarmManager.RTC_WAKEUP, notificationTimes[nextNotificationTime].getTimeInMillis(), intent);
 	    
-        // TODO: The following is just for testing so I don't have to actually wait for the real time
-        /*am.cancel(intent);
+	    setNextNotificationTime(nextNotificationTime, notificationTimes[nextNotificationTime].getTimeInMillis());
+    }
+    
+    private void setNextNotificationTime(short nextNotificationTime, long actualTimestamp) {
+	    //TODO: Remove this
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.add(Calendar.SECOND, 10);
-        intent.putExtra("islam.adhanalarm.nextNotificationTime", nextNotificationTime);
-        am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), intent);
-        ((TextView)findViewById(R.id.notes)).setText("Alarm" + Math.random());*/
+        //actualTimestamp = calendar.getTimeInMillis();
+        //End TODO
+        
+	    Intent intent = new Intent(this, WakeUpAndDoSomething.class);
+	    intent.putExtra("nextNotificationTime", (int)nextNotificationTime);
+	    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	    
+        AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
+        am.set(AlarmManager.RTC_WAKEUP, actualTimestamp, PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT));
+
+	    //NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+	    //nm.cancelAll();
+        //Notification notification = new Notification(R.drawable.icon, getString(R.string.time_for) + " " + getTimeName(notificationFor), calendar.getTimeInMillis());
+	    //notification.setLatestEventInfo(this, getString(R.string.app_name), getString(R.string.time_for) + " " + getTimeName(notificationFor), PendingIntent.getActivity(this, 0, intent, 0));
+	    //nm.notify(1, notification);
+
+        //((TextView)findViewById(R.id.notes)).setText("Alarm" + Math.random());
         // TODO: Remove the above test code when ready
     }
 }

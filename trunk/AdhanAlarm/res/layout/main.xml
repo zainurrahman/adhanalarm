@@ -231,7 +231,7 @@
 									android:layout_width="fill_parent">
 									<EditText android:id="@+id/latitude"
 										android:text="47.682" android:layout_width="fill_parent"
-										android:layout_height="wrap_content" android:numeric="false" />
+										android:layout_height="wrap_content" android:numeric="decimal" />
 								</LinearLayout>
 								<LinearLayout
 									android:orientation="horizontal"
@@ -240,7 +240,7 @@
 									<EditText
 										android:id="@+id/longitude" android:text="-122.132"
 										android:layout_width="fill_parent"
-										android:layout_height="wrap_content" android:numeric="false" />
+										android:layout_height="wrap_content" android:numeric="decimal" />
 								</LinearLayout>
 							</LinearLayout>
 							<Button android:id="@+id/lookup_gps"
@@ -250,7 +250,7 @@
 						</LinearLayout>
 						<EditText android:id="@+id/altitude"
 							android:text="0" android:layout_width="fill_parent"
-							android:layout_height="wrap_content" android:numeric="false" />
+							android:layout_height="wrap_content" android:numeric="decimal" />
 					</LinearLayout>
 				</LinearLayout>
 				<Button android:id="@+id/save_and_apply_place"
@@ -300,10 +300,10 @@
 							android:drawSelectorOnTop="true" />
 						<EditText android:id="@+id/pressure"
 							android:text="1010" android:layout_width="fill_parent"
-							android:layout_height="wrap_content" android:numeric="false" />
+							android:layout_height="wrap_content" android:numeric="decimal" />
 						<EditText android:id="@+id/temperature"
 							android:text="10" android:layout_width="fill_parent"
-							android:layout_height="wrap_content" android:numeric="false" />
+							android:layout_height="wrap_content" android:numeric="decimal" />
 					</LinearLayout>
 				</LinearLayout>
 				<LinearLayout android:orientation="horizontal"
