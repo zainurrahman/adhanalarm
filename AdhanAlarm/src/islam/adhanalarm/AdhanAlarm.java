@@ -127,16 +127,17 @@ public class AdhanAlarm extends Activity {
                 EditText latitude = (EditText)findViewById(R.id.latitude);
                 EditText longitude = (EditText)findViewById(R.id.longitude);
 
-                LocationManager locationMananager = (LocationManager)getSystemService(LOCATION_SERVICE);
-                 Location location = locationMananager. getLastKnownLocation("gps");
+                LocationManager locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
+                Location location = locationManager.getLastKnownLocation("gps");
 
-                 if(location != null) {
-                    latitude.setText(Double.toString(location.getLatitude()));
-                    longitude.setText(Double.toString(location.getLongitude()));
-                 } else {
-                    latitude.setText("");
-                    longitude.setText("");
-                 }
+                if(location != null) {
+                	latitude.setText(Double.toString(location.getLatitude()));
+                	longitude.setText(Double.toString(location.getLongitude()));
+                } else {
+                    SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+                	latitude.setText(Float.toString(settings.getFloat("latitude", (float)51.477222))); // default greenwich
+                	longitude.setText(Float.toString(settings.getFloat("longitude", (float)-122.132)));
+                }
             }
         });
 
@@ -271,6 +272,21 @@ public class AdhanAlarm extends Activity {
 	        	((TextView)findViewById(R.id.notes)).setText(getString(R.string.error_playing_alert));
 	        }
     	}
+
+		/*
+	    NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+	    nm.cancelAll();
+        Notification notification = new Notification(R.drawable.icon, getString(R.string.time_for) + " " + getTimeName(time), System.currentTimeMillis());
+	    notification.setLatestEventInfo(this, getString(R.string.app_name), getString(R.string.time_for) + " " + getTimeName(time), PendingIntent.getActivity(this, 0, new Intent(this, AdhanAlarm.class), 0));
+	    if(notificationMethod != VIBRATE && notificationMethod != DISPLAY_ONLY) {
+	    	notification.audioStreamType = Notification.STREAM_DEFAULT;
+	    	notification.sound = android.net.Uri.parse("android.resource://islam.adhanalarm/" + getString(alarm));
+	    }
+		if(notificationMethod == VIBRATE || notificationMethod == BEEP_AND_VIBRATE) {
+		    notification.vibrate = new long[] {100, 250, 100, 500};
+		}
+	    nm.notify(1, notification);
+	    */
     }
     
     private int getNextNotificationTime() {
@@ -420,12 +436,6 @@ public class AdhanAlarm extends Activity {
 	    
         AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
         am.set(AlarmManager.RTC_WAKEUP, actualTimestamp, PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT));
-
-	    //NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-	    //nm.cancelAll();
-        //Notification notification = new Notification(R.drawable.icon, getString(R.string.time_for) + " " + getTimeName(notificationFor), calendar.getTimeInMillis());
-	    //notification.setLatestEventInfo(this, getString(R.string.app_name), getString(R.string.time_for) + " " + getTimeName(notificationFor), PendingIntent.getActivity(this, 0, intent, 0));
-	    //nm.notify(1, notification);
 
         //((TextView)findViewById(R.id.notes)).setText("Alarm" + Math.random());
         // TODO: Remove the above test code when ready
