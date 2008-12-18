@@ -26,218 +26,218 @@ import java.util.GregorianCalendar;
 import libs.itl.PrayerTimes;
 
 public class AdhanAlarm extends Activity {
+	public static final boolean DEBUG = true;
 	public static final String PREFS_NAME = "settingsFile";
 
 	private static final short DAWN = 0, FAJR = 1, SUNRISE = 2, DHUHR = 3, ASR = 4, MAGHRIB = 5, ISHAA = 6, NEXT_DAWN = 7, NEXT_FAJR = 8; // Notification Times
 	private static final short DISPLAY_ONLY = 0, VIBRATE = 1, BEEP = 2, BEEP_AND_VIBRATE = 3, RECITE_ADHAN = 4; // Notification Methods
 	private static final short ALERT_PRAYERS_ONLY = 0, ALERT_DAWN = 1, ALERT_SUNRISE = 2, ALERT_DAWN_AND_SUNRISE = 3; // Extra Alerts
-	
+
 	private MediaPlayer mediaPlayer = null;
-    @Override
-    public void onCreate(Bundle icicle) {
-        super.onCreate(icicle);
-        setContentView(R.layout.main);
-        
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+	@Override
+	public void onCreate(Bundle icicle) {
+		super.onCreate(icicle);
+		setContentView(R.layout.main);
 
-        Spinner notification_methods = (Spinner)findViewById(R.id.notification_methods);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                this, R.array.notification_methods, android.R.layout.simple_spinner_item);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        notification_methods.setAdapter(adapter);
-        notification_methods.setSelection(settings.getInt("notificationMethodIndex", BEEP));
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-        Spinner extra_alerts = (Spinner)findViewById(R.id.extra_alerts);
-        adapter = ArrayAdapter.createFromResource(
-                this, R.array.extra_alerts, android.R.layout.simple_spinner_item);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        extra_alerts.setAdapter(adapter);
-        extra_alerts.setSelection(settings.getInt("extraAlertsIndex", ALERT_PRAYERS_ONLY));
+		Spinner notification_methods = (Spinner)findViewById(R.id.notification_methods);
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+				this, R.array.notification_methods, android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		notification_methods.setAdapter(adapter);
+		notification_methods.setSelection(settings.getInt("notificationMethodIndex", BEEP));
 
-        // TODO: Make all edit texts single line and numeric from main.xml in next SDK
-        ((EditText)findViewById(R.id.latitude)).setText(Float.toString(settings.getFloat("latitude", (float)51.477222)));
-        ((EditText)findViewById(R.id.longitude)).setText(Float.toString(settings.getFloat("longitude", (float)-122.132)));
-        ((EditText)findViewById(R.id.altitude)).setText(Float.toString(settings.getFloat("altitude", 0)));
-        
-        if(settings.getString("latitude", "") != "" && settings.getString("longitude", "") != "") {
-        	updateScheduleAndNotification();
-        }
+		Spinner extra_alerts = (Spinner)findViewById(R.id.extra_alerts);
+		adapter = ArrayAdapter.createFromResource(
+				this, R.array.extra_alerts, android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		extra_alerts.setAdapter(adapter);
+		extra_alerts.setSelection(settings.getInt("extraAlertsIndex", ALERT_PRAYERS_ONLY));
 
-        Spinner calculation_methods = (Spinner)findViewById(R.id.calculation_methods);
-        adapter = ArrayAdapter.createFromResource(
-                this, R.array.calculation_methods, android.R.layout.simple_spinner_item);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        calculation_methods.setAdapter(adapter);
-        calculation_methods.setSelection(settings.getInt("calculationMethodsIndex", 0));
+		((EditText)findViewById(R.id.latitude)).setText(Float.toString(settings.getFloat("latitude", (float)51.477222)));
+		((EditText)findViewById(R.id.longitude)).setText(Float.toString(settings.getFloat("longitude", (float)-122.132)));
+		((EditText)findViewById(R.id.altitude)).setText(Float.toString(settings.getFloat("altitude", 0)));
 
-        Spinner rounding_types = (Spinner)findViewById(R.id.rounding_types);
-        adapter = ArrayAdapter.createFromResource(
-                this, R.array.rounding_types, android.R.layout.simple_spinner_item);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-       rounding_types.setAdapter(adapter);
-       rounding_types.setSelection(settings.getInt("roundingTypesIndex", 1));
+		if(settings.getString("latitude", "") != "" && settings.getString("longitude", "") != "") {
+			updateScheduleAndNotification();
+		}
 
-       ((EditText)findViewById(R.id.pressure)).setText(Float.toString(settings.getFloat("pressure", 1010)));
-       ((EditText)findViewById(R.id.temperature)).setText(Float.toString(settings.getFloat("temperature", 10)));
+		Spinner calculation_methods = (Spinner)findViewById(R.id.calculation_methods);
+		adapter = ArrayAdapter.createFromResource(
+				this, R.array.calculation_methods, android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		calculation_methods.setAdapter(adapter);
+		calculation_methods.setSelection(settings.getInt("calculationMethodsIndex", 0));
 
-       double gmtOffset = getGMTOffset();
-       String plusMinusGMT = gmtOffset < 0 ? "" + gmtOffset : "+" + gmtOffset;
-       String daylightTime = isDaylightSavings() ? " " + getString(R.string.daylight_savings) : "";
-       ((TextView)findViewById(R.id.display_time_zone)).setText(getString(R.string.system_time_zone) + ": " + getString(R.string.gmt) + plusMinusGMT + " (" + new GregorianCalendar().getTimeZone().getDisplayName() + daylightTime + ")");
+		Spinner rounding_types = (Spinner)findViewById(R.id.rounding_types);
+		adapter = ArrayAdapter.createFromResource(
+				this, R.array.rounding_types, android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		rounding_types.setAdapter(adapter);
+		rounding_types.setSelection(settings.getInt("roundingTypesIndex", 1));
 
-        TabHost tabs = (TabHost)findViewById(R.id.tabs);
-        tabs.setup();
+		((EditText)findViewById(R.id.pressure)).setText(Float.toString(settings.getFloat("pressure", 1010)));
+		((EditText)findViewById(R.id.temperature)).setText(Float.toString(settings.getFloat("temperature", 10)));
 
-        TabHost.TabSpec one = tabs.newTabSpec("one");
-        one.setContent(R.id.content1);
-        one.setIndicator(getString(R.string.today), getResources().getDrawable(R.drawable.calendar));
-        tabs.addTab(one);
+		double gmtOffset = getGMTOffset();
+		String plusMinusGMT = gmtOffset < 0 ? "" + gmtOffset : "+" + gmtOffset;
+		String daylightTime = isDaylightSavings() ? " " + getString(R.string.daylight_savings) : "";
+		((TextView)findViewById(R.id.display_time_zone)).setText(getString(R.string.system_time_zone) + ": " + getString(R.string.gmt) + plusMinusGMT + " (" + new GregorianCalendar().getTimeZone().getDisplayName() + daylightTime + ")");
 
-        TabHost.TabSpec two = tabs.newTabSpec("two");
-        two.setContent(R.id.content2);
-        two.setIndicator(getString(R.string.alert), getResources().getDrawable(R.drawable.volume));
-        tabs.addTab(two);
+		TabHost tabs = (TabHost)findViewById(R.id.tabs);
+		tabs.setup();
 
-        TabHost.TabSpec three = tabs.newTabSpec("three");
-        three.setContent(R.id.content3);
-        three.setIndicator(getString(R.string.place), getResources().getDrawable(R.drawable.globe));
-        tabs.addTab(three);
+		TabHost.TabSpec one = tabs.newTabSpec("one");
+		one.setContent(R.id.content1);
+		one.setIndicator(getString(R.string.today), getResources().getDrawable(R.drawable.calendar));
+		tabs.addTab(one);
 
-        TabHost.TabSpec four = tabs.newTabSpec("four");
-        four.setContent(R.id.content4);
-        four.setIndicator(getString(R.string.extra), getResources().getDrawable(R.drawable.calculator));
-        tabs.addTab(four);
+		TabHost.TabSpec two = tabs.newTabSpec("two");
+		two.setContent(R.id.content2);
+		two.setIndicator(getString(R.string.alert), getResources().getDrawable(R.drawable.volume));
+		tabs.addTab(two);
 
-        Button playStop = (Button)findViewById(R.id.play_stop);
-        playStop.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-            	if(mediaPlayer != null && mediaPlayer.isPlaying()) {
-            		((Button)findViewById(R.id.play_stop)).setText(getString(R.string.preview_next_alarm));
-            		mediaPlayer.stop();
-            		//((Vibrator)getSystemService("vibrator")).cancel();
-            	} else {
-    				playAlertIfAppropriate(getNextNotificationTime());
-            	}
-            }
-        });
+		TabHost.TabSpec three = tabs.newTabSpec("three");
+		three.setContent(R.id.content3);
+		three.setIndicator(getString(R.string.place), getResources().getDrawable(R.drawable.globe));
+		tabs.addTab(three);
 
-        Button lookupGPS = (Button)findViewById(R.id.lookup_gps);
-        lookupGPS.setOnClickListener(new Button.OnClickListener() {  
-            public void onClick(View v) {
-                EditText latitude = (EditText)findViewById(R.id.latitude);
-                EditText longitude = (EditText)findViewById(R.id.longitude);
+		TabHost.TabSpec four = tabs.newTabSpec("four");
+		four.setContent(R.id.content4);
+		four.setIndicator(getString(R.string.extra), getResources().getDrawable(R.drawable.calculator));
+		tabs.addTab(four);
 
-                LocationManager locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
-                Location location = locationManager.getLastKnownLocation("gps");
+		Button playStop = (Button)findViewById(R.id.play_stop);
+		playStop.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				if(mediaPlayer != null && mediaPlayer.isPlaying()) {
+					((Button)findViewById(R.id.play_stop)).setText(getString(R.string.preview_next_alarm));
+					mediaPlayer.stop();
+					//((Vibrator)getSystemService("vibrator")).cancel();
+				} else {
+					playAlertIfAppropriate(getNextNotificationTime());
+				}
+			}
+		});
 
-                if(location != null) {
-                	latitude.setText(Double.toString(location.getLatitude()));
-                	longitude.setText(Double.toString(location.getLongitude()));
-                } else {
-                    SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-                	latitude.setText(Float.toString(settings.getFloat("latitude", (float)51.477222))); // default greenwich
-                	longitude.setText(Float.toString(settings.getFloat("longitude", (float)-122.132)));
-                }
-            }
-        });
+		Button lookupGPS = (Button)findViewById(R.id.lookup_gps);
+		lookupGPS.setOnClickListener(new Button.OnClickListener() {  
+			public void onClick(View v) {
+				EditText latitude = (EditText)findViewById(R.id.latitude);
+				EditText longitude = (EditText)findViewById(R.id.longitude);
 
-        Button saveAndApplyAlert = (Button)findViewById(R.id.save_and_apply_alert);
-        saveAndApplyAlert.setOnClickListener(new Button.OnClickListener() {  
-            public void onClick(View v) {
-                updateScheduleAndNotification();
-                TabHost tabs = (TabHost)findViewById(R.id.tabs);
-                tabs.setCurrentTab(0);
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putInt("notificationMethodIndex", ((Spinner)findViewById(R.id.notification_methods)).getSelectedItemPosition());
-                editor.putInt("extraAlertsIndex", ((Spinner)findViewById(R.id.extra_alerts)).getSelectedItemPosition());
-                editor.commit();
-            }
-        });
+				LocationManager locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
+				Location location = locationManager.getLastKnownLocation("gps");
 
-        Button saveAndApplyPlace = (Button)findViewById(R.id.save_and_apply_place);
-        saveAndApplyPlace.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-                updateScheduleAndNotification();
-                TabHost tabs = (TabHost)findViewById(R.id.tabs);
-                tabs.setCurrentTab(0);
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putString("latitude", ((EditText)findViewById(R.id.latitude)).getText().toString());
-                editor.putString("longitude", ((EditText)findViewById(R.id.longitude)).getText().toString());
-                editor.putFloat("altitude", Float.parseFloat(((EditText)findViewById(R.id.altitude)).getText().toString()));
-                editor.commit();
-            }
-        });
+				if(location != null) {
+					latitude.setText(Double.toString(location.getLatitude()));
+					longitude.setText(Double.toString(location.getLongitude()));
+				} else {
+					SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+					latitude.setText(Float.toString(settings.getFloat("latitude", (float)51.477222))); // default greenwich
+					longitude.setText(Float.toString(settings.getFloat("longitude", (float)-122.132)));
+				}
+			}
+		});
 
-        Button resetExtra = (Button)findViewById(R.id.reset_extra);
-        resetExtra.setOnClickListener(new Button.OnClickListener() {  
-            public void onClick(View v) {
-                ((Spinner)findViewById(R.id.calculation_methods)).setSelection(0);
-                ((Spinner)findViewById(R.id.rounding_types)).setSelection(1);
-                ((EditText)findViewById(R.id.pressure)).setText("1010.0");
-                ((EditText)findViewById(R.id.temperature)).setText("10.0");
-            }
-        });
+		Button saveAndApplyAlert = (Button)findViewById(R.id.save_and_apply_alert);
+		saveAndApplyAlert.setOnClickListener(new Button.OnClickListener() {  
+			public void onClick(View v) {
+				updateScheduleAndNotification();
+				TabHost tabs = (TabHost)findViewById(R.id.tabs);
+				tabs.setCurrentTab(0);
+				SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+				SharedPreferences.Editor editor = settings.edit();
+				editor.putInt("notificationMethodIndex", ((Spinner)findViewById(R.id.notification_methods)).getSelectedItemPosition());
+				editor.putInt("extraAlertsIndex", ((Spinner)findViewById(R.id.extra_alerts)).getSelectedItemPosition());
+				editor.commit();
+			}
+		});
 
-        Button saveAndApplyExtra = (Button)findViewById(R.id.save_and_apply_extra);
-        saveAndApplyExtra.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-                updateScheduleAndNotification();
-                TabHost tabs = (TabHost)findViewById(R.id.tabs);
-                tabs.setCurrentTab(0);
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putInt("calculationMethodsIndex", ((Spinner)findViewById(R.id.calculation_methods)).getSelectedItemPosition());
-                editor.putInt("roundingTypesIndex", ((Spinner)findViewById(R.id.rounding_types)).getSelectedItemPosition());
-                editor.putFloat("pressure", Float.parseFloat(((EditText)findViewById(R.id.pressure)).getText().toString()));
-                editor.putFloat("temperature", Float.parseFloat(((EditText)findViewById(R.id.temperature)).getText().toString()));
-                editor.commit();
-            }
-        });
-    }
-    
-    public void onResume() {
-    	int notificationTime = getIntent().getIntExtra("nextNotificationTime", -1);
-    	if(notificationTime > 0) {
-            Toast.makeText(this, getString(R.string.time_for) + " " + getTimeName(notificationTime), Toast.LENGTH_LONG).show();
-            playAlertIfAppropriate(notificationTime);
-    	}
-    	getIntent().removeExtra("nextNotificationTime");
-    	updateScheduleAndNotification();
-    	((TabHost)findViewById(R.id.tabs)).setCurrentTab(0);
-    	super.onResume();
-    }
-    
-    public void onNewIntent(Intent intent) {
-    	setIntent(intent);
-    	super.onNewIntent(intent);
-    }
-    
-    private double getGMTOffset() {
-        Calendar currentTime = new GregorianCalendar();
-        int gmtOffset = currentTime.getTimeZone().getOffset(currentTime.getTimeInMillis());
-        return gmtOffset / 3600000;
-    }
-    
-    private boolean isDaylightSavings() {
-        Calendar currentTime = new GregorianCalendar();
-        return currentTime.getTimeZone().inDaylightTime(currentTime.getTime());
-    }
-    
-    private TextView[] getAllNotificationMarkers() {
-    	return new TextView[]{(TextView)findViewById(R.id.mark_dawn), (TextView)findViewById(R.id.mark_fajr), (TextView)findViewById(R.id.mark_sunrise), (TextView)findViewById(R.id.mark_dhuhr), (TextView)findViewById(R.id.mark_asr), (TextView)findViewById(R.id.mark_maghrib), (TextView)findViewById(R.id.mark_ishaa), (TextView)findViewById(R.id.mark_next_dawn), (TextView)findViewById(R.id.mark_next_fajr)};
-    }
-    
-    private String getTimeName(int time) {
-    	int[] timeNames = new int[]{R.string.dawn, R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr, R.string.maghrib, R.string.ishaa, R.string.next_dawn, R.string.next_fajr};
-    	return getString(timeNames[time]);
-    }
-    
-    private void playAlertIfAppropriate(int time) {
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+		Button saveAndApplyPlace = (Button)findViewById(R.id.save_and_apply_place);
+		saveAndApplyPlace.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				updateScheduleAndNotification();
+				TabHost tabs = (TabHost)findViewById(R.id.tabs);
+				tabs.setCurrentTab(0);
+				SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+				SharedPreferences.Editor editor = settings.edit();
+				editor.putString("latitude", ((EditText)findViewById(R.id.latitude)).getText().toString());
+				editor.putString("longitude", ((EditText)findViewById(R.id.longitude)).getText().toString());
+				editor.putFloat("altitude", Float.parseFloat(((EditText)findViewById(R.id.altitude)).getText().toString()));
+				editor.commit();
+			}
+		});
+
+		Button resetExtra = (Button)findViewById(R.id.reset_extra);
+		resetExtra.setOnClickListener(new Button.OnClickListener() {  
+			public void onClick(View v) {
+				((Spinner)findViewById(R.id.calculation_methods)).setSelection(0);
+				((Spinner)findViewById(R.id.rounding_types)).setSelection(1);
+				((EditText)findViewById(R.id.pressure)).setText("1010.0");
+				((EditText)findViewById(R.id.temperature)).setText("10.0");
+			}
+		});
+
+		Button saveAndApplyExtra = (Button)findViewById(R.id.save_and_apply_extra);
+		saveAndApplyExtra.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				updateScheduleAndNotification();
+				TabHost tabs = (TabHost)findViewById(R.id.tabs);
+				tabs.setCurrentTab(0);
+				SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+				SharedPreferences.Editor editor = settings.edit();
+				editor.putInt("calculationMethodsIndex", ((Spinner)findViewById(R.id.calculation_methods)).getSelectedItemPosition());
+				editor.putInt("roundingTypesIndex", ((Spinner)findViewById(R.id.rounding_types)).getSelectedItemPosition());
+				editor.putFloat("pressure", Float.parseFloat(((EditText)findViewById(R.id.pressure)).getText().toString()));
+				editor.putFloat("temperature", Float.parseFloat(((EditText)findViewById(R.id.temperature)).getText().toString()));
+				editor.commit();
+			}
+		});
+	}
+
+	public void onResume() {
+		int notificationTime = getIntent().getIntExtra("nextNotificationTime", -1);
+		if(notificationTime > 0) {
+			Toast.makeText(this, getString(R.string.time_for) + " " + getTimeName(notificationTime), Toast.LENGTH_LONG).show();
+			playAlertIfAppropriate(notificationTime);
+		}
+		getIntent().removeExtra("nextNotificationTime");
+		updateScheduleAndNotification();
+		((TabHost)findViewById(R.id.tabs)).setCurrentTab(0);
+		super.onResume();
+	}
+
+	public void onNewIntent(Intent intent) {
+		setIntent(intent);
+		super.onNewIntent(intent);
+	}
+
+	private double getGMTOffset() {
+		Calendar currentTime = new GregorianCalendar();
+		int gmtOffset = currentTime.getTimeZone().getOffset(currentTime.getTimeInMillis());
+		return gmtOffset / 3600000;
+	}
+
+	private boolean isDaylightSavings() {
+		Calendar currentTime = new GregorianCalendar();
+		return currentTime.getTimeZone().inDaylightTime(currentTime.getTime());
+	}
+
+	private TextView[] getAllNotificationMarkers() {
+		return new TextView[]{(TextView)findViewById(R.id.mark_dawn), (TextView)findViewById(R.id.mark_fajr), (TextView)findViewById(R.id.mark_sunrise), (TextView)findViewById(R.id.mark_dhuhr), (TextView)findViewById(R.id.mark_asr), (TextView)findViewById(R.id.mark_maghrib), (TextView)findViewById(R.id.mark_ishaa), (TextView)findViewById(R.id.mark_next_dawn), (TextView)findViewById(R.id.mark_next_fajr)};
+	}
+
+	private String getTimeName(int time) {
+		int[] timeNames = new int[]{R.string.dawn, R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr, R.string.maghrib, R.string.ishaa, R.string.next_dawn, R.string.next_fajr};
+		return getString(timeNames[time]);
+	}
+
+	private void playAlertIfAppropriate(int time) {
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 		int notificationMethod = settings.getInt("notificationMethodIndex", BEEP);
-    	if(notificationMethod == DISPLAY_ONLY || time < DAWN || time > NEXT_FAJR) return;
+		if(notificationMethod == DISPLAY_ONLY || time < DAWN || time > NEXT_FAJR) return;
 		if(notificationMethod == VIBRATE || notificationMethod == BEEP_AND_VIBRATE) {
 			//((Vibrator)getSystemService("vibrator")).vibrate(new long[]{0, 1000}, 15000);
 		}
@@ -245,33 +245,29 @@ public class AdhanAlarm extends Activity {
 			int alarm = R.raw.beep;
 			int extraAlerts = settings.getInt("extraAlertsIndex", ALERT_PRAYERS_ONLY);
 			if(notificationMethod == RECITE_ADHAN) {
-				if((time == DAWN || time == NEXT_DAWN) && (extraAlerts == ALERT_DAWN || extraAlerts == ALERT_DAWN_AND_SUNRISE)) {
+				if(((time == DAWN || time == NEXT_DAWN) && (extraAlerts == ALERT_DAWN || extraAlerts == ALERT_DAWN_AND_SUNRISE)) || (time == SUNRISE && (extraAlerts == ALERT_SUNRISE || extraAlerts == ALERT_DAWN_AND_SUNRISE))) {
 					alarm = R.raw.beep;
 				} else if(time == FAJR || time == NEXT_FAJR) {
 					alarm = R.raw.adhan_fajr;
-				} else if(time == SUNRISE && (extraAlerts == ALERT_SUNRISE || extraAlerts == ALERT_DAWN_AND_SUNRISE)) {
-					alarm = R.raw.beep;
-				} else if(time == DHUHR || time == ASR || time == MAGHRIB || time == ISHAA) {
+				} else if(time == DHUHR || time == ASR || time == MAGHRIB || time == ISHAA || (extraAlerts == ALERT_PRAYERS_ONLY && time == SUNRISE)) {
 					alarm = R.raw.adhan;
 				} else if(extraAlerts == ALERT_PRAYERS_ONLY && (time == DAWN || time == NEXT_DAWN)) {
 					alarm = R.raw.adhan_fajr;
-				} else if(extraAlerts == ALERT_PRAYERS_ONLY && time == SUNRISE) {
-					alarm = R.raw.adhan;
 				}
 			}
-	        mediaPlayer = MediaPlayer.create(AdhanAlarm.this, alarm);
-	        try {
-	    		((Button)findViewById(R.id.play_stop)).setText(getString(R.string.stop));
-	        	mediaPlayer.start();
-	    		mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-	    			public void onCompletion(MediaPlayer mp) {
-	    				((Button)findViewById(R.id.play_stop)).setText(getString(R.string.preview_next_alarm));
-	    			}
-	    		});
-	        } catch(Exception ex) {
-	        	((TextView)findViewById(R.id.notes)).setText(getString(R.string.error_playing_alert));
-	        }
-    	}
+			mediaPlayer = MediaPlayer.create(AdhanAlarm.this, alarm);
+			try {
+				((Button)findViewById(R.id.play_stop)).setText(getString(R.string.stop));
+				mediaPlayer.start();
+				mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+					public void onCompletion(MediaPlayer mp) {
+						((Button)findViewById(R.id.play_stop)).setText(getString(R.string.preview_next_alarm));
+					}
+				});
+			} catch(Exception ex) {
+				((TextView)findViewById(R.id.notes)).setText(getString(R.string.error_playing_alert));
+			}
+		}
 
 		/*
 	    NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
@@ -286,158 +282,138 @@ public class AdhanAlarm extends Activity {
 		    notification.vibrate = new long[] {100, 250, 100, 500};
 		}
 	    nm.notify(1, notification);
-	    */
-    }
-    
-    private int getNextNotificationTime() {
-    	TextView[] markers = getAllNotificationMarkers();
-    	for(int i = DAWN; i < NEXT_FAJR; i++) {
-    		if(markers[i].getText() == getString(R.string.next_time_marker)) return i;
-    	}
-    	return -1;
-    }
-    
-    private void indicateNextNotificationAndAlarmTimes(short nextNotificationTime) {
-    	TextView[] markers = getAllNotificationMarkers();
-    	TextView note = (TextView)findViewById(R.id.notes);
-    	// Clear all existing markers in case it was left from the previous day or while phone was turned off
-    	for(int i = DAWN; i < NEXT_FAJR; i++) {
-    		markers[i].setText("");
-    	}
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-		int extraAlerts = settings.getInt("extraAlertsIndex", ALERT_PRAYERS_ONLY);
-        if(nextNotificationTime == DAWN) {
-            markers[DAWN].setText(getString(R.string.next_time_marker));
-            if(extraAlerts == ALERT_DAWN || extraAlerts == ALERT_DAWN_AND_SUNRISE) { // Only alert dawn if the user has specified
-                note.setText(getString(R.string.next_alert) + ": " + getString(R.string.dawn));
-            } else {
-            	note.setText(getString(R.string.next_alert) + ": " + getString(R.string.fajr));
-            }
-        } else if(nextNotificationTime == FAJR) {
-            markers[FAJR].setText(getString(R.string.next_time_marker));
-            note.setText(getString(R.string.next_alert) + ": " + getString(R.string.fajr));
-        } else if(nextNotificationTime == SUNRISE) {
-        	markers[SUNRISE].setText(getString(R.string.next_time_marker));
-            if(extraAlerts == ALERT_SUNRISE || extraAlerts == ALERT_DAWN_AND_SUNRISE) { // Only alert sunrise if the user has specified
-            	note.setText(getString(R.string.next_alert) + ": " + getString(R.string.sunrise));
-            } else {
-                note.setText(getString(R.string.next_alert) + ": " + getString(R.string.dhuhr));
-            }
-        } else if(nextNotificationTime == DHUHR) {
-        	markers[DHUHR].setText(getString(R.string.next_time_marker));
-        	note.setText(getString(R.string.next_alert) + ": " + getString(R.string.dhuhr));
-        } else if(nextNotificationTime == ASR) {
-        	markers[ASR].setText(getString(R.string.next_time_marker));
-        	note.setText(getString(R.string.next_alert) + ": " + getString(R.string.asr));
-        } else if(nextNotificationTime == MAGHRIB) {
-        	markers[MAGHRIB].setText(getString(R.string.next_time_marker));
-        	note.setText(getString(R.string.next_alert) + ": " + getString(R.string.maghrib));
-        } else if(nextNotificationTime == ISHAA) {
-        	markers[ISHAA].setText(getString(R.string.next_time_marker));
-        	note.setText(getString(R.string.next_alert) + ": " + getString(R.string.ishaa));
-        } else if(nextNotificationTime == NEXT_DAWN) {
-        	markers[NEXT_DAWN].setText(getString(R.string.next_time_marker));
-            if(extraAlerts == ALERT_DAWN || extraAlerts == ALERT_DAWN_AND_SUNRISE) { // Only alert dawn if the user has specified
-            	note.setText(getString(R.string.next_alert) + ": " + getString(R.string.next_dawn));
-            } else {
-            	note.setText(getString(R.string.next_alert) + ": " + getString(R.string.next_fajr));
-            }
-        } else if(nextNotificationTime == NEXT_FAJR) {
-        	markers[NEXT_FAJR].setText(getString(R.string.next_time_marker));
-        	note.setText(getString(R.string.next_alert) + ": " + getString(R.string.next_fajr));
-        }
-    }
-    
-    private void updateScheduleAndNotification() {
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        
-        PrayerTimes prayerTimes = new PrayerTimes();
+		 */
+	}
 
-        PrayerTimes.PrayerDate date= prayerTimes.new PrayerDate();
-        Calendar currentTime = Calendar.getInstance();
-        date.setDay(currentTime.get(Calendar.DAY_OF_MONTH));
-        date.setMonth(currentTime.get(Calendar.MONTH) + 1);
-        date.setYear(currentTime.get(Calendar.YEAR));
+	private int getNextNotificationTime() {
+		TextView[] markers = getAllNotificationMarkers();
+		for(int i = DAWN; i < NEXT_FAJR; i++) {
+			if(markers[i].getText() == getString(R.string.next_time_marker)) return i;
+		}
+		return -1;
+	}
 
-        PrayerTimes.Location loc = prayerTimes.new Location();
-        loc.setDegreeLat(settings.getFloat("latitude", (float)51.477222)); // default greenwich
-        loc.setDegreeLong(settings.getFloat("longitude", (float)-122.132));
-        loc.setGmtDiff(getGMTOffset());
-        loc.setDst(isDaylightSavings() ? 1 : 0);
-        //loc.setGmtDiff(-5);
-        //loc.setDst(0);
-        loc.setSeaLevel(settings.getFloat("altitude", 0));
-        loc.setPressure(settings.getFloat("pressure", 1010));
-        loc.setTemperature(settings.getFloat("temperature", 10));
+	private void indicateNextNotificationAndAlarmTimes(short nextNotificationTime) {
+		TextView[] markers = getAllNotificationMarkers();
+		TextView note = (TextView)findViewById(R.id.notes);
+		// Clear all existing markers in case it was left from the previous day or while phone was turned off
+		for(int i = DAWN; i < NEXT_FAJR; i++) {
+			markers[i].setText("");
+		}
+		int extraAlerts = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).getInt("extraAlertsIndex", ALERT_PRAYERS_ONLY);
+		markers[nextNotificationTime].setText(getString(R.string.next_time_marker));
+		int nextAlert = R.string.fajr;
+		switch(nextNotificationTime) {
+		case DAWN:		// Only alert dawn if the user has specified, else move on to fajr
+			if(extraAlerts == ALERT_DAWN || extraAlerts == ALERT_DAWN_AND_SUNRISE) nextAlert = R.string.dawn;
+			break;
+		case SUNRISE:	// Only alert sunrise if the user has specified, else move on to dhuhr
+			nextAlert = (extraAlerts == ALERT_SUNRISE || extraAlerts == ALERT_DAWN_AND_SUNRISE) ? R.string.sunrise : R.string.dhuhr;
+			break;
+		case DHUHR:
+			nextAlert = R.string.dhuhr;
+			break;
+		case ASR:
+			nextAlert = R.string.asr;
+			break;
+		case MAGHRIB:
+			nextAlert = R.string.maghrib;
+			break;
+		case ISHAA:
+			nextAlert = R.string.ishaa;
+			break;
+		case NEXT_DAWN:	// Only alert next dawn if the user has specified, else move on to next fajr
+			nextAlert = (extraAlerts == ALERT_DAWN || extraAlerts == ALERT_DAWN_AND_SUNRISE) ? R.string.next_dawn : R.string.next_fajr;
+			break;
+		case NEXT_FAJR:
+			nextAlert = R.string.next_fajr;
+			break;
+		}
+		note.setText(getString(R.string.next_alert) + ": " + getString(nextAlert));
+	}
 
-        PrayerTimes.Method conf = prayerTimes.new Method();
-        conf.autoFillPrayerMethod(settings.getInt("calculationMethodsIndex", 0));
-        conf.setRound(settings.getInt("roundingTypesIndex", 1));
+	private void updateScheduleAndNotification() {
+		SharedPreferences settings = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-        PrayerTimes.Prayer[] ptList = prayerTimes.getPrayerTimes(loc, conf, date);
-        PrayerTimes.Prayer dawn = prayerTimes.getImsaak(loc, conf, date);
-        PrayerTimes.Prayer nextDawn = prayerTimes.getNextDayImsaak(loc, conf, date);
-        PrayerTimes.Prayer nextFajr = prayerTimes.getNextDayFajr(loc, conf, date);
-        
-        // Set the times on the schedule
-        GregorianCalendar[] notificationTimes = new GregorianCalendar[9];
-        DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
-        notificationTimes[DAWN] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), dawn.getHour(), dawn.getMinute(), dawn.getSecond());
-        ((TextView)findViewById(R.id.dawn)).setText(timeFormat.format(notificationTimes[0].getTime()) + (dawn.getIsExtreme() == 1 ? "*" : ""));
-        notificationTimes[FAJR] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[0].getHour(), ptList[0].getMinute(), ptList[0].getSecond());
-        ((TextView)findViewById(R.id.fajr)).setText(timeFormat.format(notificationTimes[1].getTime()) + (ptList[0].getIsExtreme() == 1 ? "*" : ""));
-        notificationTimes[SUNRISE] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[1].getHour(), ptList[1].getMinute(),ptList[1] .getSecond());
-        ((TextView)findViewById(R.id.sunrise)).setText(timeFormat.format(notificationTimes[2].getTime()) + (ptList[1].getIsExtreme() == 1 ? "*" : ""));
-        notificationTimes[DHUHR] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[2].getHour(), ptList[2].getMinute(), ptList[2].getSecond());
-        ((TextView)findViewById(R.id.dhuhr)).setText(timeFormat.format(notificationTimes[3].getTime()) + (ptList[2].getIsExtreme() == 1 ? "*" : ""));
-        notificationTimes[ASR] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[3].getHour(), ptList[3].getMinute(), ptList[3].getSecond());
-        ((TextView)findViewById(R.id.asr)).setText(timeFormat.format(notificationTimes[4].getTime()) + (ptList[3].getIsExtreme() == 1 ? "*" : ""));
-        notificationTimes[MAGHRIB] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[4].getHour(), ptList[4].getMinute(), ptList[4].getSecond());
-        ((TextView)findViewById(R.id.maghrib)).setText(timeFormat.format(notificationTimes[5].getTime()) + (ptList[4].getIsExtreme() == 1 ? "*" : ""));
-        notificationTimes[ISHAA] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[5].getHour(), ptList[5].getMinute(), ptList[5].getSecond());
-        ((TextView)findViewById(R.id.ishaa)).setText(timeFormat.format(notificationTimes[6].getTime()) + (ptList[5].getIsExtreme() == 1 ? "*" : ""));
-        notificationTimes[NEXT_DAWN] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH) + 1, nextDawn.getHour(), nextDawn.getMinute(), nextDawn.getSecond());
-        ((TextView)findViewById(R.id.next_dawn)).setText(timeFormat.format(notificationTimes[7].getTime()) + (nextDawn.getIsExtreme() == 1 ? "*" : ""));
-        notificationTimes[NEXT_FAJR] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH) + 1, nextFajr.getHour(), nextFajr.getMinute(), nextFajr.getSecond());
-        ((TextView)findViewById(R.id.next_fajr)).setText(timeFormat.format(notificationTimes[8].getTime()) + (nextFajr.getIsExtreme() == 1 ? "*" : ""));
+		PrayerTimes prayerTimes = DEBUG ? new DummyPrayerTimes() : new PrayerTimes();
 
-        short nextNotificationTime;
-        for(nextNotificationTime = DAWN; nextNotificationTime < NEXT_FAJR; nextNotificationTime++) {
-        	if(currentTime.compareTo(notificationTimes[nextNotificationTime]) < 0) break;
-        }
-        indicateNextNotificationAndAlarmTimes(nextNotificationTime);
-        
-        // Add Latitude, Longitude and Qibla DMS location to front panel
-        PrayerTimes.DMS dms = prayerTimes.decimal2Dms(loc.getDegreeLat());
-        double qibla = prayerTimes.getNorthQibla(loc);
-	    String current_latitude = Math.abs(dms.getDegree()) + "° " + Math.abs(dms.getMinute())+ "' " + Math.abs(dms.getSecond()) + "\" " + ((loc.getDegreeLat() >= 0) ? getString(R.string.north) : getString(R.string.south));
-	    ((TextView)findViewById(R.id.current_latitude)).setText(current_latitude);
-	    dms = prayerTimes.decimal2Dms(loc.getDegreeLong());
-	    String current_longitude = Math.abs(dms.getDegree()) + "° " + Math.abs(dms.getMinute()) + "' " + Math.abs(dms.getSecond()) + "\" " + ((loc.getDegreeLong() >= 0) ? getString(R.string.east) : getString(R.string.west));
-	    ((TextView)findViewById(R.id.current_longitude)).setText(current_longitude);
-	    dms = prayerTimes.decimal2Dms(qibla);
-	    String current_qibla = Math.abs(dms.getDegree()) + "° " + Math.abs(dms.getMinute()) + "' " + Math.abs(dms.getSecond()) + "\" " + ((qibla >= 0) ? getString(R.string.west) : getString(R.string.east));
-	    ((TextView)findViewById(R.id.current_qibla)).setText(current_qibla);
-	    
-	    setNextNotificationTime(nextNotificationTime, notificationTimes[nextNotificationTime].getTimeInMillis());
-    }
-    
-    private void setNextNotificationTime(short nextNotificationTime, long actualTimestamp) {
-	    //TODO: Remove this
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.add(Calendar.SECOND, 10);
-        //actualTimestamp = calendar.getTimeInMillis();
-        //End TODO
-        
-	    Intent intent = new Intent(this, WakeUpAndDoSomething.class);
-	    intent.putExtra("nextNotificationTime", (int)nextNotificationTime);
-	    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-	    
-        AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
-        am.set(AlarmManager.RTC_WAKEUP, actualTimestamp, PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT));
+		PrayerTimes.PrayerDate date= prayerTimes.new PrayerDate();
+		Calendar currentTime = Calendar.getInstance();
+		date.setDay(currentTime.get(Calendar.DAY_OF_MONTH));
+		date.setMonth(currentTime.get(Calendar.MONTH) + 1);
+		date.setYear(currentTime.get(Calendar.YEAR));
 
-        //((TextView)findViewById(R.id.notes)).setText("Alarm" + Math.random());
-        // TODO: Remove the above test code when ready
-    }
+		PrayerTimes.Location loc = prayerTimes.new Location();
+		loc.setDegreeLat(settings.getFloat("latitude", (float)51.477222)); // default greenwich
+		loc.setDegreeLong(settings.getFloat("longitude", (float)-122.132));
+		loc.setGmtDiff(getGMTOffset());
+		loc.setDst(isDaylightSavings() ? 1 : 0);
+		//loc.setGmtDiff(-5);
+		//loc.setDst(0);
+		loc.setSeaLevel(settings.getFloat("altitude", 0));
+		loc.setPressure(settings.getFloat("pressure", 1010));
+		loc.setTemperature(settings.getFloat("temperature", 10));
+
+		PrayerTimes.Method conf = prayerTimes.new Method();
+		conf.autoFillPrayerMethod(settings.getInt("calculationMethodsIndex", 0));
+		conf.setRound(settings.getInt("roundingTypesIndex", 1));
+
+		PrayerTimes.Prayer[] ptList = prayerTimes.getPrayerTimes(loc, conf, date);
+		PrayerTimes.Prayer dawn = prayerTimes.getImsaak(loc, conf, date);
+		PrayerTimes.Prayer nextDawn = prayerTimes.getNextDayImsaak(loc, conf, date);
+		PrayerTimes.Prayer nextFajr = prayerTimes.getNextDayFajr(loc, conf, date);
+
+		// Set the times on the schedule
+		GregorianCalendar[] notificationTimes = new GregorianCalendar[9];
+		DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
+		notificationTimes[DAWN] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), dawn.getHour(), dawn.getMinute(), dawn.getSecond());
+		((TextView)findViewById(R.id.dawn)).setText(timeFormat.format(notificationTimes[0].getTime()) + (dawn.getIsExtreme() == 1 ? "*" : ""));
+		notificationTimes[FAJR] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[0].getHour(), ptList[0].getMinute(), ptList[0].getSecond());
+		((TextView)findViewById(R.id.fajr)).setText(timeFormat.format(notificationTimes[1].getTime()) + (ptList[0].getIsExtreme() == 1 ? "*" : ""));
+		notificationTimes[SUNRISE] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[1].getHour(), ptList[1].getMinute(),ptList[1] .getSecond());
+		((TextView)findViewById(R.id.sunrise)).setText(timeFormat.format(notificationTimes[2].getTime()) + (ptList[1].getIsExtreme() == 1 ? "*" : ""));
+		notificationTimes[DHUHR] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[2].getHour(), ptList[2].getMinute(), ptList[2].getSecond());
+		((TextView)findViewById(R.id.dhuhr)).setText(timeFormat.format(notificationTimes[3].getTime()) + (ptList[2].getIsExtreme() == 1 ? "*" : ""));
+		notificationTimes[ASR] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[3].getHour(), ptList[3].getMinute(), ptList[3].getSecond());
+		((TextView)findViewById(R.id.asr)).setText(timeFormat.format(notificationTimes[4].getTime()) + (ptList[3].getIsExtreme() == 1 ? "*" : ""));
+		notificationTimes[MAGHRIB] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[4].getHour(), ptList[4].getMinute(), ptList[4].getSecond());
+		((TextView)findViewById(R.id.maghrib)).setText(timeFormat.format(notificationTimes[5].getTime()) + (ptList[4].getIsExtreme() == 1 ? "*" : ""));
+		notificationTimes[ISHAA] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), ptList[5].getHour(), ptList[5].getMinute(), ptList[5].getSecond());
+		((TextView)findViewById(R.id.ishaa)).setText(timeFormat.format(notificationTimes[6].getTime()) + (ptList[5].getIsExtreme() == 1 ? "*" : ""));
+		notificationTimes[NEXT_DAWN] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH) + 1, nextDawn.getHour(), nextDawn.getMinute(), nextDawn.getSecond());
+		((TextView)findViewById(R.id.next_dawn)).setText(timeFormat.format(notificationTimes[7].getTime()) + (nextDawn.getIsExtreme() == 1 ? "*" : ""));
+		notificationTimes[NEXT_FAJR] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH) + 1, nextFajr.getHour(), nextFajr.getMinute(), nextFajr.getSecond());
+		((TextView)findViewById(R.id.next_fajr)).setText(timeFormat.format(notificationTimes[8].getTime()) + (nextFajr.getIsExtreme() == 1 ? "*" : ""));
+
+		short nextNotificationTime;
+		for(nextNotificationTime = DAWN; nextNotificationTime < NEXT_FAJR; nextNotificationTime++) {
+			if(currentTime.compareTo(notificationTimes[nextNotificationTime]) < 0) break;
+		}
+		indicateNextNotificationAndAlarmTimes(nextNotificationTime);
+
+		// Add Latitude, Longitude and Qibla DMS location to front panel
+		PrayerTimes.DMS dms = prayerTimes.decimal2Dms(loc.getDegreeLat());
+		double qibla = prayerTimes.getNorthQibla(loc);
+		String current_latitude = Math.abs(dms.getDegree()) + "° " + Math.abs(dms.getMinute())+ "' " + Math.abs(dms.getSecond()) + "\" " + ((loc.getDegreeLat() >= 0) ? getString(R.string.north) : getString(R.string.south));
+		((TextView)findViewById(R.id.current_latitude)).setText(current_latitude);
+		dms = prayerTimes.decimal2Dms(loc.getDegreeLong());
+		String current_longitude = Math.abs(dms.getDegree()) + "° " + Math.abs(dms.getMinute()) + "' " + Math.abs(dms.getSecond()) + "\" " + ((loc.getDegreeLong() >= 0) ? getString(R.string.east) : getString(R.string.west));
+		((TextView)findViewById(R.id.current_longitude)).setText(current_longitude);
+		dms = prayerTimes.decimal2Dms(qibla);
+		String current_qibla = Math.abs(dms.getDegree()) + "° " + Math.abs(dms.getMinute()) + "' " + Math.abs(dms.getSecond()) + "\" " + ((qibla >= 0) ? getString(R.string.west) : getString(R.string.east));
+		((TextView)findViewById(R.id.current_qibla)).setText(current_qibla);
+
+		setNextNotificationTime(nextNotificationTime, notificationTimes[nextNotificationTime].getTimeInMillis());
+	}
+
+	private void setNextNotificationTime(short nextNotificationTime, long actualTimestamp) {
+		if(DEBUG) ((TextView)findViewById(R.id.notes)).setText("Alarm" + Math.random());
+
+		Intent intent = new Intent(this, WakeUpAndDoSomething.class);
+		intent.putExtra("nextNotificationTime", (int)nextNotificationTime);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+		AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
+		am.set(AlarmManager.RTC_WAKEUP, actualTimestamp, PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT));
+	}
 }
