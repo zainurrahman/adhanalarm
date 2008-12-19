@@ -19,11 +19,11 @@ public class DummyPrayerTimes extends PrayerTimes {
 		}
 	}
 	public Prayer[] getPrayerTimes ( Location loc, Method conf, PrayerDate date) {
-		return new Prayer[] {pt[0], pt[1], pt[2], pt[3], pt[4], pt[5]};
+		return new Prayer[] {pt[1], pt[2], pt[3], pt[4], pt[5], pt[6]};
 	}
 
 	public Prayer getImsaak (Location loc, Method conf, PrayerDate date) {
-		return pt[6];
+		return pt[0];
 	}
 
 	public Prayer getNextDayImsaak (Location loc, Method conf, PrayerDate date) {
