@@ -65,10 +65,6 @@ public class AdhanAlarm extends Activity {
 		((EditText)findViewById(R.id.longitude)).setText(Float.toString(settings.getFloat("longitude", (float)-122.132)));
 		((EditText)findViewById(R.id.altitude)).setText(Float.toString(settings.getFloat("altitude", 0)));
 
-		if(settings.getString("latitude", "") != "" && settings.getString("longitude", "") != "") {
-			updateScheduleAndNotification();
-		}
-
 		Spinner calculation_methods = (Spinner)findViewById(R.id.calculation_methods);
 		adapter = ArrayAdapter.createFromResource(this, R.array.calculation_methods, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
