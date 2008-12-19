@@ -32,16 +32,22 @@ public class AdhanAlarm extends Activity {
 	private static final short DISPLAY_ONLY = 0, VIBRATE = 1, BEEP = 2, BEEP_AND_VIBRATE = 3, RECITE_ADHAN = 4; // Notification Methods
 	private static final short ALERT_PRAYERS_ONLY = 0, ALERT_DAWN = 1, ALERT_SUNRISE = 2, ALERT_DAWN_AND_SUNRISE = 3; // Extra Alerts
 
-	private final TextView[] NOTIFICATION_MARKERS = new TextView[]{(TextView)findViewById(R.id.mark_dawn), (TextView)findViewById(R.id.mark_fajr), (TextView)findViewById(R.id.mark_sunrise), (TextView)findViewById(R.id.mark_dhuhr), (TextView)findViewById(R.id.mark_asr), (TextView)findViewById(R.id.mark_maghrib), (TextView)findViewById(R.id.mark_ishaa), (TextView)findViewById(R.id.mark_next_dawn), (TextView)findViewById(R.id.mark_next_fajr)};
-	private final TextView[] TIME_SPACES = new TextView[]{(TextView)findViewById(R.id.dawn), (TextView)findViewById(R.id.fajr), (TextView)findViewById(R.id.sunrise), (TextView)findViewById(R.id.dhuhr), (TextView)findViewById(R.id.asr), (TextView)findViewById(R.id.maghrib), (TextView)findViewById(R.id.ishaa), (TextView)findViewById(R.id.next_dawn), (TextView)findViewById(R.id.next_fajr)};
-	private final String[] TIME_NAMES = new String[]{getString(R.string.dawn), getString(R.string.fajr), getString(R.string.sunrise), getString(R.string.dhuhr), getString(R.string.asr), getString(R.string.maghrib), getString(R.string.ishaa), getString(R.string.next_dawn), getString(R.string.next_fajr)};
+	private static TextView[] NOTIFICATION_MARKERS = null;
+	private static TextView[] ALARM_TIMES = null;
+	private static String[] TIME_NAMES = null;
 
-	private final SharedPreferences settings = getSharedPreferences("settingsFile", MODE_PRIVATE);
-	private MediaPlayer mediaPlayer = null;
+	private static SharedPreferences settings = null;
+	private static MediaPlayer mediaPlayer = null;
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		setContentView(R.layout.main);
+
+		NOTIFICATION_MARKERS = new TextView[]{(TextView)findViewById(R.id.mark_dawn), (TextView)findViewById(R.id.mark_fajr), (TextView)findViewById(R.id.mark_sunrise), (TextView)findViewById(R.id.mark_dhuhr), (TextView)findViewById(R.id.mark_asr), (TextView)findViewById(R.id.mark_maghrib), (TextView)findViewById(R.id.mark_ishaa), (TextView)findViewById(R.id.mark_next_dawn), (TextView)findViewById(R.id.mark_next_fajr)};
+		ALARM_TIMES = new TextView[]{(TextView)findViewById(R.id.dawn), (TextView)findViewById(R.id.fajr), (TextView)findViewById(R.id.sunrise), (TextView)findViewById(R.id.dhuhr), (TextView)findViewById(R.id.asr), (TextView)findViewById(R.id.maghrib), (TextView)findViewById(R.id.ishaa), (TextView)findViewById(R.id.next_dawn), (TextView)findViewById(R.id.next_fajr)};
+		TIME_NAMES = new String[]{getString(R.string.dawn), getString(R.string.fajr), getString(R.string.sunrise), getString(R.string.dhuhr), getString(R.string.asr), getString(R.string.maghrib), getString(R.string.ishaa), getString(R.string.next_dawn), getString(R.string.next_fajr)};
+
+		settings = getSharedPreferences("settingsFile", MODE_PRIVATE);
 
 		Spinner notification_methods = (Spinner)findViewById(R.id.notification_methods);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.notification_methods, android.R.layout.simple_spinner_item);
@@ -141,25 +147,25 @@ public class AdhanAlarm extends Activity {
 		Button saveAndApplyAlert = (Button)findViewById(R.id.save_and_apply_alert);
 		saveAndApplyAlert.setOnClickListener(new Button.OnClickListener() {  
 			public void onClick(View v) {
+				SharedPreferences.Editor editor = settings.edit();
+				editor.putInt("notificationMethodIndex", ((Spinner)findViewById(R.id.notification_methods)).getSelectedItemPosition());
+				editor.putInt("extraAlertsIndex", ((Spinner)findViewById(R.id.extra_alerts)).getSelectedItemPosition());
+				editor.commit();
 				updateScheduleAndNotification();
-				TabHost tabs = (TabHost)findViewById(R.id.tabs);
-				tabs.setCurrentTab(0);
-				settings.edit().putInt("notificationMethodIndex", ((Spinner)findViewById(R.id.notification_methods)).getSelectedItemPosition());
-				settings.edit().putInt("extraAlertsIndex", ((Spinner)findViewById(R.id.extra_alerts)).getSelectedItemPosition());
-				settings.edit().commit();
+				((TabHost)findViewById(R.id.tabs)).setCurrentTab(0);
 			}
 		});
 
 		Button saveAndApplyPlace = (Button)findViewById(R.id.save_and_apply_place);
 		saveAndApplyPlace.setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
+				SharedPreferences.Editor editor = settings.edit();
+				editor.putString("latitude", ((EditText)findViewById(R.id.latitude)).getText().toString());
+				editor.putString("longitude", ((EditText)findViewById(R.id.longitude)).getText().toString());
+				editor.putFloat("altitude", Float.parseFloat(((EditText)findViewById(R.id.altitude)).getText().toString()));
+				editor.commit();
 				updateScheduleAndNotification();
-				TabHost tabs = (TabHost)findViewById(R.id.tabs);
-				tabs.setCurrentTab(0);
-				settings.edit().putString("latitude", ((EditText)findViewById(R.id.latitude)).getText().toString());
-				settings.edit().putString("longitude", ((EditText)findViewById(R.id.longitude)).getText().toString());
-				settings.edit().putFloat("altitude", Float.parseFloat(((EditText)findViewById(R.id.altitude)).getText().toString()));
-				settings.edit().commit();
+				((TabHost)findViewById(R.id.tabs)).setCurrentTab(0);
 			}
 		});
 
@@ -176,14 +182,14 @@ public class AdhanAlarm extends Activity {
 		Button saveAndApplyExtra = (Button)findViewById(R.id.save_and_apply_extra);
 		saveAndApplyExtra.setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
+				SharedPreferences.Editor editor = settings.edit();
+				editor.putInt("calculationMethodsIndex", ((Spinner)findViewById(R.id.calculation_methods)).getSelectedItemPosition());
+				editor.putInt("roundingTypesIndex", ((Spinner)findViewById(R.id.rounding_types)).getSelectedItemPosition());
+				editor.putFloat("pressure", Float.parseFloat(((EditText)findViewById(R.id.pressure)).getText().toString()));
+				editor.putFloat("temperature", Float.parseFloat(((EditText)findViewById(R.id.temperature)).getText().toString()));
+				editor.commit();
 				updateScheduleAndNotification();
-				TabHost tabs = (TabHost)findViewById(R.id.tabs);
-				tabs.setCurrentTab(0);
-				settings.edit().putInt("calculationMethodsIndex", ((Spinner)findViewById(R.id.calculation_methods)).getSelectedItemPosition());
-				settings.edit().putInt("roundingTypesIndex", ((Spinner)findViewById(R.id.rounding_types)).getSelectedItemPosition());
-				settings.edit().putFloat("pressure", Float.parseFloat(((EditText)findViewById(R.id.pressure)).getText().toString()));
-				settings.edit().putFloat("temperature", Float.parseFloat(((EditText)findViewById(R.id.temperature)).getText().toString()));
-				settings.edit().commit();
+				((TabHost)findViewById(R.id.tabs)).setCurrentTab(0);
 			}
 		});
 	}
@@ -225,9 +231,9 @@ public class AdhanAlarm extends Activity {
 		if(notificationMethod != VIBRATE) {
 			int alarm = R.raw.beep;
 			int extraAlerts = settings.getInt("extraAlertsIndex", ALERT_PRAYERS_ONLY);
-			if(notificationMethod == RECITE_ADHAN && (time == DHUHR || time == ASR || time == MAGHRIB || time == ISHAA || (extraAlerts == ALERT_PRAYERS_ONLY && time == SUNRISE))) {
+			if(notificationMethod == RECITE_ADHAN && (time == DHUHR || time == ASR || time == MAGHRIB || time == ISHAA || ((extraAlerts == ALERT_PRAYERS_ONLY || extraAlerts == ALERT_DAWN) && time == SUNRISE))) {
 				alarm = R.raw.adhan;
-			} else if(notificationMethod == RECITE_ADHAN && (time == FAJR || time == NEXT_FAJR || (extraAlerts == ALERT_PRAYERS_ONLY && (time == DAWN || time == NEXT_DAWN)))) {
+			} else if(notificationMethod == RECITE_ADHAN && (time == FAJR || time == NEXT_FAJR || ((extraAlerts == ALERT_PRAYERS_ONLY || extraAlerts == ALERT_SUNRISE) && (time == DAWN || time == NEXT_DAWN)))) {
 				alarm = R.raw.adhan_fajr;
 			}
 			mediaPlayer = MediaPlayer.create(AdhanAlarm.this, alarm);
@@ -256,20 +262,20 @@ public class AdhanAlarm extends Activity {
 			notification.vibrate = new long[] {100, 250, 100, 500};
 		}
 		nm.notify(1, notification);
-		*/
+		 */
 	}
 
 	private short getNextNotificationTime() {
-		for(short i = DAWN; i < NEXT_FAJR; i++) {
-			if(TIME_NAMES[i] == getString(R.string.next_time_marker)) return i;
+		for(short i = DAWN; i <= NEXT_FAJR; i++) {
+			if(NOTIFICATION_MARKERS[i].getText() == getString(R.string.next_time_marker)) return i;
 		}
 		return -1;
 	}
 
 	private void indicateNextNotificationAndAlarmTimes(short nextNotificationTime) {
 		TextView note = (TextView)findViewById(R.id.notes);
-		
-		for(short i = DAWN; i < NEXT_FAJR; i++) NOTIFICATION_MARKERS[i].setText(""); // Clear all existing markers in case it was left from the previous day or while phone was turned off
+
+		for(short i = DAWN; i <= NEXT_FAJR; i++) NOTIFICATION_MARKERS[i].setText(""); // Clear all existing markers in case it was left from the previous day or while phone was turned off
 		NOTIFICATION_MARKERS[nextNotificationTime].setText(getString(R.string.next_time_marker));
 
 		int extraAlerts = settings.getInt("extraAlertsIndex", ALERT_PRAYERS_ONLY);
@@ -312,17 +318,17 @@ public class AdhanAlarm extends Activity {
 		PrayerTimes.Prayer dawn = prayerTimes.getImsaak(loc, conf, date);
 		PrayerTimes.Prayer nextDawn = prayerTimes.getNextDayImsaak(loc, conf, date);
 		PrayerTimes.Prayer nextFajr = prayerTimes.getNextDayFajr(loc, conf, date);
-		PrayerTimes.Prayer[] allPrayerTimes = new PrayerTimes.Prayer[]{dawn, ptList[0], ptList[1], ptList[2], ptList[3], ptList[4], ptList[5], ptList[6], nextDawn, nextFajr};
+		PrayerTimes.Prayer[] allPrayerTimes = new PrayerTimes.Prayer[]{dawn, ptList[0], ptList[1], ptList[2], ptList[3], ptList[4], ptList[5], nextDawn, nextFajr};
 
 		DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
 		GregorianCalendar[] notificationTimes = new GregorianCalendar[9];
-		for(short i = DAWN; i < NEXT_FAJR; i++) { // Set the times on the schedule
+		for(short i = DAWN; i <= NEXT_FAJR; i++) { // Set the times on the schedule
 			notificationTimes[i] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), allPrayerTimes[i].getHour(), allPrayerTimes[i].getMinute(), allPrayerTimes[i].getSecond());
-			TIME_SPACES[i].setText(timeFormat.format(notificationTimes[i].getTime()) + (allPrayerTimes[i].getIsExtreme() == 1 ? "*" : ""));	
+			ALARM_TIMES[i].setText(timeFormat.format(notificationTimes[i].getTime()) + (allPrayerTimes[i].getIsExtreme() == 1 ? "*" : ""));	
 		}
 
 		short nextNotificationTime;
-		for(nextNotificationTime = DAWN; nextNotificationTime < NEXT_FAJR; nextNotificationTime++) {
+		for(nextNotificationTime = DAWN; nextNotificationTime <= NEXT_FAJR; nextNotificationTime++) {
 			if(currentTime.compareTo(notificationTimes[nextNotificationTime]) < 0) break;
 		}
 		indicateNextNotificationAndAlarmTimes(nextNotificationTime);
@@ -340,7 +346,7 @@ public class AdhanAlarm extends Activity {
 	}
 
 	private void setNextNotificationTime(short nextNotificationTime, long actualTimestamp) {
-		if(DEBUG) ((TextView)findViewById(R.id.notes)).setText("Alarm" + Math.random());
+		if(DEBUG) ((TextView)findViewById(R.id.notes)).setText(((TextView)findViewById(R.id.notes)).getText() + ", Debug: " + Math.random());
 
 		Intent intent = new Intent(this, WakeUpAndDoSomething.class);
 		intent.putExtra("nextNotificationTime", nextNotificationTime);
