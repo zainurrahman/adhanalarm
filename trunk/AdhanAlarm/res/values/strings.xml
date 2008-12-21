@@ -21,10 +21,6 @@
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
     <string name="qibla">Qibla</string>
-    <string name="north">N</string>
-    <string name="south">S</string>
-    <string name="east">E</string>
-    <string name="west">W</string>
     <string name="alert">Alert</string>
     <string name="notification">Notification</string>
     <string name="extra_alerts">Extra Alerts</string>

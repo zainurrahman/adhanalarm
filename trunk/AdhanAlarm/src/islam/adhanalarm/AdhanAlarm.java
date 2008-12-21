@@ -23,10 +23,15 @@ import android.view.View;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import libs.itl.PrayerTimes;
+
+import net.sourceforge.jitl.astro.Dms;
+import net.sourceforge.jitl.Jitl;
+import net.sourceforge.jitl.Method;
+import net.sourceforge.jitl.Rounding;
+import net.sourceforge.jitl.Prayer;
 
 public class AdhanAlarm extends Activity {
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
 
 	private static final short DAWN = 0, FAJR = 1, SUNRISE = 2, DHUHR = 3, ASR = 4, MAGHRIB = 5, ISHAA = 6, NEXT_DAWN = 7, NEXT_FAJR = 8; // Notification Times
 	private static final short DISPLAY_ONLY = 0, VIBRATE = 1, BEEP = 2, BEEP_AND_VIBRATE = 3, RECITE_ADHAN = 4; // Notification Methods
@@ -35,6 +40,9 @@ public class AdhanAlarm extends Activity {
 	private static TextView[] NOTIFICATION_MARKERS = null;
 	private static TextView[] ALARM_TIMES = null;
 	private static String[] TIME_NAMES = null;
+
+	private static Method[] CALCULATION_METHODS = new Method[]{Method.NONE, Method.EGYPT_SURVEY, Method.KARACHI_SHAF, Method.KARACHI_HANAF, Method.NORTH_AMERICA, Method.MUSLIM_LEAGUE, Method.UMM_ALQURRA, Method.FIXED_ISHAA};
+	private static Rounding[] ROUNDING_TYPES = new Rounding[]{Rounding.NONE, Rounding.NORMAL, Rounding.SPECIAL, Rounding.AGRESSIVE};
 
 	private static SharedPreferences settings = null;
 	private static MediaPlayer mediaPlayer = null;
@@ -75,7 +83,7 @@ public class AdhanAlarm extends Activity {
 		adapter = ArrayAdapter.createFromResource(this, R.array.rounding_types, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		rounding_types.setAdapter(adapter);
-		rounding_types.setSelection(settings.getInt("roundingTypesIndex", 1));
+		rounding_types.setSelection(settings.getInt("roundingTypesIndex", 2));
 
 		((EditText)findViewById(R.id.pressure)).setText(Float.toString(settings.getFloat("pressure", 1010)));
 		((EditText)findViewById(R.id.temperature)).setText(Float.toString(settings.getFloat("temperature", 10)));
@@ -287,56 +295,36 @@ public class AdhanAlarm extends Activity {
 	}
 
 	private void updateScheduleAndNotification() {
-		PrayerTimes prayerTimes = DEBUG ? new DummyPrayerTimes() : new PrayerTimes();
+		Method method = CALCULATION_METHODS[settings.getInt("calculationMethodsIndex", 0)].copy();
+		method.setRound(ROUNDING_TYPES[settings.getInt("roundingTypesIndex", 2)]);
 
-		PrayerTimes.PrayerDate date= prayerTimes.new PrayerDate();
+		net.sourceforge.jitl.astro.Location location = new net.sourceforge.jitl.astro.Location(settings.getFloat("latitude", (float)51.477222), settings.getFloat("longitude", (float)-122.132), getGMTOffset(), isDaylightSavings() ? 1 : 0);
+		location.setSeaLevel(settings.getFloat("altitude", 0));
+		location.setPressure(settings.getFloat("pressure", 1010));
+		location.setTemperature(settings.getFloat("temperature", 10));
+
+		Jitl itl = DEBUG ? new DummyJitl(location, method) : new Jitl(location, method);
+		GregorianCalendar today = new GregorianCalendar();
+		Prayer[] dayPrayers = itl.getPrayerTimes(today).getPrayers();
+		Prayer[] allTimes = new Prayer[]{itl.getImsaak(today), dayPrayers[0], dayPrayers[1], dayPrayers[2], dayPrayers[3], dayPrayers[4], dayPrayers[5], itl.getNextDayImsaak(today), itl.getNextDayFajr(today)};
+
 		Calendar currentTime = Calendar.getInstance();
-		date.setDay(currentTime.get(Calendar.DAY_OF_MONTH));
-		date.setMonth(currentTime.get(Calendar.MONTH) + 1);
-		date.setYear(currentTime.get(Calendar.YEAR));
-
-		PrayerTimes.Location loc = prayerTimes.new Location();
-		loc.setDegreeLat(settings.getFloat("latitude", (float)51.477222)); // default greenwich
-		loc.setDegreeLong(settings.getFloat("longitude", (float)-122.132));
-		loc.setGmtDiff(getGMTOffset());
-		loc.setDst(isDaylightSavings() ? 1 : 0);
-		//loc.setGmtDiff(-5);
-		//loc.setDst(0);
-		loc.setSeaLevel(settings.getFloat("altitude", 0));
-		loc.setPressure(settings.getFloat("pressure", 1010));
-		loc.setTemperature(settings.getFloat("temperature", 10));
-
-		PrayerTimes.Method conf = prayerTimes.new Method();
-		conf.autoFillPrayerMethod(settings.getInt("calculationMethodsIndex", 0));
-		conf.setRound(settings.getInt("roundingTypesIndex", 1));
-
-		PrayerTimes.Prayer[] ptList = prayerTimes.getPrayerTimes(loc, conf, date);
-		PrayerTimes.Prayer dawn = prayerTimes.getImsaak(loc, conf, date);
-		PrayerTimes.Prayer nextDawn = prayerTimes.getNextDayImsaak(loc, conf, date);
-		PrayerTimes.Prayer nextFajr = prayerTimes.getNextDayFajr(loc, conf, date);
-		PrayerTimes.Prayer[] allPrayerTimes = new PrayerTimes.Prayer[]{dawn, ptList[0], ptList[1], ptList[2], ptList[3], ptList[4], ptList[5], nextDawn, nextFajr};
-
 		DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
 		GregorianCalendar[] notificationTimes = new GregorianCalendar[9];
+		short nextNotificationTime = -1;
 		for(short i = DAWN; i <= NEXT_FAJR; i++) { // Set the times on the schedule
-			notificationTimes[i] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), allPrayerTimes[i].getHour(), allPrayerTimes[i].getMinute(), allPrayerTimes[i].getSecond());
-			ALARM_TIMES[i].setText(timeFormat.format(notificationTimes[i].getTime()) + (allPrayerTimes[i].getIsExtreme() == 1 ? "*" : ""));	
-		}
-
-		short nextNotificationTime;
-		for(nextNotificationTime = DAWN; nextNotificationTime <= NEXT_FAJR; nextNotificationTime++) {
-			if(currentTime.compareTo(notificationTimes[nextNotificationTime]) < 0) break;
+			notificationTimes[i] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), allTimes[i].getHour(), allTimes[i].getMinute(), allTimes[i].getSecond());
+			ALARM_TIMES[i].setText(timeFormat.format(notificationTimes[i].getTime()) + (allTimes[i].isExtreme() ? "*" : ""));
+			if(nextNotificationTime < 0 && (currentTime.compareTo(notificationTimes[i]) < 0 || i == NEXT_FAJR)) {
+				nextNotificationTime = i;
+			}
 		}
 		indicateNextNotificationAndAlarmTimes(nextNotificationTime);
 
 		// Add Latitude, Longitude and Qibla DMS location to front panel
-		PrayerTimes.DMS dms = prayerTimes.decimal2Dms(loc.getDegreeLat());
-		((TextView)findViewById(R.id.current_latitude)).setText(Math.abs(dms.getDegree()) + "° " + Math.abs(dms.getMinute())+ "' " + Math.abs(dms.getSecond()) + "\" " + ((loc.getDegreeLat() >= 0) ? getString(R.string.north) : getString(R.string.south)));
-		dms = prayerTimes.decimal2Dms(loc.getDegreeLong());
-		((TextView)findViewById(R.id.current_longitude)).setText(Math.abs(dms.getDegree()) + "° " + Math.abs(dms.getMinute()) + "' " + Math.abs(dms.getSecond()) + "\" " + ((loc.getDegreeLong() >= 0) ? getString(R.string.east) : getString(R.string.west)));
-		double qibla = prayerTimes.getNorthQibla(loc);
-		dms = prayerTimes.decimal2Dms(qibla);
-		((TextView)findViewById(R.id.current_qibla)).setText(Math.abs(dms.getDegree()) + "° " + Math.abs(dms.getMinute()) + "' " + Math.abs(dms.getSecond()) + "\" " + ((qibla >= 0) ? getString(R.string.west) : getString(R.string.east)));
+		((TextView)findViewById(R.id.current_latitude)).setText(new Dms(location.getDegreeLat()).toString());
+		((TextView)findViewById(R.id.current_longitude)).setText(new Dms(location.getDegreeLong()).toString());
+		((TextView)findViewById(R.id.current_qibla)).setText(itl.getNorthQibla().toString());
 
 		setNextNotificationTime(nextNotificationTime, notificationTimes[nextNotificationTime].getTimeInMillis());
 	}
