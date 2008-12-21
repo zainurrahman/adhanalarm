@@ -225,6 +225,10 @@ public class AdhanAlarm extends Activity {
 		Calendar currentTime = new GregorianCalendar();
 		return currentTime.getTimeZone().inDaylightTime(currentTime.getTime());
 	}
+	
+	private float getDSTSavings() {
+		return isDaylightSavings() ? new GregorianCalendar().getTimeZone().getDSTSavings() / 3600000 : 0;
+	}
 
 	private void playAlertIfAppropriate(short time) {
 		int notificationMethod = settings.getInt("notificationMethodIndex", BEEP);
@@ -298,7 +302,7 @@ public class AdhanAlarm extends Activity {
 		Method method = CALCULATION_METHODS[settings.getInt("calculationMethodsIndex", 0)].copy();
 		method.setRound(ROUNDING_TYPES[settings.getInt("roundingTypesIndex", 2)]);
 
-		net.sourceforge.jitl.astro.Location location = new net.sourceforge.jitl.astro.Location(settings.getFloat("latitude", (float)51.477222), settings.getFloat("longitude", (float)-122.132), getGMTOffset(), isDaylightSavings() ? 1 : 0);
+		net.sourceforge.jitl.astro.Location location = new net.sourceforge.jitl.astro.Location(settings.getFloat("latitude", (float)51.477222), settings.getFloat("longitude", (float)-122.132), getGMTOffset(), (int)getDSTSavings());
 		location.setSeaLevel(settings.getFloat("altitude", 0));
 		location.setPressure(settings.getFloat("pressure", 1010));
 		location.setTemperature(settings.getFloat("temperature", 10));
