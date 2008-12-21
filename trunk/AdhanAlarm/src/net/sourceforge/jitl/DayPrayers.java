@@ -99,8 +99,8 @@ public class DayPrayers {
 	 * @return an iterator over the prayers
 	 * @see #getPrayers()
 	 */
-	public Iterator iterator() {
-		return new Iterator() {
+	public Iterator<Prayer> iterator() {
+		return new Iterator<Prayer>() {
 			private int i = 0;
 			
 			public boolean hasNext() {
@@ -109,7 +109,7 @@ public class DayPrayers {
 				return false;
 			}
 			
-			public Object next() {
+			public Prayer next() {
 				return prayers[i++];
 			}
 			
