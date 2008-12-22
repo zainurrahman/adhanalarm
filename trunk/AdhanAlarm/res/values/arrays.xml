@@ -9,9 +9,7 @@
     </array>
     <array name="extra_alerts">
         <item>None</item>
-        <item>Dawn</item>
         <item>Sunrise</item>
-        <item>Dawn and Sunrise</item>
     </array>
     <array name="calculation_methods">
         <item>None</item>

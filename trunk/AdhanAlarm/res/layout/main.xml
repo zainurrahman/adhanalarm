@@ -19,9 +19,6 @@
 					<LinearLayout android:orientation="vertical"
 						android:layout_height="wrap_content"
 						android:layout_width="10px">
-						<TextView android:id="@+id/mark_dawn"
-							android:textColor="#000000" android:layout_height="wrap_content"
-							android:background="#FFFF00" android:layout_width="fill_parent" />
 						<TextView android:id="@+id/mark_fajr"
 							android:layout_width="fill_parent"
 							android:layout_height="wrap_content" />
@@ -40,20 +37,13 @@
 						<TextView android:id="@+id/mark_ishaa"
 							android:textColor="#000000" android:layout_height="wrap_content"
 							android:background="#FFFF00" android:layout_width="fill_parent" />
-						<TextView android:id="@+id/mark_next_dawn"
+						<TextView android:id="@+id/mark_next_fajr"
 							android:layout_width="fill_parent"
 							android:layout_height="wrap_content" />
-						<TextView android:id="@+id/mark_next_fajr"
-							android:textColor="#000000" android:layout_height="wrap_content"
-							android:background="#FFFF00" android:layout_width="fill_parent" />
 					</LinearLayout>
 					<LinearLayout android:orientation="vertical"
 						android:layout_height="wrap_content"
 						android:layout_width="wrap_content">
-						<TextView android:textColor="#000000"
-							android:layout_height="wrap_content" android:text="@string/dawn"
-							android:background="#FFFF00" android:layout_width="fill_parent"
-							android:paddingRight="5px" />
 						<TextView android:layout_height="wrap_content"
 							android:text="@string/fajr" android:layout_width="fill_parent"
 							android:paddingRight="5px" />
@@ -76,20 +66,12 @@
 							android:background="#FFFF00" android:layout_width="fill_parent"
 							android:paddingRight="5px" />
 						<TextView android:layout_height="wrap_content"
-							android:text="@string/next_dawn"
-							android:layout_width="fill_parent" android:paddingRight="5px" />
-						<TextView android:layout_height="wrap_content"
-							android:textColor="#000000" android:text="@string/next_fajr"
-							android:background="#FFFF00" android:layout_width="fill_parent"
+							android:text="@string/next_fajr" android:layout_width="fill_parent"
 							android:paddingRight="5px" />
 					</LinearLayout>
 					<LinearLayout android:orientation="vertical"
 						android:layout_height="wrap_content"
 						android:layout_width="wrap_content">
-						<TextView android:id="@+id/dawn"
-							android:textColor="#000000" android:layout_height="wrap_content"
-							android:text="~" android:background="#FFFF00"
-							android:layout_width="fill_parent" />
 						<TextView android:id="@+id/fajr"
 							android:layout_width="fill_parent"
 							android:layout_height="wrap_content" android:text="~" />
@@ -111,13 +93,9 @@
 							android:textColor="#000000" android:layout_height="wrap_content"
 							android:text="~" android:background="#FFFF00"
 							android:layout_width="fill_parent" />
-						<TextView android:id="@+id/next_dawn"
+						<TextView android:id="@+id/next_fajr"
 							android:layout_width="fill_parent"
 							android:layout_height="wrap_content" android:text="~" />
-						<TextView android:id="@+id/next_fajr"
-							android:textColor="#000000" android:layout_height="wrap_content"
-							android:text="~" android:background="#FFFF00"
-							android:layout_width="fill_parent" />
 					</LinearLayout>
 				</LinearLayout>
 				<LinearLayout android:orientation="vertical"
@@ -127,9 +105,19 @@
 						android:layout_width="fill_parent"
 						android:layout_height="wrap_content"
 						android:text="@string/introduction" />
-					<Button android:id="@+id/play_stop"
-						android:text="@string/preview_next_alarm" android:layout_width="fill_parent"
-						android:layout_height="fill_parent" />
+					<LinearLayout android:orientation="horizontal"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content">
+						<Button android:id="@+id/previous"
+							android:text="@string/previous_alarm" android:layout_width="fill_parent"
+							android:layout_height="fill_parent" />
+						<Button android:id="@+id/next"
+							android:text="@string/next_alarm" android:layout_width="fill_parent"
+							android:layout_height="fill_parent" />
+						<Button android:id="@+id/clear"
+							android:text="@string/clear_alarms" android:layout_width="fill_parent"
+							android:layout_height="fill_parent" />
+					</LinearLayout>
 					<TextView android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:text="@string/latitude" />
@@ -231,7 +219,7 @@
 									android:layout_width="fill_parent">
 									<EditText android:id="@+id/latitude"
 										android:text="47.682" android:layout_width="fill_parent"
-										android:layout_height="wrap_content" android:numeric="decimal" />
+										android:layout_height="wrap_content" android:numeric="signed|decimal" />
 								</LinearLayout>
 								<LinearLayout
 									android:orientation="horizontal"
@@ -240,7 +228,7 @@
 									<EditText
 										android:id="@+id/longitude" android:text="-122.132"
 										android:layout_width="fill_parent"
-										android:layout_height="wrap_content" android:numeric="decimal" />
+										android:layout_height="wrap_content" android:numeric="signed|decimal" />
 								</LinearLayout>
 							</LinearLayout>
 							<Button android:id="@+id/lookup_gps"
@@ -250,7 +238,7 @@
 						</LinearLayout>
 						<EditText android:id="@+id/altitude"
 							android:text="0" android:layout_width="fill_parent"
-							android:layout_height="wrap_content" android:numeric="decimal" />
+							android:layout_height="wrap_content" android:numeric="signed|decimal" />
 					</LinearLayout>
 				</LinearLayout>
 				<Button android:id="@+id/save_and_apply_place"
@@ -300,10 +288,10 @@
 							android:drawSelectorOnTop="true" />
 						<EditText android:id="@+id/pressure"
 							android:text="1010" android:layout_width="fill_parent"
-							android:layout_height="wrap_content" android:numeric="decimal" />
+							android:layout_height="wrap_content" android:numeric="signed|decimal" />
 						<EditText android:id="@+id/temperature"
 							android:text="10" android:layout_width="fill_parent"
-							android:layout_height="wrap_content" android:numeric="decimal" />
+							android:layout_height="wrap_content" android:numeric="signed|decimal" />
 					</LinearLayout>
 				</LinearLayout>
 				<LinearLayout android:orientation="horizontal"

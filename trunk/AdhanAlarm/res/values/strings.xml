@@ -2,17 +2,17 @@
 <resources>
     <string name="app_name">Adh&#257;n Alarm</string>
     <string name="today">Today</string>
-    <string name="dawn">Dawn</string>
     <string name="fajr">Fajr</string>
     <string name="sunrise">Sunrise</string>
     <string name="dhuhr">Dhuhr</string>
     <string name="asr">`Asr</string>
     <string name="maghrib">Maghrib</string>
     <string name="ishaa">`Ishaa\'</string>
-    <string name="next_dawn">Next dawn</string>
-    <string name="next_fajr">Next fajr</string>
+    <string name="next_fajr">Next Fajr</string>
     <string name="next_time_marker">></string>
-    <string name="preview_next_alarm">Preview Next Alarm</string>
+    <string name="previous_alarm">Previous</string>
+    <string name="next_alarm">Next</string>
+    <string name="clear_alarms">Clear</string>
     <string name="error_playing_alert">Error Playing Alert</string>
     <string name="stop">Stop</string>
     <string name="introduction">Please set <u>place</u></string>
