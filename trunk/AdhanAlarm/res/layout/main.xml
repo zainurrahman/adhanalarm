@@ -199,10 +199,6 @@
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content" android:layout_weight="1"
 							android:gravity="fill_vertical" />
-						<TextView android:text="@string/altitude"
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content" android:layout_weight="1"
-							android:gravity="fill_vertical" />
 					</LinearLayout>
 					<LinearLayout android:orientation="vertical"
 						android:layout_height="wrap_content"
@@ -218,7 +214,7 @@
 									android:layout_height="wrap_content"
 									android:layout_width="fill_parent">
 									<EditText android:id="@+id/latitude"
-										android:text="47.682" android:layout_width="fill_parent"
+										android:text="43.67" android:layout_width="fill_parent"
 										android:layout_height="wrap_content" android:numeric="signed|decimal" />
 								</LinearLayout>
 								<LinearLayout
@@ -226,7 +222,7 @@
 									android:layout_height="wrap_content"
 									android:layout_width="fill_parent">
 									<EditText
-										android:id="@+id/longitude" android:text="-122.132"
+										android:id="@+id/longitude" android:text="-79.4167"
 										android:layout_width="fill_parent"
 										android:layout_height="wrap_content" android:numeric="signed|decimal" />
 								</LinearLayout>
@@ -236,9 +232,6 @@
 								android:layout_width="wrap_content"
 								android:layout_height="fill_parent" />
 						</LinearLayout>
-						<EditText android:id="@+id/altitude"
-							android:text="0" android:layout_width="fill_parent"
-							android:layout_height="wrap_content" android:numeric="signed|decimal" />
 					</LinearLayout>
 				</LinearLayout>
 				<Button android:id="@+id/save_and_apply_place"
@@ -274,6 +267,10 @@
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content" android:layout_weight="1"
 							android:gravity="fill_vertical" />
+						<TextView android:text="@string/altitude"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content" android:layout_weight="1"
+							android:gravity="fill_vertical" />
 					</LinearLayout>
 					<LinearLayout android:orientation="vertical"
 						android:layout_height="wrap_content"
@@ -291,6 +288,9 @@
 							android:layout_height="wrap_content" android:numeric="signed|decimal" />
 						<EditText android:id="@+id/temperature"
 							android:text="10" android:layout_width="fill_parent"
+							android:layout_height="wrap_content" android:numeric="signed|decimal" />
+						<EditText android:id="@+id/altitude"
+							android:text="0" android:layout_width="fill_parent"
 							android:layout_height="wrap_content" android:numeric="signed|decimal" />
 					</LinearLayout>
 				</LinearLayout>
