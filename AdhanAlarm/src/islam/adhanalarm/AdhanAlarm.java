@@ -42,6 +42,7 @@ public class AdhanAlarm extends Activity {
 	private static String[] TIME_NAMES = null;
 
 	private static SharedPreferences settings = null;
+	private static GregorianCalendar[] notificationTimes = new GregorianCalendar[9];
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
@@ -235,7 +236,8 @@ public class AdhanAlarm extends Activity {
 	private void playAlertIfAppropriate(short time) {
 		NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 		nm.cancelAll();
-		Notification notification = new Notification(R.drawable.icon, getString(R.string.time_for) + " " + TIME_NAMES[time], System.currentTimeMillis());
+		long timestamp = notificationTimes[time] != null ? notificationTimes[time].getTimeInMillis() : System.currentTimeMillis();
+		Notification notification = new Notification(R.drawable.icon, getString(R.string.time_for) + " " + TIME_NAMES[time], timestamp);
 		
 		int notificationMethod = settings.getInt("notificationMethodIndex", BEEP);
 		
@@ -294,7 +296,6 @@ public class AdhanAlarm extends Activity {
 		Prayer[] allTimes = new Prayer[]{dayPrayers[0], dayPrayers[1], dayPrayers[2], dayPrayers[3], dayPrayers[4], dayPrayers[5], itl.getNextDayFajr(today)};
 
 		DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
-		GregorianCalendar[] notificationTimes = new GregorianCalendar[9];
 		short nextNotificationTime = -1;
 		for(short i = FAJR; i <= NEXT_FAJR; i++) { // Set the times on the schedule
 			notificationTimes[i] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), allTimes[i].getHour(), allTimes[i].getMinute(), allTimes[i].getSecond());

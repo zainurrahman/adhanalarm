@@ -10,7 +10,7 @@
     <string name="ishaa">`Ishaa\'</string>
     <string name="next_fajr">Next Fajr</string>
     <string name="next_time_marker">></string>
-    <string name="previous_alarm">Previous</string>
+    <string name="previous_alarm">Past</string>
     <string name="next_alarm">Next</string>
     <string name="clear_alarms">Clear</string>
     <string name="error_playing_alert">Error Playing Alert</string>
