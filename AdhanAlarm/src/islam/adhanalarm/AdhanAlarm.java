@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -31,10 +32,10 @@ public class AdhanAlarm extends Activity {
 	public static final boolean DEBUG = false;
 
 	private static final short FAJR = 0, SUNRISE = 1, DHUHR = 2, ASR = 3, MAGHRIB = 4, ISHAA = 5, NEXT_FAJR = 6; // Notification Times
-	private static final short DISPLAY_ONLY = 0, VIBRATE = 1, BEEP = 2, BEEP_AND_VIBRATE = 3, RECITE_ADHAN = 4; // Notification Methods
+	private static final short DEFAULT_NOTIFICATION = 0, RECITE_ADHAN = 1; // Notification Methods
 	private static final short NO_EXTRA_ALERTS = 0, ALERT_SUNRISE = 1; // Extra Alerts
 
-	private static final Method[] CALCULATION_METHODS = new Method[]{Method.NONE, Method.EGYPT_SURVEY, Method.KARACHI_SHAF, Method.KARACHI_HANAF, Method.NORTH_AMERICA, Method.MUSLIM_LEAGUE, Method.UMM_ALQURRA, Method.FIXED_ISHAA};
+	private static final Method[] CALCULATION_METHODS = new Method[]{Method.EGYPT_SURVEY, Method.KARACHI_SHAF, Method.KARACHI_HANAF, Method.NORTH_AMERICA, Method.MUSLIM_LEAGUE, Method.UMM_ALQURRA, Method.FIXED_ISHAA};
 	private static final Rounding[] ROUNDING_TYPES = new Rounding[]{Rounding.NONE, Rounding.NORMAL, Rounding.SPECIAL, Rounding.AGRESSIVE};
 
 	private static TextView[] NOTIFICATION_MARKERS = null;
@@ -43,6 +44,7 @@ public class AdhanAlarm extends Activity {
 
 	private static SharedPreferences settings = null;
 	private static GregorianCalendar[] notificationTimes = new GregorianCalendar[9];
+	private MediaPlayer mediaPlayer = null;
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
@@ -58,7 +60,7 @@ public class AdhanAlarm extends Activity {
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.notification_methods, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		notification_methods.setAdapter(adapter);
-		notification_methods.setSelection(settings.getInt("notificationMethodIndex", BEEP));
+		notification_methods.setSelection(settings.getInt("notificationMethodIndex", DEFAULT_NOTIFICATION));
 
 		Spinner extra_alerts = (Spinner)findViewById(R.id.extra_alerts);
 		adapter = ArrayAdapter.createFromResource(this, R.array.extra_alerts, android.R.layout.simple_spinner_item);
@@ -66,15 +68,15 @@ public class AdhanAlarm extends Activity {
 		extra_alerts.setAdapter(adapter);
 		extra_alerts.setSelection(settings.getInt("extraAlertsIndex", NO_EXTRA_ALERTS));
 
-		((EditText)findViewById(R.id.latitude)).setText(Float.toString(settings.getFloat("latitude", (float)51.477222)));
-		((EditText)findViewById(R.id.longitude)).setText(Float.toString(settings.getFloat("longitude", (float)-122.132)));
+		((EditText)findViewById(R.id.latitude)).setText(Float.toString(settings.getFloat("latitude", (float)43.67)));
+		((EditText)findViewById(R.id.longitude)).setText(Float.toString(settings.getFloat("longitude", (float)-79.4167)));
 		((EditText)findViewById(R.id.altitude)).setText(Float.toString(settings.getFloat("altitude", 0)));
 
 		Spinner calculation_methods = (Spinner)findViewById(R.id.calculation_methods);
 		adapter = ArrayAdapter.createFromResource(this, R.array.calculation_methods, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		calculation_methods.setAdapter(adapter);
-		calculation_methods.setSelection(settings.getInt("calculationMethodsIndex", 5));
+		calculation_methods.setSelection(settings.getInt("calculationMethodsIndex", 4));
 
 		Spinner rounding_types = (Spinner)findViewById(R.id.rounding_types);
 		adapter = ArrayAdapter.createFromResource(this, R.array.rounding_types, android.R.layout.simple_spinner_item);
@@ -130,6 +132,7 @@ public class AdhanAlarm extends Activity {
 		Button clearButton = (Button)findViewById(R.id.clear);
 		clearButton.setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
+				if(mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
 				NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 				nm.cancelAll();
 			}
@@ -148,8 +151,8 @@ public class AdhanAlarm extends Activity {
 					latitude.setText(Double.toString(location.getLatitude()));
 					longitude.setText(Double.toString(location.getLongitude()));
 				} else {
-					latitude.setText(Float.toString(settings.getFloat("latitude", (float)51.477222))); // default greenwich
-					longitude.setText(Float.toString(settings.getFloat("longitude", (float)-122.132)));
+					latitude.setText(Float.toString(settings.getFloat("latitude", (float)43.67))); // default greenwich
+					longitude.setText(Float.toString(settings.getFloat("longitude", (float)-79.4167)));
 				}
 			}
 		});
@@ -186,6 +189,7 @@ public class AdhanAlarm extends Activity {
 				((Spinner)findViewById(R.id.rounding_types)).setSelection(2);
 				((EditText)findViewById(R.id.pressure)).setText("1010.0");
 				((EditText)findViewById(R.id.temperature)).setText("10.0");
+				((EditText)findViewById(R.id.altitude)).setText("0");
 			}
 		});
 
@@ -202,6 +206,11 @@ public class AdhanAlarm extends Activity {
 				((TabHost)findViewById(R.id.tabs)).setCurrentTab(0);
 			}
 		});
+	}
+
+	public void onPause() {
+		if(mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
+		super.onPause();
 	}
 
 	public void onResume() {
@@ -234,17 +243,15 @@ public class AdhanAlarm extends Activity {
 	}
 
 	private void playAlertIfAppropriate(short time) {
+		if(mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
 		NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 		nm.cancelAll();
 		long timestamp = notificationTimes[time] != null ? notificationTimes[time].getTimeInMillis() : System.currentTimeMillis();
 		Notification notification = new Notification(R.drawable.icon, getString(R.string.time_for) + " " + TIME_NAMES[time], timestamp);
 		
-		int notificationMethod = settings.getInt("notificationMethodIndex", BEEP);
+		int notificationMethod = settings.getInt("notificationMethodIndex", DEFAULT_NOTIFICATION);
 		
-		if(notificationMethod == VIBRATE || notificationMethod == BEEP_AND_VIBRATE) {
-			notification.vibrate = new long[] {100, 250, 100, 500};
-		}
-		if(notificationMethod != VIBRATE && notificationMethod != DISPLAY_ONLY) {
+		if(notificationMethod == RECITE_ADHAN) {
 			int alarm = R.raw.beep;
 			int extraAlerts = settings.getInt("extraAlertsIndex", NO_EXTRA_ALERTS);
 			if(notificationMethod == RECITE_ADHAN && (time == DHUHR || time == ASR || time == MAGHRIB || time == ISHAA || (extraAlerts == NO_EXTRA_ALERTS && time == SUNRISE))) {
@@ -252,8 +259,12 @@ public class AdhanAlarm extends Activity {
 			} else if(notificationMethod == RECITE_ADHAN && (time == FAJR || time == NEXT_FAJR)) {
 				alarm = R.raw.adhan_fajr;
 			}
-			notification.sound = android.net.Uri.parse("android.resource://com.islam.adhanalarm/" + alarm);
-			//notification.sound = android.net.Uri.fromFile(new java.io.File("/system/media/audio/ringtones/ringer.mp3"));
+			mediaPlayer = MediaPlayer.create(AdhanAlarm.this, alarm);
+			try {
+				mediaPlayer.start();
+			} catch(Exception ex) {
+				((TextView)findViewById(R.id.notes)).setText(getString(R.string.error_playing_alert));
+			}
 		}
 		notification.setLatestEventInfo(this, getString(R.string.app_name), getString(R.string.time_for) + " " + TIME_NAMES[time], PendingIntent.getActivity(this, 0, new Intent(this, AdhanAlarm.class), 0));
 		nm.notify(1, notification);
@@ -281,10 +292,10 @@ public class AdhanAlarm extends Activity {
 	}
 
 	private void updateScheduleAndNotification() {
-		Method method = CALCULATION_METHODS[settings.getInt("calculationMethodsIndex", 5)].copy();
+		Method method = CALCULATION_METHODS[settings.getInt("calculationMethodsIndex", 4)].copy();
 		method.setRound(ROUNDING_TYPES[settings.getInt("roundingTypesIndex", 2)]);
 
-		net.sourceforge.jitl.astro.Location location = new net.sourceforge.jitl.astro.Location(settings.getFloat("latitude", (float)51.477222), settings.getFloat("longitude", (float)-122.132), getGMTOffset(), (int)getDSTSavings());
+		net.sourceforge.jitl.astro.Location location = new net.sourceforge.jitl.astro.Location(settings.getFloat("latitude", (float)43.67), settings.getFloat("longitude", (float)-79.4167), getGMTOffset(), (int)getDSTSavings());
 		location.setSeaLevel(settings.getFloat("altitude", 0));
 		location.setPressure(settings.getFloat("pressure", 1010));
 		location.setTemperature(settings.getFloat("temperature", 10));

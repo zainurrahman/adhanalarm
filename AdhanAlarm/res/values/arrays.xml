@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="notification_methods">
-        <item>Display Only</item>
-        <item>Vibrate</item>
-        <item>Beep</item>
-        <item>Beep and Vibrate</item>
+        <item>Default Notification</item>
         <item>Recite Adh&#257;n</item>
     </array>
     <array name="extra_alerts">
@@ -12,7 +9,6 @@
         <item>Sunrise</item>
     </array>
     <array name="calculation_methods">
-        <item>None</item>
         <item>Egyptian General Authority of Survey</item>
         <item>University of Islamic Sciences, Karachi (Shaf`i)</item>
         <item>University of Islamic Sciences, Karachi (Hanafi)</item>
