@@ -20,13 +20,13 @@
 						android:layout_width="fill_parent"
 						android:layout_height="wrap_content" android:paddingLeft="20px">
 						<ImageButton android:id="@+id/previous"
-							 android:src="@drawable/previous" android:background="@drawable/empty"
+							 android:src="@drawable/previous"
 							 android:layout_width="30px" android:layout_height="30px" />
 						<ImageButton android:id="@+id/next"
-							 android:src="@drawable/next" android:background="@drawable/empty"
+							 android:src="@drawable/next"
 							 android:layout_width="30px" android:layout_height="30px" />
 						<ImageButton android:id="@+id/clear"
-							 android:src="@drawable/stop" android:background="@drawable/empty"
+							 android:src="@drawable/stop"
 							 android:layout_width="30px" android:layout_height="30px" />
 					</LinearLayout>
 					<LinearLayout android:orientation="horizontal"

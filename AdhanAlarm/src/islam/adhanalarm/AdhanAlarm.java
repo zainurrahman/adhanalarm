@@ -152,8 +152,8 @@ public class AdhanAlarm extends Activity {
 					latitude.setText(Double.toString(location.getLatitude()));
 					longitude.setText(Double.toString(location.getLongitude()));
 				} else {
-					latitude.setText(Float.toString(settings.getFloat("latitude", (float)43.67))); // default greenwich
-					longitude.setText(Float.toString(settings.getFloat("longitude", (float)-79.4167)));
+					latitude.setText("");
+					longitude.setText("");
 				}
 			}
 		});
