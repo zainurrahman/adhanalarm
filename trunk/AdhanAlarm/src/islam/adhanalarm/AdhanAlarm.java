@@ -13,6 +13,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TabHost;
@@ -115,22 +116,22 @@ public class AdhanAlarm extends Activity {
 		four.setIndicator(getString(R.string.extra), getResources().getDrawable(R.drawable.calculator));
 		tabs.addTab(four);
 
-		Button previousButton = (Button)findViewById(R.id.previous);
-		previousButton.setOnClickListener(new Button.OnClickListener() {
+		ImageButton previousButton = (ImageButton)findViewById(R.id.previous);
+		previousButton.setOnClickListener(new ImageButton.OnClickListener() {
 			public void onClick(View v) {
 				int time = getNextNotificationTime() - 1;
 				if(time < FAJR) time = ISHAA;
 				playAlertIfAppropriate((short)time);
 			}
 		});
-		Button nextButton = (Button)findViewById(R.id.next);
-		nextButton.setOnClickListener(new Button.OnClickListener() {
+		ImageButton nextButton = (ImageButton)findViewById(R.id.next);
+		nextButton.setOnClickListener(new ImageButton.OnClickListener() {
 			public void onClick(View v) {
 				playAlertIfAppropriate(getNextNotificationTime());
 			}
 		});
-		Button clearButton = (Button)findViewById(R.id.clear);
-		clearButton.setOnClickListener(new Button.OnClickListener() {
+		ImageButton clearButton = (ImageButton)findViewById(R.id.clear);
+		clearButton.setOnClickListener(new ImageButton.OnClickListener() {
 			public void onClick(View v) {
 				if(mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
 				NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
