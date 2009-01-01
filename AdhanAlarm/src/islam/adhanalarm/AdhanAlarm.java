@@ -43,7 +43,7 @@ public class AdhanAlarm extends Activity {
 	private static String[] TIME_NAMES = null;
 
 	private static SharedPreferences settings = null;
-	private static GregorianCalendar[] notificationTimes = new GregorianCalendar[9];
+	private static GregorianCalendar[] notificationTimes = new GregorianCalendar[7];
 	private MediaPlayer mediaPlayer = null;
 	@Override
 	public void onCreate(Bundle icicle) {
@@ -209,17 +209,17 @@ public class AdhanAlarm extends Activity {
 	}
 
 	public void onPause() {
-		if(mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
 		super.onPause();
+		if(mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
 	}
 
 	public void onResume() {
+		super.onResume();
 		short notificationTime = getIntent().getShortExtra("nextNotificationTime", (short)-1);
 		if(notificationTime > 0) playAlertIfAppropriate(notificationTime);
 		getIntent().removeExtra("nextNotificationTime");
 		updateScheduleAndNotification();
 		((TabHost)findViewById(R.id.tabs)).setCurrentTab(0);
-		super.onResume();
 	}
 
 	public void onNewIntent(Intent intent) {
@@ -302,14 +302,20 @@ public class AdhanAlarm extends Activity {
 
 		Jitl itl = DEBUG ? new DummyJitl(location, method) : new Jitl(location, method);
 		Calendar currentTime = Calendar.getInstance();
-		GregorianCalendar today = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH));
+		GregorianCalendar today = new GregorianCalendar();
+		GregorianCalendar tomorrow = new GregorianCalendar();
+		tomorrow.add(Calendar.DATE, 1);
 		Prayer[] dayPrayers = itl.getPrayerTimes(today).getPrayers();
 		Prayer[] allTimes = new Prayer[]{dayPrayers[0], dayPrayers[1], dayPrayers[2], dayPrayers[3], dayPrayers[4], dayPrayers[5], itl.getNextDayFajr(today)};
 
 		DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
 		short nextNotificationTime = -1;
 		for(short i = FAJR; i <= NEXT_FAJR; i++) { // Set the times on the schedule
-			notificationTimes[i] = new GregorianCalendar(currentTime.get(Calendar.YEAR), currentTime.get(Calendar.MONTH), currentTime.get(Calendar.DAY_OF_MONTH), allTimes[i].getHour(), allTimes[i].getMinute(), allTimes[i].getSecond());
+			if(i == NEXT_FAJR) {
+				notificationTimes[i] = new GregorianCalendar(tomorrow.get(Calendar.YEAR), tomorrow.get(Calendar.MONTH), tomorrow.get(Calendar.DAY_OF_MONTH), allTimes[i].getHour(), allTimes[i].getMinute(), allTimes[i].getSecond());
+			} else {
+				notificationTimes[i] = new GregorianCalendar(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH), allTimes[i].getHour(), allTimes[i].getMinute(), allTimes[i].getSecond());	
+			}
 			ALARM_TIMES[i].setText(timeFormat.format(notificationTimes[i].getTime()) + (allTimes[i].isExtreme() ? "*" : ""));
 			if(nextNotificationTime < 0 && (currentTime.compareTo(notificationTimes[i]) < 0 || i == NEXT_FAJR)) {
 				nextNotificationTime = i;
@@ -322,17 +328,19 @@ public class AdhanAlarm extends Activity {
 		((TextView)findViewById(R.id.current_longitude)).setText(new Dms(location.getDegreeLong()).toString());
 		((TextView)findViewById(R.id.current_qibla)).setText(itl.getNorthQibla().toString());
 
-		setNextNotificationTime(nextNotificationTime, notificationTimes[nextNotificationTime].getTimeInMillis());
+		setNextNotificationTime(nextNotificationTime);
 	}
 
-	private void setNextNotificationTime(short nextNotificationTime, long actualTimestamp) {
+	private void setNextNotificationTime(short nextNotificationTime) {
 		if(DEBUG) ((TextView)findViewById(R.id.notes)).setText(((TextView)findViewById(R.id.notes)).getText() + ", Debug: " + Math.random());
 
+		if(Calendar.getInstance().getTimeInMillis() > notificationTimes[nextNotificationTime].getTimeInMillis()) return; // Somehow current time is greater than the prayer time
+		
 		Intent intent = new Intent(this, WakeUpAndDoSomething.class);
 		intent.putExtra("nextNotificationTime", nextNotificationTime);
-		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
 		AlarmManager am = (AlarmManager)getSystemService(ALARM_SERVICE);
-		am.set(AlarmManager.RTC_WAKEUP, actualTimestamp, PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT));
+		am.set(AlarmManager.RTC_WAKEUP, notificationTimes[nextNotificationTime].getTimeInMillis(), PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT));
 	}
 }
