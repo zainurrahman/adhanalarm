@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
 import android.view.View;
+import java.text.DecimalFormat;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -41,6 +42,7 @@ public class AdhanAlarm extends Activity {
 
 	private static TextView[] NOTIFICATION_MARKERS = null;
 	private static TextView[] ALARM_TIMES = null;
+	private static TextView[] ALARM_TIMES_AM_PM = null;
 	private static String[] TIME_NAMES = null;
 
 	private static SharedPreferences settings = null;
@@ -53,6 +55,7 @@ public class AdhanAlarm extends Activity {
 
 		NOTIFICATION_MARKERS = new TextView[]{(TextView)findViewById(R.id.mark_fajr), (TextView)findViewById(R.id.mark_sunrise), (TextView)findViewById(R.id.mark_dhuhr), (TextView)findViewById(R.id.mark_asr), (TextView)findViewById(R.id.mark_maghrib), (TextView)findViewById(R.id.mark_ishaa), (TextView)findViewById(R.id.mark_next_fajr)};
 		ALARM_TIMES = new TextView[]{(TextView)findViewById(R.id.fajr), (TextView)findViewById(R.id.sunrise), (TextView)findViewById(R.id.dhuhr), (TextView)findViewById(R.id.asr), (TextView)findViewById(R.id.maghrib), (TextView)findViewById(R.id.ishaa), (TextView)findViewById(R.id.next_fajr)};
+		ALARM_TIMES_AM_PM = new TextView[]{(TextView)findViewById(R.id.fajr_am_pm), (TextView)findViewById(R.id.sunrise_am_pm), (TextView)findViewById(R.id.dhuhr_am_pm), (TextView)findViewById(R.id.asr_am_pm), (TextView)findViewById(R.id.maghrib_am_pm), (TextView)findViewById(R.id.ishaa_am_pm), (TextView)findViewById(R.id.next_fajr_am_pm)};
 		TIME_NAMES = new String[]{getString(R.string.fajr), getString(R.string.sunrise), getString(R.string.dhuhr), getString(R.string.asr), getString(R.string.maghrib), getString(R.string.ishaa), getString(R.string.next_fajr)};
 
 		settings = getSharedPreferences("settingsFile", MODE_PRIVATE);
@@ -103,12 +106,12 @@ public class AdhanAlarm extends Activity {
 
 		TabHost.TabSpec two = tabs.newTabSpec("two");
 		two.setContent(R.id.content2);
-		two.setIndicator(getString(R.string.alert), getResources().getDrawable(R.drawable.volume));
+		two.setIndicator(getString(R.string.qibla), getResources().getDrawable(R.drawable.globe));
 		tabs.addTab(two);
 
 		TabHost.TabSpec three = tabs.newTabSpec("three");
 		three.setContent(R.id.content3);
-		three.setIndicator(getString(R.string.place), getResources().getDrawable(R.drawable.globe));
+		three.setIndicator(getString(R.string.place), getResources().getDrawable(R.drawable.volume));
 		tabs.addTab(three);
 
 		TabHost.TabSpec four = tabs.newTabSpec("four");
@@ -158,22 +161,12 @@ public class AdhanAlarm extends Activity {
 			}
 		});
 
-		Button saveAndApplyAlert = (Button)findViewById(R.id.save_and_apply_alert);
-		saveAndApplyAlert.setOnClickListener(new Button.OnClickListener() {  
+		Button saveAndApplySettings = (Button)findViewById(R.id.save_and_apply_settings);
+		saveAndApplySettings.setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
 				SharedPreferences.Editor editor = settings.edit();
 				editor.putInt("notificationMethodIndex", ((Spinner)findViewById(R.id.notification_methods)).getSelectedItemPosition());
 				editor.putInt("extraAlertsIndex", ((Spinner)findViewById(R.id.extra_alerts)).getSelectedItemPosition());
-				editor.commit();
-				updateScheduleAndNotification();
-				((TabHost)findViewById(R.id.tabs)).setCurrentTab(0);
-			}
-		});
-
-		Button saveAndApplyPlace = (Button)findViewById(R.id.save_and_apply_place);
-		saveAndApplyPlace.setOnClickListener(new Button.OnClickListener() {
-			public void onClick(View v) {
-				SharedPreferences.Editor editor = settings.edit();
 				editor.putFloat("latitude", Float.parseFloat(((EditText)findViewById(R.id.latitude)).getText().toString()));
 				editor.putFloat("longitude", Float.parseFloat(((EditText)findViewById(R.id.longitude)).getText().toString()));
 				editor.putFloat("altitude", Float.parseFloat(((EditText)findViewById(R.id.altitude)).getText().toString()));
@@ -186,7 +179,7 @@ public class AdhanAlarm extends Activity {
 		Button resetExtra = (Button)findViewById(R.id.reset_extra);
 		resetExtra.setOnClickListener(new Button.OnClickListener() {  
 			public void onClick(View v) {
-				((Spinner)findViewById(R.id.calculation_methods)).setSelection(5);
+				((Spinner)findViewById(R.id.calculation_methods)).setSelection(4);
 				((Spinner)findViewById(R.id.rounding_types)).setSelection(2);
 				((EditText)findViewById(R.id.pressure)).setText("1010.0");
 				((EditText)findViewById(R.id.temperature)).setText("10.0");
@@ -245,17 +238,21 @@ public class AdhanAlarm extends Activity {
 
 	private void playAlertIfAppropriate(short time) {
 		if(mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
+		
 		NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 		nm.cancelAll();
+		
+		int extraAlerts = settings.getInt("extraAlertsIndex", NO_EXTRA_ALERTS);
+		if(extraAlerts == NO_EXTRA_ALERTS && time == SUNRISE) return;
+		
 		long timestamp = notificationTimes[time] != null ? notificationTimes[time].getTimeInMillis() : System.currentTimeMillis();
-		Notification notification = new Notification(R.drawable.icon, getString(R.string.time_for) + " " + TIME_NAMES[time], timestamp);
+		Notification notification = new Notification(R.drawable.icon, getString(R.string.time_for) + " " + (time == NEXT_FAJR ? TIME_NAMES[FAJR] : TIME_NAMES[time]), timestamp);
 		
 		int notificationMethod = settings.getInt("notificationMethodIndex", DEFAULT_NOTIFICATION);
 		
 		if(notificationMethod == RECITE_ADHAN) {
 			int alarm = R.raw.beep;
-			int extraAlerts = settings.getInt("extraAlertsIndex", NO_EXTRA_ALERTS);
-			if(notificationMethod == RECITE_ADHAN && (time == DHUHR || time == ASR || time == MAGHRIB || time == ISHAA || (extraAlerts == NO_EXTRA_ALERTS && time == SUNRISE))) {
+			if(notificationMethod == RECITE_ADHAN && (time == DHUHR || time == ASR || time == MAGHRIB || time == ISHAA)) {
 				alarm = R.raw.adhan;
 			} else if(notificationMethod == RECITE_ADHAN && (time == FAJR || time == NEXT_FAJR)) {
 				alarm = R.raw.adhan_fajr;
@@ -317,17 +314,29 @@ public class AdhanAlarm extends Activity {
 			} else {
 				notificationTimes[i] = new GregorianCalendar(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH), allTimes[i].getHour(), allTimes[i].getMinute(), allTimes[i].getSecond());	
 			}
-			ALARM_TIMES[i].setText(timeFormat.format(notificationTimes[i].getTime()) + (allTimes[i].isExtreme() ? "*" : ""));
+			String fullTime = timeFormat.format(notificationTimes[i].getTime());
+			ALARM_TIMES[i].setText(fullTime.substring(0, fullTime.lastIndexOf(" ")));
+			ALARM_TIMES_AM_PM[i].setText(fullTime.substring(fullTime.lastIndexOf(" ") + 1, fullTime.length()) + (allTimes[i].isExtreme() ? "*" : ""));
 			if(nextNotificationTime < 0 && (currentTime.compareTo(notificationTimes[i]) < 0 || i == NEXT_FAJR)) {
 				nextNotificationTime = i;
 			}
 		}
 		indicateNextNotificationAndAlarmTimes(nextNotificationTime);
 
-		// Add Latitude, Longitude and Qibla DMS location to front panel
-		((TextView)findViewById(R.id.current_latitude)).setText(new Dms(location.getDegreeLat()).toString());
-		((TextView)findViewById(R.id.current_longitude)).setText(new Dms(location.getDegreeLong()).toString());
-		((TextView)findViewById(R.id.current_qibla)).setText(itl.getNorthQibla().toString());
+		// Add Latitude, Longitude and Qibla DMS location
+		DecimalFormat df = new DecimalFormat("#.###");
+		Dms latitude = new Dms(location.getDegreeLat());
+		Dms longitude = new Dms(location.getDegreeLong());
+		Dms qibla = itl.getNorthQibla();
+		((TextView)findViewById(R.id.current_latitude_deg)).setText(String.valueOf(latitude.getDegree()));
+		((TextView)findViewById(R.id.current_latitude_min)).setText(String.valueOf(latitude.getMinute()));
+		((TextView)findViewById(R.id.current_latitude_sec)).setText(df.format(latitude.getSecond()));
+		((TextView)findViewById(R.id.current_longitude_deg)).setText(String.valueOf(longitude.getDegree()));
+		((TextView)findViewById(R.id.current_longitude_min)).setText(String.valueOf(longitude.getMinute()));
+		((TextView)findViewById(R.id.current_longitude_sec)).setText(df.format(longitude.getSecond()));
+		((TextView)findViewById(R.id.current_qibla_deg)).setText(String.valueOf(qibla.getDegree()));
+		((TextView)findViewById(R.id.current_qibla_min)).setText(String.valueOf(qibla.getMinute()));
+		((TextView)findViewById(R.id.current_qibla_sec)).setText(df.format(qibla.getSecond()));
 
 		setNextNotificationTime(nextNotificationTime);
 	}
