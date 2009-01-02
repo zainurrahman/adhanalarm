@@ -81,8 +81,7 @@ public class Dms {
 	}
 	
 	public String toString() {
-		java.text.DecimalFormat df = new java.text.DecimalFormat("#.###");
-		return degree + "°" + minute + "'" + df.format(second) + "''";
+		return degree + "°" + minute + "'" + second + "''";
 	}
 	
 }

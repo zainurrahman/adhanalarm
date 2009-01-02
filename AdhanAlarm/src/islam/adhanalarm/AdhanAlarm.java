@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -47,7 +46,6 @@ public class AdhanAlarm extends Activity {
 
 	private static SharedPreferences settings = null;
 	private static GregorianCalendar[] notificationTimes = new GregorianCalendar[7];
-	private MediaPlayer mediaPlayer = null;
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
@@ -136,7 +134,6 @@ public class AdhanAlarm extends Activity {
 		ImageButton clearButton = (ImageButton)findViewById(R.id.clear);
 		clearButton.setOnClickListener(new ImageButton.OnClickListener() {
 			public void onClick(View v) {
-				if(mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
 				NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 				nm.cancelAll();
 			}
@@ -183,7 +180,7 @@ public class AdhanAlarm extends Activity {
 				((Spinner)findViewById(R.id.rounding_types)).setSelection(2);
 				((EditText)findViewById(R.id.pressure)).setText("1010.0");
 				((EditText)findViewById(R.id.temperature)).setText("10.0");
-				((EditText)findViewById(R.id.altitude)).setText("0");
+				((EditText)findViewById(R.id.altitude)).setText("0.0");
 			}
 		});
 
@@ -204,7 +201,8 @@ public class AdhanAlarm extends Activity {
 
 	public void onPause() {
 		super.onPause();
-		if(mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
+		NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+		nm.cancelAll();
 	}
 
 	public void onResume() {
@@ -237,13 +235,8 @@ public class AdhanAlarm extends Activity {
 	}
 
 	private void playAlertIfAppropriate(short time) {
-		if(mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
-		
 		NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 		nm.cancelAll();
-		
-		int extraAlerts = settings.getInt("extraAlertsIndex", NO_EXTRA_ALERTS);
-		if(extraAlerts == NO_EXTRA_ALERTS && time == SUNRISE) return;
 		
 		long timestamp = notificationTimes[time] != null ? notificationTimes[time].getTimeInMillis() : System.currentTimeMillis();
 		Notification notification = new Notification(R.drawable.icon, getString(R.string.time_for) + " " + (time == NEXT_FAJR ? TIME_NAMES[FAJR] : TIME_NAMES[time]), timestamp);
@@ -252,17 +245,19 @@ public class AdhanAlarm extends Activity {
 		
 		if(notificationMethod == RECITE_ADHAN) {
 			int alarm = R.raw.beep;
-			if(notificationMethod == RECITE_ADHAN && (time == DHUHR || time == ASR || time == MAGHRIB || time == ISHAA)) {
+			int extraAlerts = settings.getInt("extraAlertsIndex", NO_EXTRA_ALERTS);
+			if(notificationMethod == RECITE_ADHAN && (time == DHUHR || time == ASR || time == MAGHRIB || time == ISHAA || (extraAlerts != ALERT_SUNRISE && time == SUNRISE))) {
 				alarm = R.raw.adhan;
 			} else if(notificationMethod == RECITE_ADHAN && (time == FAJR || time == NEXT_FAJR)) {
 				alarm = R.raw.adhan_fajr;
 			}
-			mediaPlayer = MediaPlayer.create(AdhanAlarm.this, alarm);
-			try {
-				mediaPlayer.start();
-			} catch(Exception ex) {
-				((TextView)findViewById(R.id.notes)).setText(getString(R.string.error_playing_alert));
-			}
+			notification.defaults = Notification.DEFAULT_VIBRATE | Notification.DEFAULT_LIGHTS;
+			notification.sound = android.net.Uri.parse("android.resource://islam.adhanalarm/" + alarm);
+			notification.audioStreamType = android.media.AudioManager.STREAM_ALARM;
+			
+			//notification.sound = android.net.Uri.fromFile(new java.io.File("/system/media/audio/ringtones/ringer.mp3"));
+		} else {
+			notification.defaults = Notification.DEFAULT_ALL;
 		}
 		notification.setLatestEventInfo(this, getString(R.string.app_name), getString(R.string.time_for) + " " + TIME_NAMES[time], PendingIntent.getActivity(this, 0, new Intent(this, AdhanAlarm.class), 0));
 		nm.notify(1, notification);
@@ -279,13 +274,13 @@ public class AdhanAlarm extends Activity {
 		TextView note = (TextView)findViewById(R.id.notes);
 
 		for(short i = FAJR; i <= NEXT_FAJR; i++) NOTIFICATION_MARKERS[i].setText(""); // Clear all existing markers in case it was left from the previous day or while phone was turned off
+		
+		int extraAlerts = settings.getInt("extraAlertsIndex", NO_EXTRA_ALERTS);
+		if(extraAlerts != ALERT_SUNRISE && nextNotificationTime == SUNRISE) nextNotificationTime = DHUHR;
+		
 		NOTIFICATION_MARKERS[nextNotificationTime].setText(getString(R.string.next_time_marker));
 
-		int extraAlerts = settings.getInt("extraAlertsIndex", NO_EXTRA_ALERTS);
 		String nextAlert = TIME_NAMES[nextNotificationTime];
-		if(nextNotificationTime == SUNRISE && extraAlerts != ALERT_SUNRISE) {
-			nextAlert = TIME_NAMES[DHUHR];
-		}
 		note.setText(getString(R.string.next_alert) + ": " + nextAlert);
 	}
 
@@ -345,6 +340,9 @@ public class AdhanAlarm extends Activity {
 		if(DEBUG) ((TextView)findViewById(R.id.notes)).setText(((TextView)findViewById(R.id.notes)).getText() + ", Debug: " + Math.random());
 
 		if(Calendar.getInstance().getTimeInMillis() > notificationTimes[nextNotificationTime].getTimeInMillis()) return; // Somehow current time is greater than the prayer time
+		
+		int extraAlerts = settings.getInt("extraAlertsIndex", NO_EXTRA_ALERTS);
+		if(extraAlerts != ALERT_SUNRISE && nextNotificationTime == SUNRISE) nextNotificationTime = DHUHR;
 		
 		Intent intent = new Intent(this, WakeUpAndDoSomething.class);
 		intent.putExtra("nextNotificationTime", nextNotificationTime);
