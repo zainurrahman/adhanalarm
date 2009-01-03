@@ -199,8 +199,8 @@ public class AdhanAlarm extends Activity {
 		});
 	}
 
-	public void onPause() {
-		super.onPause();
+	public void onStop() {
+		super.onStop();
 		NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 		nm.cancelAll();
 	}
