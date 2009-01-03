@@ -351,14 +351,6 @@
 						android:layout_height="fill_parent"
 						android:layout_width="wrap_content" android:paddingRight="5px"
 						android:paddingLeft="5px">
-						<TextView android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:text="@string/calculation" android:layout_weight="1"
-							android:gravity="fill_vertical" />
-						<TextView android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:text="@string/rounding" android:layout_weight="1"
-							android:gravity="fill_vertical" />
 						<TextView android:text="@string/pressure"
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content" android:layout_weight="1"
@@ -371,18 +363,18 @@
 							android:layout_width="wrap_content"
 							android:layout_height="wrap_content" android:layout_weight="1"
 							android:gravity="fill_vertical" />
+						<TextView android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/calculation" android:layout_weight="1"
+							android:gravity="fill_vertical" />
+						<TextView android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:text="@string/rounding" android:layout_weight="1"
+							android:gravity="fill_vertical" />
 					</LinearLayout>
 					<LinearLayout android:orientation="vertical"
 						android:layout_height="wrap_content"
 						android:layout_width="fill_parent">
-						<Spinner android:id="@+id/calculation_methods"
-							android:layout_width="fill_parent"
-							android:layout_height="wrap_content"
-							android:drawSelectorOnTop="true" />
-						<Spinner android:id="@+id/rounding_types"
-							android:layout_width="fill_parent"
-							android:layout_height="wrap_content"
-							android:drawSelectorOnTop="true" />
 						<EditText android:id="@+id/pressure"
 							android:text="1010" android:layout_width="fill_parent"
 							android:layout_height="wrap_content"
@@ -395,6 +387,14 @@
 							android:text="0" android:layout_width="fill_parent"
 							android:layout_height="wrap_content"
 							android:numeric="signed|decimal" />
+						<Spinner android:id="@+id/calculation_methods"
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content"
+							android:drawSelectorOnTop="true" />
+						<Spinner android:id="@+id/rounding_types"
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content"
+							android:drawSelectorOnTop="true" />
 					</LinearLayout>
 				</LinearLayout>
 				<LinearLayout android:orientation="horizontal"
