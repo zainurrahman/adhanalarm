@@ -209,7 +209,6 @@ public class AdhanAlarm extends Activity {
 		super.onResume();
 		short notificationTime = getIntent().getShortExtra("nextNotificationTime", (short)-1);
 		if(notificationTime > 0) playAlertIfAppropriate(notificationTime);
-		getIntent().removeExtra("nextNotificationTime");
 		updateScheduleAndNotification();
 		((TabHost)findViewById(R.id.tabs)).setCurrentTab(0);
 	}
@@ -239,7 +238,7 @@ public class AdhanAlarm extends Activity {
 		nm.cancelAll();
 		
 		long timestamp = notificationTimes[time] != null ? notificationTimes[time].getTimeInMillis() : System.currentTimeMillis();
-		String notificationTitle = getString(R.string.time_for) + " " + (time == NEXT_FAJR ? TIME_NAMES[FAJR] : TIME_NAMES[time]);
+		String notificationTitle = (time != SUNRISE ? getString(R.string.allahu_akbar) + ": " : "") + getString(R.string.time_for) + " " + (time == NEXT_FAJR ? TIME_NAMES[FAJR] : TIME_NAMES[time]).toLowerCase();
 		Notification notification = new Notification(R.drawable.icon, notificationTitle, timestamp);
 		
 		int notificationMethod = settings.getInt("notificationMethodIndex", DEFAULT_NOTIFICATION);
@@ -333,15 +332,18 @@ public class AdhanAlarm extends Activity {
 		((TextView)findViewById(R.id.current_qibla_deg)).setText(String.valueOf(qibla.getDegree()));
 		((TextView)findViewById(R.id.current_qibla_min)).setText(String.valueOf(qibla.getMinute()));
 		((TextView)findViewById(R.id.current_qibla_sec)).setText(df.format(qibla.getSecond()));
-
-		int notificationMethod = settings.getInt("notificationMethodIndex", DEFAULT_NOTIFICATION);
-		if(notificationMethod != NO_NOTIFICATIONS) setNextNotificationTime(nextNotificationTime);
+		
+		setNextNotificationTime(nextNotificationTime);
 	}
 
 	private void setNextNotificationTime(short nextNotificationTime) {
 		if(DEBUG) ((TextView)findViewById(R.id.notes)).setText(((TextView)findViewById(R.id.notes)).getText() + ", Debug: " + Math.random());
 
+		getIntent().removeExtra("nextNotificationTime");
 		if(Calendar.getInstance().getTimeInMillis() > notificationTimes[nextNotificationTime].getTimeInMillis()) return; // Somehow current time is greater than the prayer time
+		
+		int notificationMethod = settings.getInt("notificationMethodIndex", DEFAULT_NOTIFICATION);
+		if(notificationMethod == NO_NOTIFICATIONS) return;
 		
 		int extraAlerts = settings.getInt("extraAlertsIndex", NO_EXTRA_ALERTS);
 		if(extraAlerts != ALERT_SUNRISE && nextNotificationTime == SUNRISE) nextNotificationTime = DHUHR;
