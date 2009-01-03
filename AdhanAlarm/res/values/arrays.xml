@@ -3,6 +3,7 @@
     <array name="notification_methods">
         <item>Default Notification</item>
         <item>Recite Adh&#257;n</item>
+        <item>No Notifications</item>
     </array>
     <array name="extra_alerts">
         <item>None</item>
@@ -10,8 +11,8 @@
     </array>
     <array name="calculation_methods">
         <item>Egyptian General Authority of Survey</item>
-        <item>University of Islamic Sciences, Karachi (Shaf`i)</item>
-        <item>University of Islamic Sciences, Karachi (Hanafi)</item>
+        <item>Shaf`i - Karachi University of Islamic Sciences</item>
+        <item>Hanafi - Karachi University of Islamic Sciences</item>
         <item>Islamic Society of North America</item>
         <item>Muslim World League</item>
         <item>Umm Al-Qurra, Saudi Arabia</item>

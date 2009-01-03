@@ -33,7 +33,7 @@ public class AdhanAlarm extends Activity {
 	public static final boolean DEBUG = false;
 
 	private static final short FAJR = 0, SUNRISE = 1, DHUHR = 2, ASR = 3, MAGHRIB = 4, ISHAA = 5, NEXT_FAJR = 6; // Notification Times
-	private static final short DEFAULT_NOTIFICATION = 0, RECITE_ADHAN = 1; // Notification Methods
+	private static final short DEFAULT_NOTIFICATION = 0, RECITE_ADHAN = 1, NO_NOTIFICATIONS = 1; // Notification Methods
 	private static final short NO_EXTRA_ALERTS = 0, ALERT_SUNRISE = 1; // Extra Alerts
 
 	private static final Method[] CALCULATION_METHODS = new Method[]{Method.EGYPT_SURVEY, Method.KARACHI_SHAF, Method.KARACHI_HANAF, Method.NORTH_AMERICA, Method.MUSLIM_LEAGUE, Method.UMM_ALQURRA, Method.FIXED_ISHAA};
@@ -239,7 +239,8 @@ public class AdhanAlarm extends Activity {
 		nm.cancelAll();
 		
 		long timestamp = notificationTimes[time] != null ? notificationTimes[time].getTimeInMillis() : System.currentTimeMillis();
-		Notification notification = new Notification(R.drawable.icon, getString(R.string.time_for) + " " + (time == NEXT_FAJR ? TIME_NAMES[FAJR] : TIME_NAMES[time]), timestamp);
+		String notificationTitle = getString(R.string.time_for) + " " + (time == NEXT_FAJR ? TIME_NAMES[FAJR] : TIME_NAMES[time]);
+		Notification notification = new Notification(R.drawable.icon, notificationTitle, timestamp);
 		
 		int notificationMethod = settings.getInt("notificationMethodIndex", DEFAULT_NOTIFICATION);
 		
@@ -259,7 +260,7 @@ public class AdhanAlarm extends Activity {
 		} else {
 			notification.defaults = Notification.DEFAULT_ALL;
 		}
-		notification.setLatestEventInfo(this, getString(R.string.app_name), getString(R.string.time_for) + " " + TIME_NAMES[time], PendingIntent.getActivity(this, 0, new Intent(this, AdhanAlarm.class), 0));
+		notification.setLatestEventInfo(this, getString(R.string.app_name), notificationTitle, PendingIntent.getActivity(this, 0, new Intent(this, AdhanAlarm.class), 0));
 		nm.notify(1, notification);
 	}
 
@@ -333,7 +334,8 @@ public class AdhanAlarm extends Activity {
 		((TextView)findViewById(R.id.current_qibla_min)).setText(String.valueOf(qibla.getMinute()));
 		((TextView)findViewById(R.id.current_qibla_sec)).setText(df.format(qibla.getSecond()));
 
-		setNextNotificationTime(nextNotificationTime);
+		int notificationMethod = settings.getInt("notificationMethodIndex", DEFAULT_NOTIFICATION);
+		if(notificationMethod != NO_NOTIFICATIONS) setNextNotificationTime(nextNotificationTime);
 	}
 
 	private void setNextNotificationTime(short nextNotificationTime) {
