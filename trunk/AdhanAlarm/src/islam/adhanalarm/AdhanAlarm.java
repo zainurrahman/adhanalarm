@@ -229,15 +229,11 @@ public class AdhanAlarm extends Activity {
 		});
 	}
 
-	public void onPause() {
-		if(mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
-		AdhanAlarmWakeLock.release();
-		super.onPause();
-	}
-
 	public void onStop() {
+		if(mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
 		NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 		nm.cancelAll();
+		AdhanAlarmWakeLock.release();
 		super.onStop();
 	}
 
@@ -270,6 +266,7 @@ public class AdhanAlarm extends Activity {
 	}
 
 	private void playAlertIfAppropriate(short time) {
+		if(mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
 		NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 		nm.cancelAll();
 
