@@ -5,13 +5,11 @@ import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -46,17 +44,13 @@ public class AdhanAlarm extends Activity {
 	private static TextView[] ALARM_TIMES = null;
 	private static TextView[] ALARM_TIMES_AM_PM = null;
 	private static String[] TIME_NAMES = null;
-
-	private static PowerManager.WakeLock wakeLock;
+	
 	private static SharedPreferences settings = null;
 	private static GregorianCalendar[] notificationTimes = new GregorianCalendar[7];
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		setContentView(R.layout.main);
-		
-		PowerManager powerManager = (PowerManager)getSystemService(Context.POWER_SERVICE);
-		wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "Adhan Alarm Wake Lock");
 		
 		NOTIFICATION_MARKERS = new TextView[]{(TextView)findViewById(R.id.mark_fajr), (TextView)findViewById(R.id.mark_sunrise), (TextView)findViewById(R.id.mark_dhuhr), (TextView)findViewById(R.id.mark_asr), (TextView)findViewById(R.id.mark_maghrib), (TextView)findViewById(R.id.mark_ishaa), (TextView)findViewById(R.id.mark_next_fajr)};
 		ALARM_TIMES = new TextView[]{(TextView)findViewById(R.id.fajr), (TextView)findViewById(R.id.sunrise), (TextView)findViewById(R.id.dhuhr), (TextView)findViewById(R.id.asr), (TextView)findViewById(R.id.maghrib), (TextView)findViewById(R.id.ishaa), (TextView)findViewById(R.id.next_fajr)};
@@ -232,7 +226,7 @@ public class AdhanAlarm extends Activity {
 	}
 
 	public void onPause() {
-		if(wakeLock.isHeld()) wakeLock.release();
+		AdhanAlarmWakeLock.release();
 		super.onPause();
 	}
 
@@ -243,7 +237,6 @@ public class AdhanAlarm extends Activity {
 	}
 
 	public void onResume() {
-		wakeLock.acquire(180000); // Be awake for at least 3 minutes, gives the notification time to play the full adhan
 		short notificationTime = getIntent().getShortExtra("nextNotificationTime", (short)-1);
 		if(notificationTime > 0) playAlertIfAppropriate(notificationTime);
 		updateScheduleAndNotification();
