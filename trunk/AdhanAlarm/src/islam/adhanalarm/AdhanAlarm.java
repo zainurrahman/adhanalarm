@@ -59,7 +59,6 @@ public class AdhanAlarm extends Activity {
 		TIME_NAMES = new String[]{getString(R.string.fajr), getString(R.string.sunrise), getString(R.string.dhuhr), getString(R.string.asr), getString(R.string.maghrib), getString(R.string.ishaa), getString(R.string.next_fajr)};
 
 		settings = getSharedPreferences("settingsFile", MODE_PRIVATE);
-		AdhanAlarmWakeLock.setShortWakeTime(settings.getInt("notificationMethodIndex", DEFAULT_NOTIFICATION) != RECITE_ADHAN);
 
 		((EditText)findViewById(R.id.latitude)).setText(Float.toString(settings.getFloat("latitude", (float)43.67)));
 		((EditText)findViewById(R.id.longitude)).setText(Float.toString(settings.getFloat("longitude", (float)-79.4167)));
@@ -140,6 +139,7 @@ public class AdhanAlarm extends Activity {
 				if(mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
 				NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 				nm.cancelAll();
+				AdhanAlarmWakeLock.release();
 			}
 		});
 
@@ -181,7 +181,6 @@ public class AdhanAlarm extends Activity {
 				editor.putInt("notificationMethodIndex", ((Spinner)findViewById(R.id.notification_methods)).getSelectedItemPosition());
 				editor.putInt("extraAlertsIndex", ((Spinner)findViewById(R.id.extra_alerts)).getSelectedItemPosition());
 				editor.commit();
-				AdhanAlarmWakeLock.setShortWakeTime(settings.getInt("notificationMethodIndex", DEFAULT_NOTIFICATION) != RECITE_ADHAN);
 				updateScheduleAndNotification();
 				((TabHost)findViewById(R.id.tabs)).setCurrentTab(0);
 			}
@@ -298,6 +297,7 @@ public class AdhanAlarm extends Activity {
 			}
 		} else {
 			notification.defaults = Notification.DEFAULT_ALL;
+			AdhanAlarmWakeLock.acquireShort(this); // Stay awake long enough to complete notification
 		}
 		notification.setLatestEventInfo(this, getString(R.string.app_name), notificationTitle, PendingIntent.getActivity(this, 0, new Intent(this, AdhanAlarm.class), 0));
 		nm.notify(1, notification);
