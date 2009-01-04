@@ -15,6 +15,7 @@
     <string name="introduction">Please set <u>place</u></string>
     <string name="allahu_akbar">God is greater</string>
     <string name="time_for">Time for</string>
+    <string name="last_alert">Last alert</string>
     <string name="next_alert">Next alert</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
