@@ -316,7 +316,7 @@ public class AdhanAlarm extends Activity {
 	private void indicateNotificationTimes(short nextNotificationTime) {
 		for(short i = FAJR; i <= NEXT_FAJR; i++) NOTIFICATION_MARKERS[i].setText(""); // Clear all existing markers in case it was left from the previous day or while phone was turned off
 
-		short previousNotificationTime = nextNotificationTime - 1 > FAJR ? nextNotificationTime : ISHAA;
+		int previousNotificationTime = nextNotificationTime - 1 < FAJR ? ISHAA : nextNotificationTime - 1;
 		
 		int extraAlerts = settings.getInt("extraAlertsIndex", NO_EXTRA_ALERTS);
 		if(extraAlerts != ALERT_SUNRISE && nextNotificationTime == SUNRISE) nextNotificationTime = DHUHR;
