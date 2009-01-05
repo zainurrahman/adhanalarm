@@ -271,8 +271,8 @@ public class AdhanAlarm extends Activity {
 
 		int notificationMethod = settings.getInt("notificationMethodIndex", DEFAULT_NOTIFICATION);
 		long stayAwakeFor = 30000; // 30 seconds minimum
+		int alarm = R.raw.beep;
 		if(notificationMethod == RECITE_ADHAN) {
-			int alarm = R.raw.beep;
 			int extraAlerts = settings.getInt("extraAlertsIndex", NO_EXTRA_ALERTS);
 			if(time == DHUHR || time == ASR || time == MAGHRIB || time == ISHAA || (extraAlerts != ALERT_SUNRISE && time == SUNRISE)) {
 				alarm = R.raw.adhan;
@@ -282,17 +282,19 @@ public class AdhanAlarm extends Activity {
 				stayAwakeFor = 151000; // 2 mins 31 seconds
 			}
 			notification.defaults = Notification.DEFAULT_VIBRATE | Notification.DEFAULT_LIGHTS;
+		} else {
+			notification.defaults = Notification.DEFAULT_ALL;
+		}
+		AdhanAlarmWakeLock.acquireFinite(this, stayAwakeFor);
+		stopAlert();
+		if(notificationMethod == RECITE_ADHAN) {
 			mediaPlayer = MediaPlayer.create(AdhanAlarm.this, alarm);
 			try {
 				mediaPlayer.start();
 			} catch(Exception ex) {
 				((TextView)findViewById(R.id.notes)).setText(getString(R.string.error_playing_alert));
 			}
-		} else {
-			notification.defaults = Notification.DEFAULT_ALL;
 		}
-		AdhanAlarmWakeLock.acquireFinite(this, stayAwakeFor);
-		stopAlert();
 		notification.setLatestEventInfo(this, getString(R.string.app_name), notificationTitle, PendingIntent.getActivity(this, 0, new Intent(this, AdhanAlarm.class), 0));
 		
 		((NotificationManager)getSystemService(NOTIFICATION_SERVICE)).notify(1, notification);
