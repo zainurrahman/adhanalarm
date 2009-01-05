@@ -5,8 +5,8 @@ import android.os.PowerManager;
 
 public class AdhanAlarmWakeLock {
 
-	private static PowerManager.WakeLock wakeLockIndefinite;
-	private static PowerManager.WakeLock wakeLockFinite;
+	private static PowerManager.WakeLock wakeLockIndefinite; // Must be released manually
+	private static PowerManager.WakeLock wakeLockFinite; // Is acquired only for a finite amount of time, cannot be released manually
 	
 	static void acquire(Context context) {
 		release();
