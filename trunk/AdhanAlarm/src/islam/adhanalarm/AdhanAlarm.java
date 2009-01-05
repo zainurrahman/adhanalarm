@@ -136,10 +136,7 @@ public class AdhanAlarm extends Activity {
 		ImageButton clearButton = (ImageButton)findViewById(R.id.clear);
 		clearButton.setOnClickListener(new ImageButton.OnClickListener() {
 			public void onClick(View v) {
-				if(mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
-				NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-				nm.cancelAll();
-				AdhanAlarmWakeLock.release();
+				stopAlert();
 			}
 		});
 
@@ -229,10 +226,7 @@ public class AdhanAlarm extends Activity {
 	}
 
 	public void onStop() {
-		if(mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
-		NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-		nm.cancelAll();
-		AdhanAlarmWakeLock.release();
+		stopAlert();
 		super.onStop();
 	}
 
@@ -263,44 +257,45 @@ public class AdhanAlarm extends Activity {
 	private float getDSTSavings() {
 		return isDaylightSavings() ? new GregorianCalendar().getTimeZone().getDSTSavings() / 3600000 : 0;
 	}
+	
+	private void stopAlert() {
+		if(mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
+		((NotificationManager)getSystemService(NOTIFICATION_SERVICE)).cancelAll();
+		AdhanAlarmWakeLock.release(); // Releases indefinite lock if it was acquired by WakeUpAndDoSomething
+	}
 
 	private void playAlertIfAppropriate(short time) {
-		if(mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
-		NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-		nm.cancelAll();
-
 		long timestamp = notificationTimes[time] != null ? notificationTimes[time].getTimeInMillis() : System.currentTimeMillis();
 		String notificationTitle = (time != SUNRISE ? getString(R.string.allahu_akbar) + ": " : "") + getString(R.string.time_for) + " " + (time == NEXT_FAJR ? TIME_NAMES[FAJR] : TIME_NAMES[time]).toLowerCase();
 		Notification notification = new Notification(R.drawable.icon, notificationTitle, timestamp);
 
 		int notificationMethod = settings.getInt("notificationMethodIndex", DEFAULT_NOTIFICATION);
-
+		long stayAwakeFor = 30000; // 30 seconds minimum
 		if(notificationMethod == RECITE_ADHAN) {
 			int alarm = R.raw.beep;
 			int extraAlerts = settings.getInt("extraAlertsIndex", NO_EXTRA_ALERTS);
 			if(time == DHUHR || time == ASR || time == MAGHRIB || time == ISHAA || (extraAlerts != ALERT_SUNRISE && time == SUNRISE)) {
 				alarm = R.raw.adhan;
+				stayAwakeFor = 80000; // 1 min 20 seconds
 			} else if(time == FAJR || time == NEXT_FAJR) {
 				alarm = R.raw.adhan_fajr;
+				stayAwakeFor = 151000; // 2 mins 31 seconds
 			}
 			notification.defaults = Notification.DEFAULT_VIBRATE | Notification.DEFAULT_LIGHTS;
 			mediaPlayer = MediaPlayer.create(AdhanAlarm.this, alarm);
 			try {
 				mediaPlayer.start();
-				mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-					public void onCompletion(MediaPlayer mp) {
-						AdhanAlarmWakeLock.release();
-					}
-				});
 			} catch(Exception ex) {
 				((TextView)findViewById(R.id.notes)).setText(getString(R.string.error_playing_alert));
 			}
 		} else {
 			notification.defaults = Notification.DEFAULT_ALL;
-			AdhanAlarmWakeLock.acquireShort(this); // Stay awake long enough to complete notification
 		}
+		AdhanAlarmWakeLock.acquireFinite(this, stayAwakeFor);
+		stopAlert();
 		notification.setLatestEventInfo(this, getString(R.string.app_name), notificationTitle, PendingIntent.getActivity(this, 0, new Intent(this, AdhanAlarm.class), 0));
-		nm.notify(1, notification);
+		
+		((NotificationManager)getSystemService(NOTIFICATION_SERVICE)).notify(1, notification);
 	}
 
 	private short getNextNotificationTime() {
