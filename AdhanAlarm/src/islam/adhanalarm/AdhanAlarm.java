@@ -60,8 +60,8 @@ public class AdhanAlarm extends Activity {
 
 		settings = getSharedPreferences("settingsFile", MODE_PRIVATE);
 
-		((EditText)findViewById(R.id.latitude)).setText(Float.toString(settings.getFloat("latitude", (float)43.67)));
-		((EditText)findViewById(R.id.longitude)).setText(Float.toString(settings.getFloat("longitude", (float)-79.417)));
+		((EditText)findViewById(R.id.latitude)).setText(Float.toString(settings.getFloat("latitude", 43.67f)));
+		((EditText)findViewById(R.id.longitude)).setText(Float.toString(settings.getFloat("longitude", -79.417f)));
 
 		Spinner notification_methods = (Spinner)findViewById(R.id.notification_methods);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.notification_methods, android.R.layout.simple_spinner_item);
@@ -167,13 +167,13 @@ public class AdhanAlarm extends Activity {
 				try {
 					editor.putFloat("latitude", Float.parseFloat(((EditText)findViewById(R.id.latitude)).getText().toString()));
 				} catch(Exception ex) {
-					editor.putFloat("latitude", (float)43.67);
+					editor.putFloat("latitude", 43.67f);
 					((EditText)findViewById(R.id.latitude)).setText("43.67");
 				}
 				try {
 					editor.putFloat("longitude", Float.parseFloat(((EditText)findViewById(R.id.longitude)).getText().toString()));
 				} catch(Exception ex) {
-					editor.putFloat("longitude", (float)-79.417);
+					editor.putFloat("longitude", -79.417f);
 					((EditText)findViewById(R.id.longitude)).setText("-79.417");
 				}
 				editor.putInt("notificationMethodIndex", ((Spinner)findViewById(R.id.notification_methods)).getSelectedItemPosition());
@@ -321,7 +321,7 @@ public class AdhanAlarm extends Activity {
 		Method method = CALCULATION_METHODS[settings.getInt("calculationMethodsIndex", 4)].copy();
 		method.setRound(ROUNDING_TYPES[settings.getInt("roundingTypesIndex", 2)]);
 
-		net.sourceforge.jitl.astro.Location location = new net.sourceforge.jitl.astro.Location(settings.getFloat("latitude", (float)43.67), settings.getFloat("longitude", (float)-79.417), getGMTOffset(), (int)getDSTSavings());
+		net.sourceforge.jitl.astro.Location location = new net.sourceforge.jitl.astro.Location(settings.getFloat("latitude", 43.67f), settings.getFloat("longitude", -79.417f), getGMTOffset(), (int)getDSTSavings());
 		location.setSeaLevel(settings.getFloat("altitude", 0));
 		location.setPressure(settings.getFloat("pressure", 1010));
 		location.setTemperature(settings.getFloat("temperature", 10));
