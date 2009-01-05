@@ -61,7 +61,7 @@ public class AdhanAlarm extends Activity {
 		settings = getSharedPreferences("settingsFile", MODE_PRIVATE);
 
 		((EditText)findViewById(R.id.latitude)).setText(Float.toString(settings.getFloat("latitude", (float)43.67)));
-		((EditText)findViewById(R.id.longitude)).setText(Float.toString(settings.getFloat("longitude", (float)-79.4167)));
+		((EditText)findViewById(R.id.longitude)).setText(Float.toString(settings.getFloat("longitude", (float)-79.417)));
 
 		Spinner notification_methods = (Spinner)findViewById(R.id.notification_methods);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.notification_methods, android.R.layout.simple_spinner_item);
@@ -137,6 +137,7 @@ public class AdhanAlarm extends Activity {
 		clearButton.setOnClickListener(new ImageButton.OnClickListener() {
 			public void onClick(View v) {
 				stopAlert();
+				AdhanAlarmWakeLock.release();
 			}
 		});
 
@@ -172,8 +173,8 @@ public class AdhanAlarm extends Activity {
 				try {
 					editor.putFloat("longitude", Float.parseFloat(((EditText)findViewById(R.id.longitude)).getText().toString()));
 				} catch(Exception ex) {
-					editor.putFloat("longitude", (float)-79.4167);
-					((EditText)findViewById(R.id.longitude)).setText("-79.4167");
+					editor.putFloat("longitude", (float)-79.417);
+					((EditText)findViewById(R.id.longitude)).setText("-79.417");
 				}
 				editor.putInt("notificationMethodIndex", ((Spinner)findViewById(R.id.notification_methods)).getSelectedItemPosition());
 				editor.putInt("extraAlertsIndex", ((Spinner)findViewById(R.id.extra_alerts)).getSelectedItemPosition());
@@ -227,6 +228,7 @@ public class AdhanAlarm extends Activity {
 
 	public void onStop() {
 		stopAlert();
+		AdhanAlarmWakeLock.release();
 		super.onStop();
 	}
 
@@ -236,6 +238,7 @@ public class AdhanAlarm extends Activity {
 		updateScheduleAndNotification();
 		((TabHost)findViewById(R.id.tabs)).setCurrentTab(0);
 		super.onResume();
+		AdhanAlarmWakeLock.release();
 	}
 
 	public void onNewIntent(Intent intent) {
@@ -261,42 +264,35 @@ public class AdhanAlarm extends Activity {
 	private void stopAlert() {
 		if(mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
 		((NotificationManager)getSystemService(NOTIFICATION_SERVICE)).cancelAll();
-		AdhanAlarmWakeLock.release(); // Releases indefinite lock if it was acquired by WakeUpAndDoSomething
 	}
 
 	private void playAlertIfAppropriate(short time) {
+		stopAlert();
 		long timestamp = notificationTimes[time] != null ? notificationTimes[time].getTimeInMillis() : System.currentTimeMillis();
 		String notificationTitle = (time != SUNRISE ? getString(R.string.allahu_akbar) + ": " : "") + getString(R.string.time_for) + " " + (time == NEXT_FAJR ? TIME_NAMES[FAJR] : TIME_NAMES[time]).toLowerCase();
 		Notification notification = new Notification(R.drawable.icon, notificationTitle, timestamp);
 
 		int notificationMethod = settings.getInt("notificationMethodIndex", DEFAULT_NOTIFICATION);
-		long stayAwakeFor = 30000; // 30 seconds minimum
-		int alarm = R.raw.beep;
 		if(notificationMethod == RECITE_ADHAN) {
+			int alarm = R.raw.beep;
 			int extraAlerts = settings.getInt("extraAlertsIndex", NO_EXTRA_ALERTS);
 			if(time == DHUHR || time == ASR || time == MAGHRIB || time == ISHAA || (extraAlerts != ALERT_SUNRISE && time == SUNRISE)) {
 				alarm = R.raw.adhan;
-				stayAwakeFor = 80000; // 1 min 20 seconds
 			} else if(time == FAJR || time == NEXT_FAJR) {
 				alarm = R.raw.adhan_fajr;
-				stayAwakeFor = 151000; // 2 mins 31 seconds
 			}
-			notification.defaults = Notification.DEFAULT_VIBRATE | Notification.DEFAULT_LIGHTS;
-		} else {
-			notification.defaults = Notification.DEFAULT_ALL;
-		}
-		AdhanAlarmWakeLock.acquireFinite(this, stayAwakeFor);
-		stopAlert();
-		if(notificationMethod == RECITE_ADHAN) {
 			mediaPlayer = MediaPlayer.create(AdhanAlarm.this, alarm);
+			mediaPlayer.setScreenOnWhilePlaying(true);
 			try {
 				mediaPlayer.start();
 			} catch(Exception ex) {
 				((TextView)findViewById(R.id.notes)).setText(getString(R.string.error_playing_alert));
 			}
+			notification.defaults = Notification.DEFAULT_VIBRATE | Notification.DEFAULT_LIGHTS;
+		} else {
+			notification.defaults = Notification.DEFAULT_ALL;
 		}
 		notification.setLatestEventInfo(this, getString(R.string.app_name), notificationTitle, PendingIntent.getActivity(this, 0, new Intent(this, AdhanAlarm.class), 0));
-		
 		((NotificationManager)getSystemService(NOTIFICATION_SERVICE)).notify(1, notification);
 	}
 
@@ -325,7 +321,7 @@ public class AdhanAlarm extends Activity {
 		Method method = CALCULATION_METHODS[settings.getInt("calculationMethodsIndex", 4)].copy();
 		method.setRound(ROUNDING_TYPES[settings.getInt("roundingTypesIndex", 2)]);
 
-		net.sourceforge.jitl.astro.Location location = new net.sourceforge.jitl.astro.Location(settings.getFloat("latitude", (float)43.67), settings.getFloat("longitude", (float)-79.4167), getGMTOffset(), (int)getDSTSavings());
+		net.sourceforge.jitl.astro.Location location = new net.sourceforge.jitl.astro.Location(settings.getFloat("latitude", (float)43.67), settings.getFloat("longitude", (float)-79.417), getGMTOffset(), (int)getDSTSavings());
 		location.setSeaLevel(settings.getFloat("altitude", 0));
 		location.setPressure(settings.getFloat("pressure", 1010));
 		location.setTemperature(settings.getFloat("temperature", 10));
