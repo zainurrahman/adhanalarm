@@ -7,6 +7,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.hardware.SensorListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.media.AudioManager;
@@ -41,14 +43,16 @@ public class AdhanAlarm extends Activity {
 	private static final Method[] CALCULATION_METHODS = new Method[]{Method.EGYPT_SURVEY, Method.KARACHI_SHAF, Method.KARACHI_HANAF, Method.NORTH_AMERICA, Method.MUSLIM_LEAGUE, Method.UMM_ALQURRA, Method.FIXED_ISHAA};
 	private static final Rounding[] ROUNDING_TYPES = new Rounding[]{Rounding.NONE, Rounding.NORMAL, Rounding.SPECIAL, Rounding.AGRESSIVE};
 
-	private static TextView[] NOTIFICATION_MARKERS = null;
-	private static TextView[] ALARM_TIMES = null;
-	private static TextView[] ALARM_TIMES_AM_PM = null;
-	private static String[] TIME_NAMES = null;
+	private static TextView[] NOTIFICATION_MARKERS;
+	private static TextView[] ALARM_TIMES;
+	private static TextView[] ALARM_TIMES_AM_PM;
+	private static String[] TIME_NAMES;
 
-	private static SharedPreferences settings = null;
-	private static MediaPlayer mediaPlayer = null;
+	private static SharedPreferences settings;
+	private static MediaPlayer mediaPlayer;
+    private SensorListener OrientationListener;
 	private static GregorianCalendar[] notificationTimes = new GregorianCalendar[7];
+	private static float qiblaDirection;
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
@@ -105,23 +109,7 @@ public class AdhanAlarm extends Activity {
 		one.setIndicator(getString(R.string.today), getResources().getDrawable(R.drawable.calendar));
 		tabs.addTab(one);
 
-		TabHost.TabSpec two = tabs.newTabSpec("two");
-		two.setContent(R.id.content2);
-		two.setIndicator(getString(R.string.qibla), getResources().getDrawable(R.drawable.globe));
-		tabs.addTab(two);
-
-		TabHost.TabSpec three = tabs.newTabSpec("three");
-		three.setContent(R.id.content3);
-		three.setIndicator(getString(R.string.place), getResources().getDrawable(R.drawable.volume));
-		tabs.addTab(three);
-
-		TabHost.TabSpec four = tabs.newTabSpec("four");
-		four.setContent(R.id.content4);
-		four.setIndicator(getString(R.string.extra), getResources().getDrawable(R.drawable.calculator));
-		tabs.addTab(four);
-
-		ImageButton previousButton = (ImageButton)findViewById(R.id.previous);
-		previousButton.setOnClickListener(new ImageButton.OnClickListener() {
+		((ImageButton)findViewById(R.id.previous)).setOnClickListener(new ImageButton.OnClickListener() {
 			public void onClick(View v) {
 				int time = getNextNotificationTime() - 1;
 				if(time < FAJR) time = ISHAA;
@@ -129,22 +117,39 @@ public class AdhanAlarm extends Activity {
 				playAlertIfAppropriate((short)time);
 			}
 		});
-		ImageButton nextButton = (ImageButton)findViewById(R.id.next);
-		nextButton.setOnClickListener(new ImageButton.OnClickListener() {
+		((ImageButton)findViewById(R.id.next)).setOnClickListener(new ImageButton.OnClickListener() {
 			public void onClick(View v) {
 				playAlertIfAppropriate(getNextNotificationTime());
 			}
 		});
-		ImageButton clearButton = (ImageButton)findViewById(R.id.clear);
-		clearButton.setOnClickListener(new ImageButton.OnClickListener() {
+		((ImageButton)findViewById(R.id.clear)).setOnClickListener(new ImageButton.OnClickListener() {
 			public void onClick(View v) {
 				stopAlert();
 				AdhanAlarmWakeLock.release();
 			}
-		});
+		}); /* End of Tab 1 Items */
 
-		Button lookupGPS = (Button)findViewById(R.id.lookup_gps);
-		lookupGPS.setOnClickListener(new Button.OnClickListener() {  
+		TabHost.TabSpec two = tabs.newTabSpec("two");
+		two.setContent(R.id.content2);
+		two.setIndicator(getString(R.string.qibla), getResources().getDrawable(R.drawable.globe));
+		tabs.addTab(two);
+		
+		OrientationListener = new SensorListener() {
+        	public void onSensorChanged(int s, float v[]) {
+        		float northDirection = v[android.hardware.SensorManager.DATA_X];
+        		((QiblaCompassView)findViewById(R.id.qibla_compass)).setDirections(northDirection, qiblaDirection, ((TextView)findViewById(R.id.bearing_north)), ((TextView)findViewById(R.id.bearing_qibla)));
+        	}
+        	public void onAccuracyChanged(int s, int a) {
+        	}
+		};
+        startTrackingOrientation(); /* End of Tab 2 Items */
+
+		TabHost.TabSpec three = tabs.newTabSpec("three");
+		three.setContent(R.id.content3);
+		three.setIndicator(getString(R.string.place), getResources().getDrawable(R.drawable.volume));
+		tabs.addTab(three);
+
+		((Button)findViewById(R.id.lookup_gps)).setOnClickListener(new Button.OnClickListener() {  
 			public void onClick(View v) {
 				EditText latitude = (EditText)findViewById(R.id.latitude);
 				EditText longitude = (EditText)findViewById(R.id.longitude);
@@ -161,9 +166,7 @@ public class AdhanAlarm extends Activity {
 				}
 			}
 		});
-
-		Button saveAndApplySettings = (Button)findViewById(R.id.save_and_apply_settings);
-		saveAndApplySettings.setOnClickListener(new Button.OnClickListener() {
+		((Button)findViewById(R.id.save_and_apply_settings)).setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
 				SharedPreferences.Editor editor = settings.edit();
 				try {
@@ -184,10 +187,14 @@ public class AdhanAlarm extends Activity {
 				updateScheduleAndNotification();
 				((TabHost)findViewById(R.id.tabs)).setCurrentTab(0);
 			}
-		});
+		}); /* End of Tab 3 Items */
 
-		Button saveAndApplyExtra = (Button)findViewById(R.id.save_and_apply_extra);
-		saveAndApplyExtra.setOnClickListener(new Button.OnClickListener() {
+		TabHost.TabSpec four = tabs.newTabSpec("four");
+		four.setContent(R.id.content4);
+		four.setIndicator(getString(R.string.extra), getResources().getDrawable(R.drawable.calculator));
+		tabs.addTab(four);
+
+		((Button)findViewById(R.id.save_and_apply_extra)).setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
 				SharedPreferences.Editor editor = settings.edit();
 				try {
@@ -215,9 +222,7 @@ public class AdhanAlarm extends Activity {
 				((TabHost)findViewById(R.id.tabs)).setCurrentTab(0);
 			}
 		});
-
-		Button resetExtra = (Button)findViewById(R.id.reset_extra);
-		resetExtra.setOnClickListener(new Button.OnClickListener() {  
+		((Button)findViewById(R.id.reset_extra)).setOnClickListener(new Button.OnClickListener() {  
 			public void onClick(View v) {
 				((Spinner)findViewById(R.id.calculation_methods)).setSelection(4);
 				((Spinner)findViewById(R.id.rounding_types)).setSelection(2);
@@ -225,11 +230,24 @@ public class AdhanAlarm extends Activity {
 				((EditText)findViewById(R.id.temperature)).setText("10.0");
 				((EditText)findViewById(R.id.altitude)).setText("0.0");
 			}
-		});
+		}); /* End of Tab 4 Items */
+	}
+	
+	private void startTrackingOrientation() {
+        ((SensorManager)getSystemService(SENSOR_SERVICE)).registerListener(OrientationListener, android.hardware.SensorManager.SENSOR_ORIENTATION);
+	}
+	private void stopTrackingOrientation() {
+		((SensorManager)getSystemService(SENSOR_SERVICE)).unregisterListener(OrientationListener);
+	}
+	
+	public void onStart() {
+		startTrackingOrientation();
+		super.onStart();
 	}
 
 	public void onStop() {
 		if(mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
+		stopTrackingOrientation();
 		AdhanAlarmWakeLock.release();
 		super.onStop();
 	}
@@ -361,6 +379,7 @@ public class AdhanAlarm extends Activity {
 		Dms latitude = new Dms(location.getDegreeLat());
 		Dms longitude = new Dms(location.getDegreeLong());
 		Dms qibla = itl.getNorthQibla();
+		qiblaDirection = (float)qibla.getDecimalValue(net.sourceforge.jitl.astro.Direction.NORTH);
 		((TextView)findViewById(R.id.current_latitude_deg)).setText(String.valueOf(latitude.getDegree()));
 		((TextView)findViewById(R.id.current_latitude_min)).setText(String.valueOf(latitude.getMinute()));
 		((TextView)findViewById(R.id.current_latitude_sec)).setText(df.format(latitude.getSecond()));

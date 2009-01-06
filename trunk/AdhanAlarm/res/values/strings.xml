@@ -21,6 +21,9 @@
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
     <string name="qibla">Qibla</string>
+    <string name="compass_disclaimer">This compass is under construction and should not be trusted.  Use in portrait mode only.</string>
+    <string name="bearing_north">1) Bearing North =</string>
+    <string name="bearing_qibla">2) Bearing Qibla = (1)</string>
     <string name="place">Set</string>
     <string name="notification">Notification</string>
     <string name="extra_alerts">Extra Alerts</string>
