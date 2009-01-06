@@ -227,7 +227,7 @@ public class AdhanAlarm extends Activity {
 	}
 
 	public void onStop() {
-		stopAlert();
+		if(mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
 		AdhanAlarmWakeLock.release();
 		super.onStop();
 	}
