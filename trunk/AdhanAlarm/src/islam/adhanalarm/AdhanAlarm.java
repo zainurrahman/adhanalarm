@@ -125,6 +125,7 @@ public class AdhanAlarm extends Activity {
 			public void onClick(View v) {
 				int time = getNextNotificationTime() - 1;
 				if(time < FAJR) time = ISHAA;
+				if(time == SUNRISE && !alertSunrise()) time = FAJR;
 				playAlertIfAppropriate((short)time);
 			}
 		});
@@ -235,11 +236,11 @@ public class AdhanAlarm extends Activity {
 
 	public void onResume() {
 		short notificationTime = getIntent().getShortExtra("nextNotificationTime", (short)-1);
-		if(notificationTime > 0) playAlertIfAppropriate(notificationTime);
+		if(notificationTime >= FAJR && notificationTime <= NEXT_FAJR) playAlertIfAppropriate(notificationTime);
 		updateScheduleAndNotification();
 		((TabHost)findViewById(R.id.tabs)).setCurrentTab(0);
-		super.onResume();
 		AdhanAlarmWakeLock.release();
+		super.onResume();
 	}
 
 	public void onNewIntent(Intent intent) {
@@ -266,6 +267,10 @@ public class AdhanAlarm extends Activity {
 		if(mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
 		((NotificationManager)getSystemService(NOTIFICATION_SERVICE)).cancelAll();
 	}
+	
+	private boolean alertSunrise() {
+		return settings.getInt("extraAlertsIndex", NO_EXTRA_ALERTS) == ALERT_SUNRISE;
+	}
 
 	private void playAlertIfAppropriate(short time) {
 		stopAlert();
@@ -275,10 +280,9 @@ public class AdhanAlarm extends Activity {
 
 		int notificationMethod = settings.getInt("notificationMethodIndex", DEFAULT_NOTIFICATION);
 		int ringerMode = ((AudioManager)getSystemService(AUDIO_SERVICE)).getRingerMode();
-		if(notificationMethod == RECITE_ADHAN && ringerMode == AudioManager.RINGER_MODE_NORMAL) {
+		if(notificationMethod == RECITE_ADHAN && ringerMode != AudioManager.RINGER_MODE_SILENT && ringerMode != AudioManager.RINGER_MODE_VIBRATE) {
 			int alarm = R.raw.beep;
-			int extraAlerts = settings.getInt("extraAlertsIndex", NO_EXTRA_ALERTS);
-			if(time == DHUHR || time == ASR || time == MAGHRIB || time == ISHAA || (extraAlerts != ALERT_SUNRISE && time == SUNRISE)) {
+			if(time == DHUHR || time == ASR || time == MAGHRIB || time == ISHAA || (time == SUNRISE && !alertSunrise())) {
 				alarm = R.raw.adhan;
 			} else if(time == FAJR || time == NEXT_FAJR) {
 				alarm = R.raw.adhan_fajr;
@@ -310,9 +314,8 @@ public class AdhanAlarm extends Activity {
 
 		int previousNotificationTime = nextNotificationTime - 1 < FAJR ? ISHAA : nextNotificationTime - 1;
 		
-		int extraAlerts = settings.getInt("extraAlertsIndex", NO_EXTRA_ALERTS);
-		if(extraAlerts != ALERT_SUNRISE && nextNotificationTime == SUNRISE) nextNotificationTime = DHUHR;
-		if(extraAlerts != ALERT_SUNRISE && previousNotificationTime == SUNRISE) previousNotificationTime = FAJR;
+		if(!alertSunrise() && nextNotificationTime == SUNRISE) nextNotificationTime = DHUHR;
+		if(!alertSunrise() && previousNotificationTime == SUNRISE) previousNotificationTime = FAJR;
 
 		NOTIFICATION_MARKERS[nextNotificationTime].setText(getString(R.string.next_time_marker));
 		
@@ -379,9 +382,8 @@ public class AdhanAlarm extends Activity {
 
 		int notificationMethod = settings.getInt("notificationMethodIndex", DEFAULT_NOTIFICATION);
 		if(notificationMethod == NO_NOTIFICATIONS) return;
-
-		int extraAlerts = settings.getInt("extraAlertsIndex", NO_EXTRA_ALERTS);
-		if(extraAlerts != ALERT_SUNRISE && nextNotificationTime == SUNRISE) nextNotificationTime = DHUHR;
+		
+		if(!alertSunrise() && nextNotificationTime == SUNRISE) nextNotificationTime = DHUHR;
 
 		Intent intent = new Intent(this, WakeUpAndDoSomething.class);
 		intent.putExtra("nextNotificationTime", nextNotificationTime);
