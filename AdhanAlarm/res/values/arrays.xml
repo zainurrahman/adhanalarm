@@ -2,7 +2,7 @@
 <resources>
     <array name="notification_methods">
         <item>Default Notification</item>
-        <item>Recite Adh&#257;n</item>
+        <item>Recite Adh&#257;n (except when silent)</item>
         <item>No Notifications</item>
     </array>
     <array name="extra_alerts">
