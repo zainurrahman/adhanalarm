@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -273,7 +274,8 @@ public class AdhanAlarm extends Activity {
 		Notification notification = new Notification(R.drawable.icon, notificationTitle, timestamp);
 
 		int notificationMethod = settings.getInt("notificationMethodIndex", DEFAULT_NOTIFICATION);
-		if(notificationMethod == RECITE_ADHAN) {
+		int ringerMode = ((AudioManager)getSystemService(AUDIO_SERVICE)).getRingerMode();
+		if(notificationMethod == RECITE_ADHAN && ringerMode == AudioManager.RINGER_MODE_NORMAL) {
 			int alarm = R.raw.beep;
 			int extraAlerts = settings.getInt("extraAlertsIndex", NO_EXTRA_ALERTS);
 			if(time == DHUHR || time == ASR || time == MAGHRIB || time == ISHAA || (extraAlerts != ALERT_SUNRISE && time == SUNRISE)) {
