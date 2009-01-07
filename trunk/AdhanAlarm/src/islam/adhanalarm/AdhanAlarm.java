@@ -2,6 +2,7 @@ package islam.adhanalarm;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -21,6 +22,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import java.text.DecimalFormat;
 import java.text.DateFormat;
@@ -231,6 +235,30 @@ public class AdhanAlarm extends Activity {
 				((EditText)findViewById(R.id.altitude)).setText("0.0");
 			}
 		}); /* End of Tab 4 Items */
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		MenuInflater inflater = new MenuInflater(this);
+		inflater.inflate(R.layout.menu, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+		switch(item.getItemId()) {
+		case R.id.menu_help:
+			dialogBuilder.setMessage(R.string.help_text);
+			break;
+		case R.id.menu_information:
+			dialogBuilder.setMessage(R.string.information_text);
+			break;
+		}
+		dialogBuilder.setCancelable(true);
+		dialogBuilder.create().show();
+		return true;
 	}
 	
 	private void startTrackingOrientation() {
