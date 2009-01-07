@@ -1,5 +1,7 @@
 package islam.adhanalarm;
 
+import java.text.DecimalFormat;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -12,6 +14,7 @@ public class QiblaCompassView extends View {
 	private float directionQibla;
 	private TextView bearingNorth;
 	private TextView bearingQibla;
+	private DecimalFormat df = new DecimalFormat("#.###");
 	
 	public QiblaCompassView(Context context) {
 		super(context);
@@ -41,8 +44,8 @@ public class QiblaCompassView extends View {
 	@Override
 	protected void onDraw(Canvas canvas) {
 		Paint p = new Paint();
-		bearingNorth.setText(" " + directionNorth + "\u00b0");
-		bearingQibla.setText((directionQibla >= 0 ? " +" : " -") + " " + Math.abs(directionQibla) + " = " + (directionNorth + directionQibla) + "\u00b0");
+		bearingNorth.setText(" " + df.format(directionNorth) + "\u00b0");
+		bearingQibla.setText((directionQibla >= 0 ? " +" : " -") + " " + df.format(Math.abs(directionQibla)) + " = " + df.format(directionNorth + directionQibla) + "\u00b0");
 		p.setColor(android.graphics.Color.WHITE);
 		drawCompass(canvas, p);
 	}
@@ -53,13 +56,14 @@ public class QiblaCompassView extends View {
 		int height = getHeight();
 		final float centre_x =  width * 0.5f;
 		final float centre_y = height * 0.5f;
+		canvas.drawLine(centre_x, 10, centre_x, 0, p); // Compass Notch
 		canvas.rotate(-directionNorth, centre_x, centre_y);
 		canvas.drawCircle(centre_x, centre_y, 10, p); // Center circle
 		p.setColor(android.graphics.Color.argb(255, 57, 97, 11));
-		canvas.drawCircle(centre_x, centre_y, centre_x, p); // Filled outer circle
+		canvas.drawCircle(centre_x, centre_y, centre_x - 10, p); // Filled outer circle
 		p.setColor(android.graphics.Color.WHITE);
 		p.setStyle(android.graphics.Paint.Style.STROKE);
-		canvas.drawCircle(centre_x, centre_y, centre_x, p); // Outer circle outline
+		canvas.drawCircle(centre_x, centre_y, centre_x - 10, p); // Outer circle outline
 		drawArrow(canvas, p,width, height);
 	}
 	private void drawArrow(Canvas canvas, Paint p, int width, int height) {
@@ -81,8 +85,5 @@ public class QiblaCompassView extends View {
 		canvas.drawLine(centre_x - width * arrow_width,                             centre_y - (height * 0.25f) + arrow_distance, centre_x + width * arrow_width,       centre_y - (height * 0.25f) + arrow_distance, p);
 		canvas.drawLine(centre_x - width * arrow_width + arrow_sides + arrow_sharp, centre_y - (height * 0.25f) - arrow_sides,    centre_x + arrow_sides + arrow_sharp, centre_y - (height * 0.3f) - arrow_sides,     p);
 		canvas.drawLine(centre_x + width * arrow_width - arrow_sides - arrow_sharp, centre_y - (height * 0.25f) - arrow_sides,    centre_x - arrow_sides - arrow_sharp, centre_y - (height * 0.3f) - arrow_sides,     p);
-		// cheap way to fill the arrow head i.e. draw two more lines right next to the sides of the arrow head
-		canvas.drawLine(centre_x - width * arrow_width + arrow_sides - arrow_sharp, centre_y - (height * 0.25f) - arrow_sides,    centre_x + arrow_sides + arrow_sharp, centre_y - (height * 0.3f) - arrow_sides,     p);
-		canvas.drawLine(centre_x + width * arrow_width - arrow_sides + arrow_sharp, centre_y - (height * 0.25f) - arrow_sides,    centre_x - arrow_sides - arrow_sharp, centre_y - (height * 0.3f) - arrow_sides,     p);
 	}
 }

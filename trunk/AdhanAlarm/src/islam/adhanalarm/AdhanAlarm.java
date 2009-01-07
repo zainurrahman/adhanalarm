@@ -135,7 +135,7 @@ public class AdhanAlarm extends Activity {
 
 		TabHost.TabSpec two = tabs.newTabSpec("two");
 		two.setContent(R.id.content2);
-		two.setIndicator(getString(R.string.qibla), getResources().getDrawable(R.drawable.globe));
+		two.setIndicator(getString(R.string.qibla), getResources().getDrawable(R.drawable.compass));
 		tabs.addTab(two);
 		
 		OrientationListener = new SensorListener() {
@@ -150,7 +150,7 @@ public class AdhanAlarm extends Activity {
 
 		TabHost.TabSpec three = tabs.newTabSpec("three");
 		three.setContent(R.id.content3);
-		three.setIndicator(getString(R.string.place), getResources().getDrawable(R.drawable.volume));
+		three.setIndicator(getString(R.string.place), getResources().getDrawable(R.drawable.settings));
 		tabs.addTab(three);
 
 		((Button)findViewById(R.id.lookup_gps)).setOnClickListener(new Button.OnClickListener() {  
