@@ -267,20 +267,20 @@
 				</LinearLayout>
 				<TextView android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:text="@string/compass_disclaimer"
-					android:paddingTop="20px" />
+					android:text="@string/compass_disclaimer" android:paddingTop="10px"
+					android:paddingBottom="10px" />
 				<LinearLayout android:orientation="horizontal"
 					android:layout_height="wrap_content"
-					android:layout_width="wrap_content">
+					android:layout_width="fill_parent" android:background="#FFFFFF">
 					<TextView android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
+						android:layout_height="wrap_content" android:textColor="#000000"
 						android:text="@string/bearing_north" />
 					<TextView android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
+						android:layout_height="wrap_content" android:textColor="#000000"
 						android:id="@+id/bearing_north" />
 				</LinearLayout>
 				<LinearLayout android:orientation="horizontal"
-					android:layout_height="fill_parent"
+					android:layout_height="wrap_content"
 					android:layout_width="fill_parent" android:background="#FFFF00">
 					<TextView android:layout_width="wrap_content"
 						android:layout_height="wrap_content" android:textColor="#000000"
@@ -294,7 +294,7 @@
 					android:layout_width="wrap_content" android:paddingTop="10px"
 					android:layout_gravity="center_horizontal|center_vertical">
 					<islam.adhanalarm.QiblaCompassView
-						android:layout_width="180px" android:layout_height="180px"
+						android:layout_width="200px" android:layout_height="200px"
 						android:id="@+id/qibla_compass" />
 				</LinearLayout>
 			</LinearLayout>
