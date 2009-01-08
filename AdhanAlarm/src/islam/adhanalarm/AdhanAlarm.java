@@ -9,7 +9,6 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.SensorListener;
-import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.media.AudioManager;
@@ -54,7 +53,7 @@ public class AdhanAlarm extends Activity {
 
 	private static SharedPreferences settings;
 	private static MediaPlayer mediaPlayer;
-    private SensorListener OrientationListener;
+    private static SensorListener OrientationListener;
 	private static GregorianCalendar[] notificationTimes = new GregorianCalendar[7];
 	private static float qiblaDirection;
 	@Override
@@ -146,7 +145,15 @@ public class AdhanAlarm extends Activity {
         	public void onAccuracyChanged(int s, int a) {
         	}
 		};
-        startTrackingOrientation(); /* End of Tab 2 Items */
+		tabs.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+			public void onTabChanged(String tabId) {
+				if(tabId == "two") {
+			        ((android.hardware.SensorManager)getSystemService(SENSOR_SERVICE)).registerListener(OrientationListener, android.hardware.SensorManager.SENSOR_ORIENTATION);
+				} else {
+					((android.hardware.SensorManager)getSystemService(SENSOR_SERVICE)).unregisterListener(OrientationListener);
+				}
+			}
+		}); /* End of Tab 2 Items */
 
 		TabHost.TabSpec three = tabs.newTabSpec("three");
 		three.setContent(R.id.content3);
@@ -261,21 +268,12 @@ public class AdhanAlarm extends Activity {
 		return true;
 	}
 	
-	private void startTrackingOrientation() {
-        ((SensorManager)getSystemService(SENSOR_SERVICE)).registerListener(OrientationListener, android.hardware.SensorManager.SENSOR_ORIENTATION);
-	}
-	private void stopTrackingOrientation() {
-		((SensorManager)getSystemService(SENSOR_SERVICE)).unregisterListener(OrientationListener);
-	}
-	
 	public void onStart() {
-		startTrackingOrientation();
 		super.onStart();
 	}
 
 	public void onStop() {
 		if(mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
-		stopTrackingOrientation();
 		AdhanAlarmWakeLock.release();
 		super.onStop();
 	}
@@ -369,56 +367,60 @@ public class AdhanAlarm extends Activity {
 	}
 
 	private void updateScheduleAndNotification() {
-		Method method = CALCULATION_METHODS[settings.getInt("calculationMethodsIndex", 4)].copy();
-		method.setRound(ROUNDING_TYPES[settings.getInt("roundingTypesIndex", 2)]);
+		try {
+			Method method = CALCULATION_METHODS[settings.getInt("calculationMethodsIndex", 4)].copy();
+			method.setRound(ROUNDING_TYPES[settings.getInt("roundingTypesIndex", 2)]);
 
-		net.sourceforge.jitl.astro.Location location = new net.sourceforge.jitl.astro.Location(settings.getFloat("latitude", 43.67f), settings.getFloat("longitude", -79.417f), getGMTOffset(), (int)getDSTSavings());
-		location.setSeaLevel(settings.getFloat("altitude", 0));
-		location.setPressure(settings.getFloat("pressure", 1010));
-		location.setTemperature(settings.getFloat("temperature", 10));
+			net.sourceforge.jitl.astro.Location location = new net.sourceforge.jitl.astro.Location(settings.getFloat("latitude", 43.67f), settings.getFloat("longitude", -79.417f), getGMTOffset(), (int)getDSTSavings());
+			location.setSeaLevel(settings.getFloat("altitude", 0));
+			location.setPressure(settings.getFloat("pressure", 1010));
+			location.setTemperature(settings.getFloat("temperature", 10));
 
-		Jitl itl = DEBUG ? new DummyJitl(location, method) : new Jitl(location, method);
-		Calendar currentTime = Calendar.getInstance();
-		GregorianCalendar today = new GregorianCalendar();
-		GregorianCalendar tomorrow = new GregorianCalendar();
-		tomorrow.add(Calendar.DATE, 1);
-		Prayer[] dayPrayers = itl.getPrayerTimes(today).getPrayers();
-		Prayer[] allTimes = new Prayer[]{dayPrayers[0], dayPrayers[1], dayPrayers[2], dayPrayers[3], dayPrayers[4], dayPrayers[5], itl.getNextDayFajr(today)};
+			Jitl itl = DEBUG ? new DummyJitl(location, method) : new Jitl(location, method);
+			Calendar currentTime = Calendar.getInstance();
+			GregorianCalendar today = new GregorianCalendar();
+			GregorianCalendar tomorrow = new GregorianCalendar();
+			tomorrow.add(Calendar.DATE, 1);
+			Prayer[] dayPrayers = itl.getPrayerTimes(today).getPrayers();
+			Prayer[] allTimes = new Prayer[]{dayPrayers[0], dayPrayers[1], dayPrayers[2], dayPrayers[3], dayPrayers[4], dayPrayers[5], itl.getNextDayFajr(today)};
 
-		DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
-		short nextNotificationTime = -1;
-		for(short i = FAJR; i <= NEXT_FAJR; i++) { // Set the times on the schedule
-			if(i == NEXT_FAJR) {
-				notificationTimes[i] = new GregorianCalendar(tomorrow.get(Calendar.YEAR), tomorrow.get(Calendar.MONTH), tomorrow.get(Calendar.DAY_OF_MONTH), allTimes[i].getHour(), allTimes[i].getMinute(), allTimes[i].getSecond());
-			} else {
-				notificationTimes[i] = new GregorianCalendar(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH), allTimes[i].getHour(), allTimes[i].getMinute(), allTimes[i].getSecond());	
+			DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
+			short nextNotificationTime = -1;
+			for(short i = FAJR; i <= NEXT_FAJR; i++) { // Set the times on the schedule
+				if(i == NEXT_FAJR) {
+					notificationTimes[i] = new GregorianCalendar(tomorrow.get(Calendar.YEAR), tomorrow.get(Calendar.MONTH), tomorrow.get(Calendar.DAY_OF_MONTH), allTimes[i].getHour(), allTimes[i].getMinute(), allTimes[i].getSecond());
+				} else {
+					notificationTimes[i] = new GregorianCalendar(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH), allTimes[i].getHour(), allTimes[i].getMinute(), allTimes[i].getSecond());	
+				}
+				String fullTime = timeFormat.format(notificationTimes[i].getTime());
+				ALARM_TIMES[i].setText(fullTime.substring(0, fullTime.lastIndexOf(" ")));
+				ALARM_TIMES_AM_PM[i].setText(fullTime.substring(fullTime.lastIndexOf(" ") + 1, fullTime.length()) + (allTimes[i].isExtreme() ? "*" : ""));
+				if(nextNotificationTime < 0 && (currentTime.compareTo(notificationTimes[i]) < 0 || i == NEXT_FAJR)) {
+					nextNotificationTime = i;
+				}
 			}
-			String fullTime = timeFormat.format(notificationTimes[i].getTime());
-			ALARM_TIMES[i].setText(fullTime.substring(0, fullTime.lastIndexOf(" ")));
-			ALARM_TIMES_AM_PM[i].setText(fullTime.substring(fullTime.lastIndexOf(" ") + 1, fullTime.length()) + (allTimes[i].isExtreme() ? "*" : ""));
-			if(nextNotificationTime < 0 && (currentTime.compareTo(notificationTimes[i]) < 0 || i == NEXT_FAJR)) {
-				nextNotificationTime = i;
-			}
+			indicateNotificationTimes(nextNotificationTime);
+
+			// Add Latitude, Longitude and Qibla DMS location
+			DecimalFormat df = new DecimalFormat("#.###");
+			Dms latitude = new Dms(location.getDegreeLat());
+			Dms longitude = new Dms(location.getDegreeLong());
+			Dms qibla = itl.getNorthQibla();
+			qiblaDirection = (float)qibla.getDecimalValue(net.sourceforge.jitl.astro.Direction.NORTH);
+			((TextView)findViewById(R.id.current_latitude_deg)).setText(String.valueOf(latitude.getDegree()));
+			((TextView)findViewById(R.id.current_latitude_min)).setText(String.valueOf(latitude.getMinute()));
+			((TextView)findViewById(R.id.current_latitude_sec)).setText(df.format(latitude.getSecond()));
+			((TextView)findViewById(R.id.current_longitude_deg)).setText(String.valueOf(longitude.getDegree()));
+			((TextView)findViewById(R.id.current_longitude_min)).setText(String.valueOf(longitude.getMinute()));
+			((TextView)findViewById(R.id.current_longitude_sec)).setText(df.format(longitude.getSecond()));
+			((TextView)findViewById(R.id.current_qibla_deg)).setText(String.valueOf(qibla.getDegree()));
+			((TextView)findViewById(R.id.current_qibla_min)).setText(String.valueOf(qibla.getMinute()));
+			((TextView)findViewById(R.id.current_qibla_sec)).setText(df.format(qibla.getSecond()));
+
+			setNextNotificationTime(nextNotificationTime);	
+		} catch(Exception ex) {
+			((TextView)findViewById(R.id.notes)).setText(ex.getStackTrace().toString());
 		}
-		indicateNotificationTimes(nextNotificationTime);
-
-		// Add Latitude, Longitude and Qibla DMS location
-		DecimalFormat df = new DecimalFormat("#.###");
-		Dms latitude = new Dms(location.getDegreeLat());
-		Dms longitude = new Dms(location.getDegreeLong());
-		Dms qibla = itl.getNorthQibla();
-		qiblaDirection = (float)qibla.getDecimalValue(net.sourceforge.jitl.astro.Direction.NORTH);
-		((TextView)findViewById(R.id.current_latitude_deg)).setText(String.valueOf(latitude.getDegree()));
-		((TextView)findViewById(R.id.current_latitude_min)).setText(String.valueOf(latitude.getMinute()));
-		((TextView)findViewById(R.id.current_latitude_sec)).setText(df.format(latitude.getSecond()));
-		((TextView)findViewById(R.id.current_longitude_deg)).setText(String.valueOf(longitude.getDegree()));
-		((TextView)findViewById(R.id.current_longitude_min)).setText(String.valueOf(longitude.getMinute()));
-		((TextView)findViewById(R.id.current_longitude_sec)).setText(df.format(longitude.getSecond()));
-		((TextView)findViewById(R.id.current_qibla_deg)).setText(String.valueOf(qibla.getDegree()));
-		((TextView)findViewById(R.id.current_qibla_min)).setText(String.valueOf(qibla.getMinute()));
-		((TextView)findViewById(R.id.current_qibla_sec)).setText(df.format(qibla.getSecond()));
-
-		setNextNotificationTime(nextNotificationTime);
 	}
 
 	private void setNextNotificationTime(short nextNotificationTime) {
