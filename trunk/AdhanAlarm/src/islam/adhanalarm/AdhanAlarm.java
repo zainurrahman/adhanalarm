@@ -6,9 +6,11 @@ import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.res.Configuration;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.SensorListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.media.AudioManager;
@@ -16,8 +18,8 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -55,7 +57,9 @@ public class AdhanAlarm extends Activity {
 	private static MediaPlayer mediaPlayer;
     private static SensorListener OrientationListener;
 	private static GregorianCalendar[] notificationTimes = new GregorianCalendar[7];
-	private static float qiblaDirection;
+	
+	private static float qiblaDirection = 0;
+	private static boolean isTrackingOrientation = false;
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
@@ -137,10 +141,11 @@ public class AdhanAlarm extends Activity {
 		two.setIndicator(getString(R.string.qibla), getResources().getDrawable(R.drawable.compass));
 		tabs.addTab(two);
 		
+		((QiblaCompassView)findViewById(R.id.qibla_compass)).setConstants(((TextView)findViewById(R.id.bearing_north)), getText(R.string.bearing_north), ((TextView)findViewById(R.id.bearing_qibla)), getText(R.string.bearing_qibla));
 		OrientationListener = new SensorListener() {
         	public void onSensorChanged(int s, float v[]) {
         		float northDirection = v[android.hardware.SensorManager.DATA_X];
-        		((QiblaCompassView)findViewById(R.id.qibla_compass)).setDirections(northDirection, qiblaDirection, ((TextView)findViewById(R.id.bearing_north)), ((TextView)findViewById(R.id.bearing_qibla)));
+        		((QiblaCompassView)findViewById(R.id.qibla_compass)).setDirections(northDirection, qiblaDirection);
         	}
         	public void onAccuracyChanged(int s, int a) {
         	}
@@ -148,13 +153,14 @@ public class AdhanAlarm extends Activity {
 		tabs.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
 			public void onTabChanged(String tabId) {
 				if(tabId == "two") {
-			        ((android.hardware.SensorManager)getSystemService(SENSOR_SERVICE)).registerListener(OrientationListener, android.hardware.SensorManager.SENSOR_ORIENTATION);
+					startTrackingOrientation();
 				} else {
-					((android.hardware.SensorManager)getSystemService(SENSOR_SERVICE)).unregisterListener(OrientationListener);
+					stopTrackingOrientation();
 				}
 			}
 		}); /* End of Tab 2 Items */
-
+		startTrackingOrientation(); // Don't know why I need this but I get a null pointer when I switch to tab 2 otherwise
+		
 		TabHost.TabSpec three = tabs.newTabSpec("three");
 		three.setContent(R.id.content3);
 		three.setIndicator(getString(R.string.place), getResources().getDrawable(R.drawable.settings));
@@ -242,6 +248,7 @@ public class AdhanAlarm extends Activity {
 				((EditText)findViewById(R.id.altitude)).setText("0.0");
 			}
 		}); /* End of Tab 4 Items */
+		showHideCompass();
 	}
 	
 	@Override
@@ -268,12 +275,36 @@ public class AdhanAlarm extends Activity {
 		return true;
 	}
 	
-	public void onStart() {
-		super.onStart();
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		showHideCompass();
+	}
+	
+	private void showHideCompass() {
+		Configuration config = getResources().getConfiguration();
+		int visiblity = config.keyboardHidden == Configuration.KEYBOARDHIDDEN_UNDEFINED || config.keyboardHidden == Configuration.KEYBOARDHIDDEN_YES ? View.VISIBLE : View.INVISIBLE;
+		((View)findViewById(R.id.qibla_compass)).setVisibility(visiblity);
+		((TextView)findViewById(R.id.compass_disclaimer)).setText(visiblity == View.VISIBLE ? "" : getText(R.string.compass_disclaimer));
+	}
+	
+	private void startTrackingOrientation() {
+		if(!isTrackingOrientation) {
+			isTrackingOrientation = ((SensorManager)getSystemService(SENSOR_SERVICE)).registerListener(OrientationListener, android.hardware.SensorManager.SENSOR_ORIENTATION);
+			AdhanAlarmWakeLock.acquire(this);
+		}
+	}
+	private void stopTrackingOrientation() {
+		if(isTrackingOrientation) {
+			((SensorManager)getSystemService(SENSOR_SERVICE)).unregisterListener(OrientationListener);
+			AdhanAlarmWakeLock.release();
+		}
+		isTrackingOrientation = false;
 	}
 
 	public void onStop() {
 		if(mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
+		stopTrackingOrientation();
 		AdhanAlarmWakeLock.release();
 		super.onStop();
 	}
@@ -417,7 +448,7 @@ public class AdhanAlarm extends Activity {
 			((TextView)findViewById(R.id.current_qibla_min)).setText(String.valueOf(qibla.getMinute()));
 			((TextView)findViewById(R.id.current_qibla_sec)).setText(df.format(qibla.getSecond()));
 
-			setNextNotificationTime(nextNotificationTime);	
+			setNextNotificationTime(nextNotificationTime);
 		} catch(Exception ex) {
 			((TextView)findViewById(R.id.notes)).setText(ex.getStackTrace().toString());
 		}
