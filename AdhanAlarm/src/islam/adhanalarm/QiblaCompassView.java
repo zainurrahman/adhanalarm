@@ -13,10 +13,12 @@ import android.view.View;
 import android.widget.TextView;
 
 public class QiblaCompassView extends View {
-	private float directionNorth = 0.45f;
-	private float directionQibla = 0.45f;
+	private float directionNorth = 0;
+	private float directionQibla = 0;
 	private TextView bearingNorth;
+	private String bearingNorthString;
 	private TextView bearingQibla;
+	private String bearingQiblaString;
 	private DecimalFormat df = new DecimalFormat("#.###");
 	private Bitmap compassBackground;
 	private Bitmap compassNeedle;
@@ -40,32 +42,33 @@ public class QiblaCompassView extends View {
 	}
 	
 	private void initCompassView() {
-		setMinimumHeight(240);
-		setMinimumWidth(240);
-		invalidate();
-	}
-	
-	public void setDirections(float directionNorth, float directionQibla, TextView bearingNorth, TextView bearingQibla) {
-		this.directionNorth = directionNorth;
-		this.directionQibla = directionQibla;
-		this.bearingNorth = bearingNorth;
-		this.bearingQibla = bearingQibla;
-		width = getWidth();
-		height = getHeight();
 		centre_x = width  * 0.5f;
 		centre_y = height * 0.5f;
 		compassBackground = BitmapFactory.decodeResource(getResources(), R.drawable.compass_background);
 		compassNeedle = BitmapFactory.decodeResource(getResources(), R.drawable.compass_needle);
+		invalidate();
+	}
+	
+	public void setConstants(TextView bearingNorth, CharSequence bearingNorthString, TextView bearingQibla, CharSequence bearingQiblaString) {
+		this.bearingNorth = bearingNorth;
+		this.bearingNorthString = bearingNorthString.toString();
+		this.bearingQibla = bearingQibla;
+		this.bearingQiblaString = bearingQiblaString.toString();
+	}
+	
+	public void setDirections(float directionNorth, float directionQibla) {
+		this.directionNorth = directionNorth;
+		this.directionQibla = directionQibla;
 		rotateNeedle = new Matrix();
-		rotateNeedle.postRotate(-directionQibla, compassNeedle.getWidth() * 0.5f, compassNeedle.getHeight() * 0.5f);
-		rotateNeedle.postTranslate(centre_x - compassNeedle.getWidth() * 0.5f, -compassNeedle.getWidth() * 0.5f);
+		rotateNeedle.postRotate(-directionQibla, compassNeedle.getWidth() * 0.5f, compassNeedle.getHeight());
+		rotateNeedle.postTranslate(centre_x - compassNeedle.getWidth() + 5, centre_y - compassNeedle.getHeight() + 5);
 		invalidate();
 	}
 	
 	@Override
 	protected void onDraw(Canvas canvas) {
-		bearingNorth.setText(" " + df.format(directionNorth) + "\u00b0");
-		bearingQibla.setText((directionQibla >= 0 ? " +" : " -") + " " + df.format(Math.abs(directionQibla)) + " = " + df.format(directionNorth + directionQibla) + "\u00b0");
+		bearingNorth.setText(bearingNorthString.replace("(1)", df.format(directionNorth)));
+		bearingQibla.setText(bearingQiblaString.replace("(+/-)", directionQibla >= 0 ? " +" : " -").replace("(2)", df.format(Math.abs(directionQibla))).replace("(3)",  df.format(directionNorth + directionQibla)));
 
 		Paint p = new Paint();
 		canvas.rotate(-directionNorth, centre_x, centre_y);
