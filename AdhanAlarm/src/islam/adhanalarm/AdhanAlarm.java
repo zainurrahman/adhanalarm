@@ -289,16 +289,10 @@ public class AdhanAlarm extends Activity {
 	}
 	
 	private void startTrackingOrientation() {
-		if(!isTrackingOrientation) {
-			isTrackingOrientation = ((SensorManager)getSystemService(SENSOR_SERVICE)).registerListener(OrientationListener, android.hardware.SensorManager.SENSOR_ORIENTATION);
-			AdhanAlarmWakeLock.acquire(this);
-		}
+		if(!isTrackingOrientation) isTrackingOrientation = ((SensorManager)getSystemService(SENSOR_SERVICE)).registerListener(OrientationListener, android.hardware.SensorManager.SENSOR_ORIENTATION);
 	}
 	private void stopTrackingOrientation() {
-		if(isTrackingOrientation) {
-			((SensorManager)getSystemService(SENSOR_SERVICE)).unregisterListener(OrientationListener);
-			AdhanAlarmWakeLock.release();
-		}
+		if(isTrackingOrientation) ((SensorManager)getSystemService(SENSOR_SERVICE)).unregisterListener(OrientationListener);
 		isTrackingOrientation = false;
 	}
 
@@ -450,7 +444,11 @@ public class AdhanAlarm extends Activity {
 
 			setNextNotificationTime(nextNotificationTime);
 		} catch(Exception ex) {
-			((TextView)findViewById(R.id.notes)).setText(ex.getStackTrace().toString());
+			java.io.StringWriter sw = new java.io.StringWriter();
+			java.io.PrintWriter pw = new java.io.PrintWriter(sw, true);
+			ex.printStackTrace(pw);
+			pw.flush(); sw.flush();
+			((TextView)findViewById(R.id.notes)).setText(sw.toString());
 		}
 	}
 
