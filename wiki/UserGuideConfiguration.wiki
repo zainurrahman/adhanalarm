@@ -9,7 +9,7 @@ It is important to configure the application to your location and settings.
   # Select the type of notification you would like and if you would also like to be alerted to sunrise
   # Click on "Save and Apply Settings"
  # Click on the tab titled "Extra"
-  # You can fill in the extra settings including your chosen calculation method.  The following calculation methods are available^1^:
+  # You can fill in the extra settings including your chosen calculation method.  The following calculation methods^1^ are available:
     * Egyptian General Authority of Survey
     * University of Islamic Sciences, Karachi (Shaf'i/Hanafi)
     * Islamic Society of North America
@@ -18,7 +18,7 @@ It is important to configure the application to your location and settings.
     * Fixed Ishaa Interval (always 90)
   # Click on "Save and Apply Extra"
 
-^1^ *If you don't see your favorite method in this list, know that we are using the [http://sourceforge.net/projects/jitl JITL] library to calculate the prayer times.  Please contribute to that project to see your method included.*
+*^1^ If you don't see your favorite method in this list, know that we are using the [http://sourceforge.net/projects/jitl JITL] library to calculate the prayer times.  Please contribute to that project to see your method included.*
 
 [UserGuideUsage 4. Using the application >>]
 
