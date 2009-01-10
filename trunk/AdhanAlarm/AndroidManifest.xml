@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="islam.adhanalarm" android:versionCode="32" android:versionName="1.0.31" xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest package="islam.adhanalarm" android:versionCode="33" android:versionName="1.0.32" xmlns:android="http://schemas.android.com/apk/res/android">
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
