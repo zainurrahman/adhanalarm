@@ -4,6 +4,6 @@
 
 It is important to configure the application to your location and settings.  Details coming soon.
 
-[UserGuideInstallation << 2. Installation]
-
 [UserGuideUsage 4. Using the application >>]
+
+[UserGuideInstallation << 2. Installation]
