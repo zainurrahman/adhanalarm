@@ -10,6 +10,6 @@ The tab titled "Today" contains a schedule of the prayer times for today as well
 
 The tab titled "Qibla" contains a compass in which the needle points towards the qibla based on the latitude and longitude entered in the settings.
 
-[UserGuideUsage 5. Upcoming Features >>]
+[UserGuideUpcomingFeatures 5. Upcoming Features >>]
 
-[UserGuideInstallation << 3. Configuration]
+[UserGuideConfiguration << 3. Configuration]
