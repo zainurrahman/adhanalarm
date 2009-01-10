@@ -4,4 +4,4 @@
 
  # [UserGuideIntroduction Introduction]
  # [UserGuideInstallation Installation]
- # [UserGuideSetUp Application Set Up]
+ # [UserGuideConfiguration Configuration]
