@@ -1,8 +1,0 @@
-#summary 0. Table of Contents
-
-= Table of Contents =
- # [UserGuideIntroduction Introduction]
- # [UserGuideInstallation Installation]
- # [UserGuideConfiguration Configuration]
- # [UserGuideUsage Usage]
- # [UserGuideUpcomingFeatures Upcoming Features]
