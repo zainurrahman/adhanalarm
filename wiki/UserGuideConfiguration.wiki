@@ -4,10 +4,10 @@
 
 It is important to configure the application to your location and settings.
  # Open the application
- # Click on the tab titled "Set"
+ # Click on the tab titled `Set`
   # Enter the latitude and longitude of your location
   # Select the type of notification you would like and if you would also like to be alerted to sunrise
-  # Click on "Save and Apply Settings"
+  # Click on `Save and Apply Settings`
  # Click on the tab titled "Extra"
   # You can fill in the extra settings including your chosen calculation method.  The following calculation methods*^1^* are available:
     * Egyptian General Authority of Survey
@@ -16,7 +16,7 @@ It is important to configure the application to your location and settings.
     * Muslim World League
     * Umm Al-Qurra, Saudi Arabia
     * Fixed Ishaa Interval (always 90)
-  # Click on "Save and Apply Extra"
+  # Click on `Save and Apply Extra`
 
 *^1^ If you don't see your favorite method in this list, know that we are using the [http://sourceforge.net/projects/jitl JITL] library to calculate the prayer times.  Please contribute to that project to see your method included.*
 
