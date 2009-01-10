@@ -1,5 +1,0 @@
-#summary 3. Application Set Up
-
-= Application Set Up =
-
-It is important to set up the device to your location and settings.  Details coming soon.
