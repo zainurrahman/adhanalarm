@@ -2,7 +2,15 @@
 
 = Configuration =
 
-It is important to configure the application to your location and settings.  Details coming soon.
+It is important to configure the application to your location and settings.
+ # Open the application
+ # Click on the tab titled "Set"
+  # Enter the latitude and longitude of your location
+  # Select the type of notification you would like and if you would also like to be alerted to sunrise
+  # Click on "Save and Apply Settings"
+ # Click on the tab titled "Extra"
+  # You can fill in the extra settings including your chosen "Calculation Method"
+  # Click on "Save and Apply Extra"
 
 [UserGuideUsage 4. Using the application >>]
 
