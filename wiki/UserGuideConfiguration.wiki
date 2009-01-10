@@ -1,0 +1,5 @@
+#summary 3. Configuration
+
+= Configuration =
+
+It is important to configure the device to your location and settings.  Details coming soon.
