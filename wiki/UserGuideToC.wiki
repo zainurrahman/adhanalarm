@@ -1,4 +1,4 @@
-#summary Hierarchical listing of the pages in this document.
+#summary 0. Table of Contents
 
 = Table of Contents =
 
