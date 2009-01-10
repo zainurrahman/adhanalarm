@@ -1,0 +1,15 @@
+#summary 4. Usage
+
+= Usage =
+
+== Today ==
+
+The tab titled "Today" contains a schedule of the prayer times for today as well as the next fajr prayer.  Clicking on the previous/next buttons will demonstrate a notification for the previous/next prayers respectively.  Clicking on the stop button will stop and clear any notification.
+
+== Qibla ==
+
+The tab titled "Qibla" contains a compass in which the needle points towards the qibla based on the latitude and longitude entered in the settings.
+
+[UserGuideUsage 5. Upcoming Features >>]
+
+[UserGuideInstallation << 3. Configuration]
