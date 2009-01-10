@@ -1,0 +1,10 @@
+#summary 4. Upcoming Features
+
+= Upcoming Features =
+
+The following features are planned:
+
+ * Current latitude/longitude can be detected and set by the user as input parameters
+ * Translations into multiple languages.  If you wish to help in the translation efforts, please send the developers translations of the following two files into any language that you know:
+  * [http://adhanalarm.googlecode.com/svn/trunk/AdhanAlarm/res/values/arrays.xml arrays.xml]
+  * [http://adhanalarm.googlecode.com/svn/trunk/AdhanAlarm/res/values/strings.xml strings.xml]
