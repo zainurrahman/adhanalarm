@@ -2,4 +2,4 @@
 
 = Configuration =
 
-It is important to configure the device to your location and settings.  Details coming soon.
+It is important to configure the application to your location and settings.  Details coming soon.
