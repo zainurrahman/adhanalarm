@@ -4,7 +4,7 @@
 
 == Today ==
 
-The tab titled "Today" contains a schedule of the prayer times for today as well as the next fajr prayer.  Clicking on the previous/next buttons will demonstrate a notification for the previous/next prayers respectively.  Clicking on the stop button will stop and clear any notification.
+The tab titled "Today" contains a schedule of the prayer times for today as well as the next fajr prayer.  Clicking on the previous/next buttons will demonstrate a notification for the previous/next prayers respectively.  Clicking on the stop button will stop and clear any notification.  Notifications will only go off if you've opened the application at least once since the last time the phone was started (and of course if you've selected to be notified).
 
 == Qibla ==
 
