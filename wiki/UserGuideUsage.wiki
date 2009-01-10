@@ -4,11 +4,11 @@
 
 == Today ==
 
-The tab titled "Today" contains a schedule of the prayer times for today as well as the next fajr prayer.  Clicking on the previous/next buttons will demonstrate a notification for the previous/next prayers respectively.  Clicking on the stop button will stop and clear any notification.  Notifications will only go off if you've opened the application at least once since the last time the phone was started (and of course if you've selected to be notified).
+The tab titled `Today` contains a schedule of the prayer times for today as well as the next fajr prayer.  Clicking on the previous/next buttons will demonstrate a notification for the previous/next prayers respectively.  Clicking on the stop button will stop and clear any notification.  Notifications will only go off if you've opened the application at least once since the last time the phone was started (and of course if you've selected to be notified).
 
 == Qibla ==
 
-The tab titled "Qibla" contains a compass in which the needle points towards the qibla based on the latitude and longitude entered in the settings.
+The tab titled `Qibla` contains a compass in which the needle points towards the qibla based on the latitude and longitude entered in the settings.
 
 [UserGuideUpcomingFeatures 5. Upcoming Features >>]
 
