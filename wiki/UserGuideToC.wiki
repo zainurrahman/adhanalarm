@@ -1,7 +1,6 @@
 #summary 0. Table of Contents
 
 = Table of Contents =
-[http://code.google.com/p/adhanalarm http://adhanalarm.googlecode.com/svn/trunk/AdhanAlarm/res/drawable/icon.png]
  # [UserGuideIntroduction Introduction]
  # [UserGuideInstallation Installation]
  # [UserGuideConfiguration Configuration]
