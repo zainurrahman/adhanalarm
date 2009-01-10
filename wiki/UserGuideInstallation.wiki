@@ -1,5 +1,7 @@
 #summary 2. Installation
 
+= Installation =
+
 The application can easily be downloaded and installed through the Android Market.  Open the Market application and click on search and use the search terms "Adhan Alarm".  Select the application "Adhân Alarm" created by user "spiritofislam.com".  At the bottom you will have the option to install the application.
 
 [UserGuideSetUp 3. Setting up the application >>]
