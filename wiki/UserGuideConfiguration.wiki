@@ -16,7 +16,7 @@ It is important to configure the application to your location and settings.
     * Muslim World League
     * Umm Al-Qurra, Saudi Arabia
     * Fixed Ishaa Interval (always 90)
-      * If you don't see your favorite method in this list, know that we are using the [http://sourceforge.net/projects/jitl JITL] library to calculate the prayer times.  Please contribute to that project to see your method included.
+    * _If you don't see your favorite method in this list, know that we are using the [http://sourceforge.net/projects/jitl JITL] library to calculate the prayer times.  Please contribute to that project to see your method included._
   # Click on "Save and Apply Extra"
 
 [UserGuideUsage 4. Using the application >>]
