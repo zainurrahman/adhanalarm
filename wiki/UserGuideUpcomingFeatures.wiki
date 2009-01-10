@@ -7,5 +7,5 @@ The following features are planned:
 
  * Ability to detect latitude/longitude and set by the user as input parameters
  * Translations into multiple languages.  If you wish to help in the translation efforts, please send us translations of the following two files into your languages of choice:
-  * [http://adhanalarm.googlecode.com/svn/trunk/AdhanAlarm/res/values/arrays.xml arrays.xml]
-  * [http://adhanalarm.googlecode.com/svn/trunk/AdhanAlarm/res/values/strings.xml strings.xml]
+  # [http://adhanalarm.googlecode.com/svn/trunk/AdhanAlarm/res/values/arrays.xml arrays.xml]
+  # [http://adhanalarm.googlecode.com/svn/trunk/AdhanAlarm/res/values/strings.xml strings.xml]
