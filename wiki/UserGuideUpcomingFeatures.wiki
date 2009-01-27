@@ -1,5 +1,4 @@
 #summary 5. Upcoming Features
-#labels Featured
 
 = Upcoming Features =
 
