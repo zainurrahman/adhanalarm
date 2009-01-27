@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.media.AudioManager;
@@ -52,10 +53,10 @@ public class AdhanAlarm extends Activity {
 	private static TextView[] ALARM_TIMES;
 	private static TextView[] ALARM_TIMES_AM_PM;
 	private static String[] TIME_NAMES;
-
+	
 	private static SharedPreferences settings;
 	private static MediaPlayer mediaPlayer;
-    private static SensorListener OrientationListener;
+    private static SensorListener orientationListener;
 	private static GregorianCalendar[] notificationTimes = new GregorianCalendar[7];
 	
 	private static float qiblaDirection = 0;
@@ -69,7 +70,7 @@ public class AdhanAlarm extends Activity {
 		ALARM_TIMES = new TextView[]{(TextView)findViewById(R.id.fajr), (TextView)findViewById(R.id.sunrise), (TextView)findViewById(R.id.dhuhr), (TextView)findViewById(R.id.asr), (TextView)findViewById(R.id.maghrib), (TextView)findViewById(R.id.ishaa), (TextView)findViewById(R.id.next_fajr)};
 		ALARM_TIMES_AM_PM = new TextView[]{(TextView)findViewById(R.id.fajr_am_pm), (TextView)findViewById(R.id.sunrise_am_pm), (TextView)findViewById(R.id.dhuhr_am_pm), (TextView)findViewById(R.id.asr_am_pm), (TextView)findViewById(R.id.maghrib_am_pm), (TextView)findViewById(R.id.ishaa_am_pm), (TextView)findViewById(R.id.next_fajr_am_pm)};
 		TIME_NAMES = new String[]{getString(R.string.fajr), getString(R.string.sunrise), getString(R.string.dhuhr), getString(R.string.asr), getString(R.string.maghrib), getString(R.string.ishaa), getString(R.string.next_fajr)};
-
+		
 		settings = getSharedPreferences("settingsFile", MODE_PRIVATE);
 
 		((EditText)findViewById(R.id.latitude)).setText(Float.toString(settings.getFloat("latitude", 43.67f)));
@@ -142,7 +143,7 @@ public class AdhanAlarm extends Activity {
 		tabs.addTab(two);
 		
 		((QiblaCompassView)findViewById(R.id.qibla_compass)).setConstants(((TextView)findViewById(R.id.bearing_north)), getText(R.string.bearing_north), ((TextView)findViewById(R.id.bearing_qibla)), getText(R.string.bearing_qibla));
-		OrientationListener = new SensorListener() {
+		orientationListener = new SensorListener() {
         	public void onSensorChanged(int s, float v[]) {
         		float northDirection = v[android.hardware.SensorManager.DATA_X];
         		((QiblaCompassView)findViewById(R.id.qibla_compass)).setDirections(northDirection, qiblaDirection);
@@ -163,23 +164,28 @@ public class AdhanAlarm extends Activity {
 		
 		TabHost.TabSpec three = tabs.newTabSpec("three");
 		three.setContent(R.id.content3);
-		three.setIndicator(getString(R.string.place), getResources().getDrawable(R.drawable.settings));
+		three.setIndicator(getString(R.string.settings), getResources().getDrawable(R.drawable.calculator));
 		tabs.addTab(three);
 
 		((Button)findViewById(R.id.lookup_gps)).setOnClickListener(new Button.OnClickListener() {  
 			public void onClick(View v) {
-				EditText latitude = (EditText)findViewById(R.id.latitude);
-				EditText longitude = (EditText)findViewById(R.id.longitude);
-
+				Criteria criteria = new Criteria();
+				criteria.setAccuracy(Criteria.ACCURACY_FINE);
+				criteria.setAltitudeRequired(false);
+				criteria.setBearingRequired(false);
+				criteria.setCostAllowed(true);
+				criteria.setPowerRequirement(Criteria.POWER_LOW);
+				
 				LocationManager locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
-				Location location = locationManager.getLastKnownLocation("gps");
-
-				if(location != null) {
-					latitude.setText(Double.toString(location.getLatitude()));
-					longitude.setText(Double.toString(location.getLongitude()));
+				Location currentLocation = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, true));
+				
+				if(currentLocation != null) {
+					((EditText)findViewById(R.id.latitude)).setText(Double.toString(currentLocation.getLatitude()));
+					((EditText)findViewById(R.id.longitude)).setText(Double.toString(currentLocation.getLongitude()));
+					((EditText)findViewById(R.id.altitude)).setText(Double.toString(currentLocation.getAltitude()));
 				} else {
-					latitude.setText("");
-					longitude.setText("");
+					((EditText)findViewById(R.id.latitude)).setText("");
+					((EditText)findViewById(R.id.longitude)).setText("");
 				}
 			}
 		});
@@ -198,22 +204,13 @@ public class AdhanAlarm extends Activity {
 					editor.putFloat("longitude", -79.417f);
 					((EditText)findViewById(R.id.longitude)).setText("-79.417");
 				}
-				editor.putInt("notificationMethodIndex", ((Spinner)findViewById(R.id.notification_methods)).getSelectedItemPosition());
-				editor.putInt("extraAlertsIndex", ((Spinner)findViewById(R.id.extra_alerts)).getSelectedItemPosition());
-				editor.commit();
-				updateScheduleAndNotification();
-				((TabHost)findViewById(R.id.tabs)).setCurrentTab(0);
-			}
-		}); /* End of Tab 3 Items */
-
-		TabHost.TabSpec four = tabs.newTabSpec("four");
-		four.setContent(R.id.content4);
-		four.setIndicator(getString(R.string.extra), getResources().getDrawable(R.drawable.calculator));
-		tabs.addTab(four);
-
-		((Button)findViewById(R.id.save_and_apply_extra)).setOnClickListener(new Button.OnClickListener() {
-			public void onClick(View v) {
-				SharedPreferences.Editor editor = settings.edit();
+				try {
+					editor.putFloat("altitude", Float.parseFloat(((EditText)findViewById(R.id.altitude)).getText().toString()));
+				} catch(Exception ex) {
+					editor.putFloat("altitude", 0);
+					((EditText)findViewById(R.id.pressure)).setText("0.0");
+				}
+				editor.putInt("calculationMethodsIndex", ((Spinner)findViewById(R.id.calculation_methods)).getSelectedItemPosition());
 				try {
 					editor.putFloat("pressure", Float.parseFloat(((EditText)findViewById(R.id.pressure)).getText().toString()));
 				} catch(Exception ex) {
@@ -226,28 +223,25 @@ public class AdhanAlarm extends Activity {
 					editor.putFloat("temperature", 10);
 					((EditText)findViewById(R.id.pressure)).setText("10.0");
 				}
-				try {
-					editor.putFloat("altitude", Float.parseFloat(((EditText)findViewById(R.id.altitude)).getText().toString()));
-				} catch(Exception ex) {
-					editor.putFloat("altitude", 0);
-					((EditText)findViewById(R.id.pressure)).setText("0.0");
-				}
-				editor.putInt("calculationMethodsIndex", ((Spinner)findViewById(R.id.calculation_methods)).getSelectedItemPosition());
 				editor.putInt("roundingTypesIndex", ((Spinner)findViewById(R.id.rounding_types)).getSelectedItemPosition());
+				editor.putInt("notificationMethodIndex", ((Spinner)findViewById(R.id.notification_methods)).getSelectedItemPosition());
+				editor.putInt("extraAlertsIndex", ((Spinner)findViewById(R.id.extra_alerts)).getSelectedItemPosition());
 				editor.commit();
 				updateScheduleAndNotification();
 				((TabHost)findViewById(R.id.tabs)).setCurrentTab(0);
 			}
 		});
-		((Button)findViewById(R.id.reset_extra)).setOnClickListener(new Button.OnClickListener() {  
+		((Button)findViewById(R.id.reset_settings)).setOnClickListener(new Button.OnClickListener() {  
 			public void onClick(View v) {
+				((Spinner)findViewById(R.id.notification_methods)).setSelection(0);
+				((Spinner)findViewById(R.id.extra_alerts)).setSelection(0);
 				((Spinner)findViewById(R.id.calculation_methods)).setSelection(4);
 				((Spinner)findViewById(R.id.rounding_types)).setSelection(2);
 				((EditText)findViewById(R.id.pressure)).setText("1010.0");
 				((EditText)findViewById(R.id.temperature)).setText("10.0");
 				((EditText)findViewById(R.id.altitude)).setText("0.0");
 			}
-		}); /* End of Tab 4 Items */
+		}); /* End of Tab 3 Items */
 		showHideCompass();
 	}
 	
@@ -289,10 +283,10 @@ public class AdhanAlarm extends Activity {
 	}
 	
 	private void startTrackingOrientation() {
-		if(!isTrackingOrientation) isTrackingOrientation = ((SensorManager)getSystemService(SENSOR_SERVICE)).registerListener(OrientationListener, android.hardware.SensorManager.SENSOR_ORIENTATION);
+		if(!isTrackingOrientation) isTrackingOrientation = ((SensorManager)getSystemService(SENSOR_SERVICE)).registerListener(orientationListener, android.hardware.SensorManager.SENSOR_ORIENTATION);
 	}
 	private void stopTrackingOrientation() {
-		if(isTrackingOrientation) ((SensorManager)getSystemService(SENSOR_SERVICE)).unregisterListener(OrientationListener);
+		if(isTrackingOrientation) ((SensorManager)getSystemService(SENSOR_SERVICE)).unregisterListener(orientationListener);
 		isTrackingOrientation = false;
 	}
 
