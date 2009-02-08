@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Alarme de l'Adh&#257;n</string>
+    <string name="description">Affichage et alertes des prières quotidiennes du musulman</string>
+	<string name="help">Aide</string>
+    <string name="help_text"><u>Questions fréquemment posées</u>\n\nQ: Pourquoi les temps de prières ne correspondent pas à mon calendrier?\n\nA: Il y a beaucoup de facteurs qui affectent le calcul des prières, notamment  les paramètres en entrées de configuration (ex. latitude, longitude, méthode de calcul,…), le choix des algorithmes ainsi que la précision du calcul qui vari selon les machines.\n\nQ: Pourquoi la boussole du Qibla ne se dirige-t-elle pas dans la bonne direction?\n\nA: C'est une boussole très imprécise qui est incluse plus comme démonstration des possibilités que pour l'exactitude.\n\nQ: Pourquoi ma fonctionnalité préférée n'est-elle pas incluse dans l'application?\n\nA: Veuillez visiter le site Web du projet à l’adresse adhanalarm.googlecode.com et aidez-nous à améliorer le programme.\n</string>
+    <string name="information">Information</string>
+    <string name="information_text"><u>Information</u>\n\nPour plus d'informations sur ce programme merci de visiter:\nadhanalarm.googlecode.com\n\nPour plus d'informations sur l'islam:\nwww.spiritofislam.com</string>
+    <string name="today">Aujourd'hui</string>
+    <string name="fajr">Fajr</string>
+    <string name="sunrise">Lever du soleil</string>
+    <string name="dhuhr">Dhuhr</string>
+    <string name="asr">`Asr</string>
+    <string name="maghrib">Maghrib</string>
+    <string name="ishaa">`Ishaa\'</string>
+    <string name="next_fajr">Prochain Fajr</string>
+    <string name="next_time_marker">></string>
+    <string name="error_playing_alert">Erreur rencontrée pendant la lecture de l’alerte </string>
+    <string name="introduction">préciser s'il vous plaît <u>Endroit</u></string>
+    <string name="allahu_akbar">Dieu est grand</string>
+    <string name="time_for">L'heure de</string>
+    <string name="last_alert">Dernière alerte</string>
+    <string name="next_alert">Prochaine alerte</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="qibla">Qibla</string>
+    <string name="compass_disclaimer">La boussole est affichée en mode portrait uniquement.</string>
+    <string name="bearing_north">1) Relevé du Nord = (1)°</string>
+    <string name="bearing_qibla">2) Relevé de la Qibla = (1) (+/-) (2)° = (3)°</string>
+    <string name="settings">Paramètres</string>
+    <string name="notification">Notification</string>
+    <string name="extra_alerts">Plus d’alertes</string>
+    <string name="daylight_savings">Heure d'été</string>
+    <string name="lookup_gps">Consultation\nGPS</string>
+    <string name="system_time_zone">Fuseau horaire</string>
+    <string name="gmt">GMT</string>
+    <string name="save_and_apply">Enregistrer et appliquer</string>
+    <string name="reset">Réinitialiser</string>
+    <string name="calculation">Calcul</string>
+    <string name="rounding">Arrondi</string>
+    <string name="altitude">Altitude</string>
+    <string name="pressure">Pression</string>
+    <string name="temperature">Température</string>
+</resources>
