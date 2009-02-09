@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="notification_methods">
+        <item>Notification par défaut</item>
+        <item>Appel sonore à la prière (sauf si en mode silencieux)</item>
+        <item>Pas de notification</item>
+    </array>
+    <array name="extra_alerts">
+        <item>Aucun</item>
+        <item>Lever du soleil</item>
+    </array>
+    <array name="calculation_methods">
+        <item>Le Cadastre général d'Egypte </item>
+        <item>Shaf`i - L'Université des Sciences Islamiques de Karachi</item>
+        <item>Hanafi - L'Université des Sciences Islamiques de Karachi</item>
+        <item>La Fédération Islamique de l'Amérique du nord</item>
+        <item>La Ligue du Monde Islamique</item>
+        <item>Umm Ul Qurâ,  Arabie Saoudite</item>
+        <item>Intervalle fixe pour Ishaa (toujours à 90)</item>
+    </array>
+    <array name="rounding_types">
+        <item>Aucun</item>
+        <item>Normal</item>
+        <item>Spécial</item>
+        <item>Agressif</item>
+    </array>
+</resources>
