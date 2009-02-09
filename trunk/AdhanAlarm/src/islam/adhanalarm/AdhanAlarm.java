@@ -1,14 +1,24 @@
 package islam.adhanalarm;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import net.sourceforge.jitl.Jitl;
+import net.sourceforge.jitl.Method;
+import net.sourceforge.jitl.Prayer;
+import net.sourceforge.jitl.Rounding;
+import net.sourceforge.jitl.astro.Dms;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.res.Configuration;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.location.Criteria;
@@ -17,6 +27,10 @@ import android.location.LocationManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,20 +38,6 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import java.text.DecimalFormat;
-import java.text.DateFormat;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
-import net.sourceforge.jitl.astro.Dms;
-import net.sourceforge.jitl.Jitl;
-import net.sourceforge.jitl.Method;
-import net.sourceforge.jitl.Rounding;
-import net.sourceforge.jitl.Prayer;
 
 public class AdhanAlarm extends Activity {
 	public static final boolean DEBUG = false;
@@ -403,7 +403,7 @@ public class AdhanAlarm extends Activity {
 			Prayer[] dayPrayers = itl.getPrayerTimes(today).getPrayers();
 			Prayer[] allTimes = new Prayer[]{dayPrayers[0], dayPrayers[1], dayPrayers[2], dayPrayers[3], dayPrayers[4], dayPrayers[5], itl.getNextDayFajr(today)};
 
-			DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
+			SimpleDateFormat timeFormat = new SimpleDateFormat ("h:mm a");
 			short nextNotificationTime = -1;
 			for(short i = FAJR; i <= NEXT_FAJR; i++) { // Set the times on the schedule
 				if(i == NEXT_FAJR) {
