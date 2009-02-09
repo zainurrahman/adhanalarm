@@ -30,6 +30,7 @@ import android.view.MenuItem;
 import android.view.View;
 import java.text.DecimalFormat;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -403,7 +404,7 @@ public class AdhanAlarm extends Activity {
 			Prayer[] dayPrayers = itl.getPrayerTimes(today).getPrayers();
 			Prayer[] allTimes = new Prayer[]{dayPrayers[0], dayPrayers[1], dayPrayers[2], dayPrayers[3], dayPrayers[4], dayPrayers[5], itl.getNextDayFajr(today)};
 
-			DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
+			SimpleDateFormat timeFormat = new SimpleDateFormat ("h:mm a");
 			short nextNotificationTime = -1;
 			for(short i = FAJR; i <= NEXT_FAJR; i++) { // Set the times on the schedule
 				if(i == NEXT_FAJR) {
