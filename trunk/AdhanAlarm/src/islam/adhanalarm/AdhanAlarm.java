@@ -390,7 +390,7 @@ public class AdhanAlarm extends Activity {
 			Method method = CALCULATION_METHODS[settings.getInt("calculationMethodsIndex", 4)].copy();
 			method.setRound(ROUNDING_TYPES[settings.getInt("roundingTypesIndex", 2)]);
 
-			net.sourceforge.jitl.astro.Location location = new net.sourceforge.jitl.astro.Location(settings.getFloat("latitude", 43.67f), settings.getFloat("longitude", -79.417f), getGMTOffset(), (int)getDSTSavings());
+			net.sourceforge.jitl.astro.Location location = new net.sourceforge.jitl.astro.Location(settings.getFloat("latitude", 43.67f), settings.getFloat("longitude", -79.417f), getGMTOffset(), 0);
 			location.setSeaLevel(settings.getFloat("altitude", 0));
 			location.setPressure(settings.getFloat("pressure", 1010));
 			location.setTemperature(settings.getFloat("temperature", 10));
