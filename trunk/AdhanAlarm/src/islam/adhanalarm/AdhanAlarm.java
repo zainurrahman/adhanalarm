@@ -242,7 +242,6 @@ public class AdhanAlarm extends Activity {
 				((EditText)findViewById(R.id.altitude)).setText("0.0");
 			}
 		}); /* End of Tab 3 Items */
-		showHideCompass();
 	}
 	
 	@Override
@@ -267,19 +266,6 @@ public class AdhanAlarm extends Activity {
 		dialogBuilder.setCancelable(true);
 		dialogBuilder.create().show();
 		return true;
-	}
-	
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
-		showHideCompass();
-	}
-	
-	private void showHideCompass() {
-		Configuration config = getResources().getConfiguration();
-		int visiblity = config.keyboardHidden == Configuration.KEYBOARDHIDDEN_UNDEFINED || config.keyboardHidden == Configuration.KEYBOARDHIDDEN_YES ? View.VISIBLE : View.INVISIBLE;
-		((View)findViewById(R.id.qibla_compass)).setVisibility(visiblity);
-		((TextView)findViewById(R.id.compass_disclaimer)).setText(visiblity == View.VISIBLE ? "" : getText(R.string.compass_disclaimer));
 	}
 	
 	private void startTrackingOrientation() {

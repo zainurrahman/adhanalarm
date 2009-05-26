@@ -24,7 +24,7 @@
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
     <string name="qibla">Qibla</string>
-    <string name="compass_disclaimer">Compass is displayed in portrait mode only.</string>
+    <string name="compass_disclaimer">Compass works in portrait mode based on settings location.</string>
     <string name="bearing_north">1) Bearing North = (1)°</string>
     <string name="bearing_qibla">2) Bearing Qibla = (1) (+/-) (2)° = (3)°</string>
     <string name="settings">Settings</string>
