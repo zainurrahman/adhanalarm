@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Azan Alarmı</string>
+    <string name="description">Günlük namaz vakitlerini görüntüler ve sizi uyarabilir.</string>
+    <string name="help">Yardım</string>
+    <string name="help_text"><u>Sık Sık Sorulan Sorular</u>\n\nS: Neden namaz vakitleri yerel takvimle eşleşmiyor?\n\nC: Buna etki eden birçok faktörler vardir, örneğin, giriş parametreleri (enlem, boylam, hesaplama yöntemi, ...), algoritmik ve farklı makinelerdeki hesaplama hassaslık farklılıkları.\n\nS: Neden pusula Kıbleyi doğru yönde göstermiyor?\n\nC: Bu pusula daha hatalı olmasına rağmen sadece Kıble hangi yönde olabileceğini göstermek için eklenmiştir.\n\nS: Neden en sevdiğim özellik daha eklenmemiştir?\n\nC: Lütfen adhanalarm.googlecode.com adresindeki proje web sitesini ziyaret edin ve bize programı geliştirmeye yardımcı olun.\n</string>
+    <string name="information">Bilgi</string>
+    <string name="information_text"><u>Bilgi</u>\n\nProgram hakkında daha fazla bilgi için:\nadhanalarm.googlecode.com\n\nİslâm hakkında daha fazla bilgi için:\nwww.spiritofislam.com</string>
+    <string name="today">Bugün</string>
+    <string name="fajr">İmsak</string>
+    <string name="sunrise">Güneş</string>
+    <string name="dhuhr">Öğle</string>
+    <string name="asr">İkindi</string>
+    <string name="maghrib">Akşam</string>
+    <string name="ishaa">Yatsı</string>
+    <string name="next_fajr">Sonraki İmsak</string>
+    <string name="next_time_marker">></string>
+    <string name="error_playing_alert">Uyarı çalmada yanlışlık</string>
+    <string name="introduction">Lütfen <u>yer</u> ayarlayın</string>
+    <string name="allahu_akbar">Allah Büyüktür</string>
+    <string name="time_for"></string>
+    <string name="last_alert">Önceki</string>
+    <string name="next_alert">Sonraki</string>
+    <string name="latitude">Enlem</string>
+    <string name="longitude">Boylam</string>
+    <string name="qibla">Kible</string>
+    <string name="compass_disclaimer">Pusula portre modunda belirtilen yere göre çalışır.</string>
+    <string name="bearing_north">1) Kuzey Yatak = (1)°</string>
+    <string name="bearing_qibla">2) Kible Yatak = (1) (+/-) (2)° = (3)°</string>
+    <string name="settings">Ayarlar</string>
+    <string name="notification">Duyuru</string>
+    <string name="extra_alerts">Ek uyarılar</string>
+    <string name="daylight_savings">Aydınlık saklamaları</string>
+    <string name="lookup_gps">GPS\naraması</string>
+    <string name="system_time_zone">Sistem saat dilimi</string>
+    <string name="gmt">GMT</string>
+    <string name="save_and_apply">Kaydet ve uygula</string>
+    <string name="reset">Sıfırla</string>
+    <string name="calculation">Hesaplama</string>
+    <string name="rounding">Yvarlama</string>
+    <string name="altitude">Rakım</string>
+    <string name="pressure">Basınç</string>
+    <string name="temperature">Sıcaklık</string>
+</resources>
