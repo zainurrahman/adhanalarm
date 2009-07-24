@@ -17,7 +17,7 @@
     <string name="next_time_marker">></string>
     <string name="error_playing_alert">Uyarı çalmada yanlışlık</string>
     <string name="introduction">Lütfen <u>yer</u> ayarlayın</string>
-    <string name="allahu_akbar">Allah Büyüktür</string>
+    <string name="allahu_akbar">Allahu Akbar</string>
     <string name="time_for"></string>
     <string name="last_alert">Önceki</string>
     <string name="next_alert">Sonraki</string>
@@ -32,12 +32,12 @@
     <string name="extra_alerts">Ek uyarılar</string>
     <string name="daylight_savings">Aydınlık saklamaları</string>
     <string name="lookup_gps">GPS\naraması</string>
-    <string name="system_time_zone">Sistem saat dilimi</string>
+    <string name="system_time_zone">Sistem saati</string>
     <string name="gmt">GMT</string>
     <string name="save_and_apply">Kaydet ve uygula</string>
     <string name="reset">Sıfırla</string>
     <string name="calculation">Hesaplama</string>
-    <string name="rounding">Yvarlama</string>
+    <string name="rounding">Yuvarlama</string>
     <string name="altitude">Rakım</string>
     <string name="pressure">Basınç</string>
     <string name="temperature">Sıcaklık</string>
