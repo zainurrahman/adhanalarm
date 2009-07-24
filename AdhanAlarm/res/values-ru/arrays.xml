@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="notification_methods">
+        <item>Уведомление по умолчанию</item>
+        <item>Произнесит азан (за исключением беззвучный режим)</item>
+        <item>Не уведомлять</item>
+    </array>
+    <array name="extra_alerts">
+        <item>Никакой</item>
+        <item>Восход</item>
+    </array>
+    <array name="calculation_methods">
+        <item>Египетские генеральная администрация по обследованию</item>
+        <item>Шафиитский - Университет Карачи</item>
+        <item>Ханифитский - Университет Карачи</item>
+        <item>Исламское общество Северной Америки</item>
+        <item>Всемирная мусульманская лига</item>
+        <item>Умм-Аль-Курра, Саудовская Аравия</item>
+        <item>Фиксированный интервал для Иша (всегда 90)</item>
+    </array>
+    <array name="rounding_types">
+        <item>Никакой</item>
+        <item>Нормальный</item>
+        <item>Специальный</item>
+        <item>Агрессивный</item>
+    </array>
+</resources>
