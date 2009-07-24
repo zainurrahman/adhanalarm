@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Азан</string>
+    <string name="description">Покажет и может предупредить вас о времях ежедневных мусульманских молитв.</string>
+    <string name="help">Помощь</string>
+    <string name="help_text"><u>Часто задаваемые вопросы</u>\n\nВ: Почему время не соответствуют моему местных график?\n\nО: Есть много факторов, которые влияют на график, включая входные параметры (напр. широта, долгота, метод расчета, ...), алгоритмическая разногласия и различия точности вычисления на разных машинах.\n\nВ: Почему компас не указывает Кибла в верном направлении?\n\nО: Это очень неточный компас, который включен как демонстрация возможностей, чем в правильности.\n\nВ: Почему моя любимая функция не включен?\n\nО: Пожалуйста, посетите вебсайт проекта на adhanalarm.googlecode.com и помогите нам улучшить программу.\n</string>
+    <string name="information">Информация</string>
+    <string name="information_text"><u>Информация</u>\n\nДля получения более подробной информации о программе:\nadhanalarm.googlecode.com\n\nДля получения более подробной информации об исламе:\nwww.spiritofislam.com</string>
+    <string name="today">Сегодня</string>
+    <string name="fajr">Фаджр</string>
+    <string name="sunrise">Восход</string>
+    <string name="dhuhr">Зухр</string>
+    <string name="asr">Аср</string>
+    <string name="maghrib">Магриб</string>
+    <string name="ishaa">Иша</string>
+    <string name="next_fajr">Следующий Фаджр</string>
+    <string name="next_time_marker">></string>
+    <string name="error_playing_alert">Ошибка воспроизведения оповещение</string>
+    <string name="introduction">Укажите <u>место</u></string>
+    <string name="allahu_akbar">Аллаху акбар</string>
+    <string name="time_for">Время для</string>
+    <string name="last_alert">Пред.</string>
+    <string name="next_alert">След.</string>
+    <string name="latitude">Широта</string>
+    <string name="longitude">Долгота</string>
+    <string name="qibla">Кибла</string>
+    <string name="compass_disclaimer">Компас работает в портретном режиме основано на настройках месте.</string>
+    <string name="bearing_north">1) Опора севера = (1)°</string>
+    <string name="bearing_qibla">2) Опора Киблы = (1) (+/-) (2)° = (3)°</string>
+    <string name="settings">Настройки</string>
+    <string name="notification">Оповещение</string>
+    <string name="extra_alerts">Дополнительные сигналы</string>
+    <string name="daylight_savings">Летнее время</string>
+    <string name="lookup_gps">Поиск\nGPS</string>
+    <string name="system_time_zone">Часовой пояс</string>
+    <string name="gmt">GMT</string>
+    <string name="save_and_apply">Сохранить и применить</string>
+    <string name="reset">Сбросить</string>
+    <string name="calculation">Расчет</string>
+    <string name="rounding">Округление</string>
+    <string name="altitude">Высота над уровнем моря</string>
+    <string name="pressure">Давление</string>
+    <string name="temperature">Температура</string>
+</resources>
