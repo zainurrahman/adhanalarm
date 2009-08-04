@@ -4,7 +4,6 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
 import net.sourceforge.jitl.Jitl;
 import net.sourceforge.jitl.Method;
 import net.sourceforge.jitl.Prayer;
@@ -18,7 +17,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.location.Criteria;
@@ -27,6 +25,7 @@ import android.location.LocationManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -307,10 +306,6 @@ public class AdhanAlarm extends Activity {
 		Calendar currentTime = new GregorianCalendar();
 		return currentTime.getTimeZone().inDaylightTime(currentTime.getTime());
 	}
-
-	private float getDSTSavings() {
-		return isDaylightSavings() ? new GregorianCalendar().getTimeZone().getDSTSavings() / 3600000 : 0;
-	}
 	
 	private void stopAlert() {
 		if(mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
@@ -329,7 +324,8 @@ public class AdhanAlarm extends Activity {
 
 		int notificationMethod = settings.getInt("notificationMethodIndex", DEFAULT_NOTIFICATION);
 		int ringerMode = ((AudioManager)getSystemService(AUDIO_SERVICE)).getRingerMode();
-		if(notificationMethod == RECITE_ADHAN && ringerMode != AudioManager.RINGER_MODE_SILENT && ringerMode != AudioManager.RINGER_MODE_VIBRATE) {
+		int callState = ((TelephonyManager)getSystemService(TELEPHONY_SERVICE)).getCallState();
+		if(notificationMethod == RECITE_ADHAN && ringerMode != AudioManager.RINGER_MODE_SILENT && ringerMode != AudioManager.RINGER_MODE_VIBRATE && callState == TelephonyManager.CALL_STATE_IDLE) {
 			int alarm = R.raw.beep;
 			if(time == DHUHR || time == ASR || time == MAGHRIB || time == ISHAA || (time == SUNRISE && !alertSunrise())) {
 				alarm = R.raw.adhan;
