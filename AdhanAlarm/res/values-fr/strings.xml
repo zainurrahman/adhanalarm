@@ -5,7 +5,7 @@
 	<string name="help">Aide</string>
     <string name="help_text"><u>Questions fréquemment posées</u>\n\nQ: Pourquoi les temps de prières ne correspondent pas à mon calendrier?\n\nA: Il y a beaucoup de facteurs qui affectent le calcul des prières, notamment  les paramètres en entrées de configuration (ex. latitude, longitude, méthode de calcul,…), le choix des algorithmes ainsi que la précision du calcul qui vari selon les machines.\n\nQ: Pourquoi la boussole du Qibla ne se dirige-t-elle pas dans la bonne direction?\n\nA: C'est une boussole très imprécise.\n\nQ: Pourquoi ma fonctionnalité préférée n'est-elle pas incluse dans l'application?\n\nA: Veuillez visiter le site Web du projet à l’adresse adhanalarm.googlecode.com et aidez-nous à améliorer le programme.\n</string>
     <string name="information">Information</string>
-    <string name="information_text"><u>Information</u>\n\nPour plus d'informations sur ce programme merci de visiter:\nadhanalarm.googlecode.com\n\nPour plus d'informations sur l'islam:\nwww.spiritofislam.com</string>
+    <string name="information_text"><u>Information</u>\n\nPour plus d'informations sur ce programme merci de visiter:\n<u>adhanalarm.googlecode.com</u>\n\nPour plus d'informations sur l'islam:\n<u>www.spiritofislam.com</u></string>
     <string name="today">Aujourd'hui</string>
     <string name="fajr">Fajr</string>
     <string name="sunrise">Lever du soleil</string>

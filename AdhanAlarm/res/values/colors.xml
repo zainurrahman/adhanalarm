@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="white">#ffffffff</color>
+	<color name="black">#ff000000</color>
+	<color name="background">#ff003300</color>
+	<color name="alternate_row_background">#ffffff00</color>
+</resources>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="wrap_content"
+	android:layout_width="wrap_content">
+	<LinearLayout android:orientation="horizontal"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content">
+		<LinearLayout android:orientation="vertical"
+			android:layout_height="wrap_content" android:layout_width="10px">
+			<TextView style="@style/RegularText"
+				android:id="@+id/mark_fajr" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" />
+			<TextView android:id="@+id/mark_sunrise"
+				android:layout_height="wrap_content"
+				android:layout_width="fill_parent" style="@style/AlternateRowText" />
+			<TextView style="@style/RegularText"
+				android:id="@+id/mark_dhuhr" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" />
+			<TextView android:id="@+id/mark_asr"
+				android:layout_height="wrap_content"
+				android:layout_width="fill_parent" style="@style/AlternateRowText" />
+			<TextView style="@style/RegularText"
+				android:id="@+id/mark_maghrib" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" />
+			<TextView android:id="@+id/mark_ishaa"
+				android:layout_height="wrap_content"
+				android:layout_width="fill_parent" style="@style/AlternateRowText" />
+			<TextView style="@style/RegularText"
+				android:id="@+id/mark_next_fajr" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" />
+		</LinearLayout>
+		<LinearLayout android:orientation="vertical"
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content">
+			<TextView style="@style/RegularText"
+				android:layout_height="wrap_content" android:text="@string/fajr"
+				android:layout_width="fill_parent" />
+			<TextView android:layout_height="wrap_content"
+				android:text="@string/sunrise" style="@style/AlternateRowText"
+				android:layout_width="fill_parent" />
+			<TextView style="@style/RegularText"
+				android:layout_height="wrap_content" android:text="@string/dhuhr"
+				android:layout_width="fill_parent" />
+			<TextView android:layout_height="wrap_content"
+				android:text="@string/asr" android:layout_width="fill_parent"
+				style="@style/AlternateRowText" />
+			<TextView style="@style/RegularText"
+				android:layout_height="wrap_content" android:text="@string/maghrib"
+				android:layout_width="fill_parent" />
+			<TextView android:layout_height="wrap_content"
+				android:text="@string/ishaa" style="@style/AlternateRowText"
+				android:layout_width="fill_parent" />
+			<TextView style="@style/RegularText"
+				android:layout_height="wrap_content"
+				android:text="@string/next_fajr" android:layout_width="fill_parent" />
+		</LinearLayout>
+		<LinearLayout android:orientation="vertical"
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content">
+			<TextView style="@style/RegularText" android:id="@+id/fajr"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:text="~"
+				android:paddingLeft="5px" android:paddingRight="5px" />
+			<TextView android:id="@+id/sunrise"
+				android:layout_height="wrap_content" android:text="~"
+				style="@style/AlternateRowText" android:layout_width="fill_parent"
+				android:paddingLeft="5px" android:paddingRight="5px" />
+			<TextView style="@style/RegularText" android:id="@+id/dhuhr"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:text="~"
+				android:paddingLeft="5px" android:paddingRight="5px" />
+			<TextView android:id="@+id/asr"
+				android:layout_height="wrap_content" android:text="~"
+				style="@style/AlternateRowText" android:layout_width="fill_parent"
+				android:paddingLeft="5px" android:paddingRight="5px" />
+			<TextView style="@style/RegularText"
+				android:id="@+id/maghrib" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:text="~"
+				android:paddingLeft="5px" android:paddingRight="5px" />
+			<TextView android:id="@+id/ishaa"
+				android:layout_height="wrap_content" android:text="~"
+				style="@style/AlternateRowText" android:layout_width="fill_parent"
+				android:paddingLeft="5px" android:paddingRight="5px" />
+			<TextView style="@style/RegularText"
+				android:id="@+id/next_fajr" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:text="~"
+				android:paddingLeft="5px" android:paddingRight="5px" />
+		</LinearLayout>
+		<LinearLayout android:orientation="vertical"
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content">
+			<TextView style="@style/RegularText"
+				android:id="@+id/fajr_am_pm" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:text="~" />
+			<TextView android:id="@+id/sunrise_am_pm"
+				android:layout_height="wrap_content" android:text="~"
+				style="@style/AlternateRowText" android:layout_width="fill_parent" />
+			<TextView style="@style/RegularText"
+				android:id="@+id/dhuhr_am_pm" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:text="~" />
+			<TextView android:id="@+id/asr_am_pm"
+				android:layout_height="wrap_content" android:text="~"
+				style="@style/AlternateRowText" android:layout_width="fill_parent" />
+			<TextView style="@style/RegularText"
+				android:id="@+id/maghrib_am_pm" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:text="~" />
+			<TextView android:id="@+id/ishaa_am_pm"
+				android:layout_height="wrap_content" android:text="~"
+				style="@style/AlternateRowText" android:layout_width="fill_parent" />
+			<TextView style="@style/RegularText"
+				android:id="@+id/next_fajr_am_pm" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:text="~" />
+		</LinearLayout>
+	</LinearLayout>
+</LinearLayout>
