@@ -12,6 +12,8 @@ import net.sourceforge.jitl.astro.Dms;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -19,9 +21,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -30,11 +29,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -42,8 +38,8 @@ public class AdhanAlarm extends Activity {
 	public static final boolean DEBUG = false;
 
 	private static final short FAJR = 0, SUNRISE = 1, DHUHR = 2, ASR = 3, MAGHRIB = 4, ISHAA = 5, NEXT_FAJR = 6; // Notification Times
-	private static final short DEFAULT_NOTIFICATION = 0, RECITE_ADHAN = 1, NO_NOTIFICATIONS = 2; // Notification Methods
-	private static final short NO_EXTRA_ALERTS = 0, ALERT_SUNRISE = 1; // Extra Alerts
+	protected static final short DEFAULT_NOTIFICATION = 0, RECITE_ADHAN = 1, NO_NOTIFICATIONS = 2; // Notification Methods
+	protected static final short NO_EXTRA_ALERTS = 0, ALERT_SUNRISE = 1; // Extra Alerts
 
 	private static final Method[] CALCULATION_METHODS = new Method[]{Method.EGYPT_SURVEY, Method.KARACHI_SHAF, Method.KARACHI_HANAF, Method.NORTH_AMERICA, Method.MUSLIM_LEAGUE, Method.UMM_ALQURRA, Method.FIXED_ISHAA};
 	private static final Rounding[] ROUNDING_TYPES = new Rounding[]{Rounding.NONE, Rounding.NORMAL, Rounding.SPECIAL, Rounding.AGRESSIVE};
@@ -71,37 +67,6 @@ public class AdhanAlarm extends Activity {
 		TIME_NAMES = new String[]{getString(R.string.fajr), getString(R.string.sunrise), getString(R.string.dhuhr), getString(R.string.asr), getString(R.string.maghrib), getString(R.string.ishaa), getString(R.string.next_fajr)};
 		
 		settings = getSharedPreferences("settingsFile", MODE_PRIVATE);
-
-		((EditText)findViewById(R.id.latitude)).setText(Float.toString(settings.getFloat("latitude", 43.67f)));
-		((EditText)findViewById(R.id.longitude)).setText(Float.toString(settings.getFloat("longitude", -79.417f)));
-
-		Spinner notification_methods = (Spinner)findViewById(R.id.notification_methods);
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.notification_methods, android.R.layout.simple_spinner_item);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		notification_methods.setAdapter(adapter);
-		notification_methods.setSelection(settings.getInt("notificationMethodIndex", DEFAULT_NOTIFICATION));
-
-		Spinner extra_alerts = (Spinner)findViewById(R.id.extra_alerts);
-		adapter = ArrayAdapter.createFromResource(this, R.array.extra_alerts, android.R.layout.simple_spinner_item);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		extra_alerts.setAdapter(adapter);
-		extra_alerts.setSelection(settings.getInt("extraAlertsIndex", NO_EXTRA_ALERTS));
-
-		Spinner calculation_methods = (Spinner)findViewById(R.id.calculation_methods);
-		adapter = ArrayAdapter.createFromResource(this, R.array.calculation_methods, android.R.layout.simple_spinner_item);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		calculation_methods.setAdapter(adapter);
-		calculation_methods.setSelection(settings.getInt("calculationMethodsIndex", 4));
-
-		Spinner rounding_types = (Spinner)findViewById(R.id.rounding_types);
-		adapter = ArrayAdapter.createFromResource(this, R.array.rounding_types, android.R.layout.simple_spinner_item);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		rounding_types.setAdapter(adapter);
-		rounding_types.setSelection(settings.getInt("roundingTypesIndex", 2));
-
-		((EditText)findViewById(R.id.pressure)).setText(Float.toString(settings.getFloat("pressure", 1010)));
-		((EditText)findViewById(R.id.temperature)).setText(Float.toString(settings.getFloat("temperature", 10)));
-		((EditText)findViewById(R.id.altitude)).setText(Float.toString(settings.getFloat("altitude", 0)));
 
 		double gmtOffset = getGMTOffset();
 		String plusMinusGMT = gmtOffset < 0 ? "" + gmtOffset : "+" + gmtOffset;
@@ -166,81 +131,21 @@ public class AdhanAlarm extends Activity {
 		three.setIndicator(getString(R.string.settings), getResources().getDrawable(R.drawable.calculator));
 		tabs.addTab(three);
 
-		((Button)findViewById(R.id.lookup_gps)).setOnClickListener(new Button.OnClickListener() {  
+		((Button)findViewById(R.id.set_location)).setOnClickListener(new Button.OnClickListener() {  
 			public void onClick(View v) {
-				Criteria criteria = new Criteria();
-				criteria.setAccuracy(Criteria.ACCURACY_FINE);
-				criteria.setAltitudeRequired(false);
-				criteria.setBearingRequired(false);
-				criteria.setCostAllowed(true);
-				criteria.setPowerRequirement(Criteria.POWER_LOW);
-				
-				LocationManager locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
-				Location currentLocation = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, true));
-				
-				if(currentLocation != null) {
-					((EditText)findViewById(R.id.latitude)).setText(Double.toString(currentLocation.getLatitude()));
-					((EditText)findViewById(R.id.longitude)).setText(Double.toString(currentLocation.getLongitude()));
-					((EditText)findViewById(R.id.altitude)).setText(Double.toString(currentLocation.getAltitude()));
-				} else {
-					((EditText)findViewById(R.id.latitude)).setText("");
-					((EditText)findViewById(R.id.longitude)).setText("");
-				}
+				showLocationDialog();
 			}
 		});
-		((Button)findViewById(R.id.save_and_apply_settings)).setOnClickListener(new Button.OnClickListener() {
+		((Button)findViewById(R.id.set_notification)).setOnClickListener(new Button.OnClickListener() {  
 			public void onClick(View v) {
-				SharedPreferences.Editor editor = settings.edit();
-				try {
-					editor.putFloat("latitude", Float.parseFloat(((EditText)findViewById(R.id.latitude)).getText().toString()));
-				} catch(Exception ex) {
-					editor.putFloat("latitude", 43.67f);
-					((EditText)findViewById(R.id.latitude)).setText("43.67");
-				}
-				try {
-					editor.putFloat("longitude", Float.parseFloat(((EditText)findViewById(R.id.longitude)).getText().toString()));
-				} catch(Exception ex) {
-					editor.putFloat("longitude", -79.417f);
-					((EditText)findViewById(R.id.longitude)).setText("-79.417");
-				}
-				try {
-					editor.putFloat("altitude", Float.parseFloat(((EditText)findViewById(R.id.altitude)).getText().toString()));
-				} catch(Exception ex) {
-					editor.putFloat("altitude", 0);
-					((EditText)findViewById(R.id.pressure)).setText("0.0");
-				}
-				editor.putInt("calculationMethodsIndex", ((Spinner)findViewById(R.id.calculation_methods)).getSelectedItemPosition());
-				try {
-					editor.putFloat("pressure", Float.parseFloat(((EditText)findViewById(R.id.pressure)).getText().toString()));
-				} catch(Exception ex) {
-					editor.putFloat("pressure", 1010);
-					((EditText)findViewById(R.id.pressure)).setText("1010.0");
-				}
-				try {
-					editor.putFloat("temperature", Float.parseFloat(((EditText)findViewById(R.id.temperature)).getText().toString()));
-				} catch(Exception ex) {
-					editor.putFloat("temperature", 10);
-					((EditText)findViewById(R.id.pressure)).setText("10.0");
-				}
-				editor.putInt("roundingTypesIndex", ((Spinner)findViewById(R.id.rounding_types)).getSelectedItemPosition());
-				editor.putInt("notificationMethodIndex", ((Spinner)findViewById(R.id.notification_methods)).getSelectedItemPosition());
-				editor.putInt("extraAlertsIndex", ((Spinner)findViewById(R.id.extra_alerts)).getSelectedItemPosition());
-				editor.commit();
-				updateScheduleAndNotification();
-				((TabHost)findViewById(R.id.tabs)).setCurrentTab(0);
+				showNotificationDialog();
 			}
 		});
-		((Button)findViewById(R.id.reset_settings)).setOnClickListener(new Button.OnClickListener() {  
+		((Button)findViewById(R.id.set_calculation)).setOnClickListener(new Button.OnClickListener() {  
 			public void onClick(View v) {
-				((Spinner)findViewById(R.id.notification_methods)).setSelection(0);
-				((Spinner)findViewById(R.id.extra_alerts)).setSelection(0);
-				((Spinner)findViewById(R.id.calculation_methods)).setSelection(4);
-				((Spinner)findViewById(R.id.rounding_types)).setSelection(2);
-				((EditText)findViewById(R.id.pressure)).setText("1010.0");
-				((EditText)findViewById(R.id.temperature)).setText("10.0");
-				((EditText)findViewById(R.id.altitude)).setText("0.0");
+				showCalculationDialog();
 			}
-		}); /* End of Tab 3 Items */
+		});	/* End of Tab 3 Items */
 	}
 	
 	@Override
@@ -273,6 +178,34 @@ public class AdhanAlarm extends Activity {
 	private void stopTrackingOrientation() {
 		if(isTrackingOrientation) ((SensorManager)getSystemService(SENSOR_SERVICE)).unregisterListener(orientationListener);
 		isTrackingOrientation = false;
+	}
+
+	private void showLocationDialog() {
+		SetLocationDialog dialog = new SetLocationDialog(this);
+		dialog.setOnDismissListener(new OnDismissListener() { 
+			public void onDismiss(DialogInterface d) {
+				updateScheduleAndNotification();
+			}
+		});
+		dialog.show();
+	}
+	private void showNotificationDialog() {
+		SetNotificationDialog dialog = new SetNotificationDialog(this);
+		dialog.setOnDismissListener(new OnDismissListener() { 
+			public void onDismiss(DialogInterface d) {
+				updateScheduleAndNotification();
+			}
+		});
+		dialog.show();
+	}
+	private void showCalculationDialog() {
+		SetCalculationDialog dialog = new SetCalculationDialog(this);
+		dialog.setOnDismissListener(new OnDismissListener() { 
+			public void onDismiss(DialogInterface d) {
+				updateScheduleAndNotification();
+			}
+		});
+		dialog.show();
 	}
 
 	public void onStop() {
