@@ -44,7 +44,12 @@ public class SetLocationDialog extends Dialog {
 				criteria.setPowerRequirement(Criteria.POWER_LOW);
 				
 				LocationManager locationManager = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
-				Location currentLocation = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, true));
+				Location currentLocation = null;
+				try {
+					currentLocation = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, true));
+				} catch(Exception ex) {
+					// GPS or wireless networks is disabled
+				}
 				
 				if(currentLocation != null) {
 					((EditText)findViewById(R.id.latitude)).setText(Double.toString(currentLocation.getLatitude()));
