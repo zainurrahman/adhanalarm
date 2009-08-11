@@ -1,9 +1,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:icon="@drawable/help" android:id="@+id/menu_help"
+	<item android:icon="@android:drawable/ic_menu_help" android:id="@+id/menu_help"
 		android:numericShortcut="1" android:title="@string/help"
 		android:alphabeticShortcut="H">
 	</item>
-	<item android:icon="@drawable/information" android:id="@+id/menu_information"
+	<item android:icon="@android:drawable/ic_menu_info_details" android:id="@+id/menu_information"
 		android:numericShortcut="2" android:title="@string/information"
 		android:alphabeticShortcut="I">
 	</item>

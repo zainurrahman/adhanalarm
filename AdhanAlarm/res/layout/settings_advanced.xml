@@ -9,14 +9,6 @@
 			android:layout_height="fill_parent"
 			android:layout_width="wrap_content" android:paddingRight="5px"
 			android:paddingLeft="5px">
-			<TextView android:text="@string/latitude"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:layout_weight="1"
-				android:gravity="fill_vertical" />
-			<TextView android:text="@string/longitude"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:layout_weight="1"
-				android:gravity="fill_vertical" />
 			<TextView android:text="@string/altitude"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:layout_weight="1"
@@ -29,6 +21,9 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:layout_weight="1"
 				android:gravity="fill_vertical" />
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:text="@string/rounding"
+				android:layout_weight="1" android:gravity="fill_vertical" />
 			<Button android:id="@+id/reset_settings"
 				android:text="@string/reset" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" />
@@ -36,34 +31,6 @@
 		<LinearLayout android:orientation="vertical"
 			android:layout_height="wrap_content"
 			android:layout_width="fill_parent">
-			<LinearLayout android:orientation="horizontal"
-				android:layout_height="wrap_content"
-				android:layout_width="fill_parent">
-				<LinearLayout android:orientation="vertical"
-					android:layout_height="wrap_content"
-					android:layout_width="wrap_content" android:layout_weight="1">
-					<LinearLayout android:orientation="horizontal"
-						android:layout_height="wrap_content"
-						android:layout_width="fill_parent">
-						<EditText android:id="@+id/latitude"
-							android:text="43.67" android:layout_width="fill_parent"
-							android:layout_height="wrap_content"
-							android:numeric="signed|decimal" android:singleLine="true" />
-					</LinearLayout>
-					<LinearLayout android:orientation="horizontal"
-						android:layout_height="wrap_content"
-						android:layout_width="fill_parent">
-						<EditText android:id="@+id/longitude"
-							android:text="-79.4167" android:layout_width="fill_parent"
-							android:layout_height="wrap_content"
-							android:numeric="signed|decimal" android:singleLine="true" />
-					</LinearLayout>
-				</LinearLayout>
-				<Button android:id="@+id/lookup_gps"
-					android:text="@string/lookup_gps"
-					android:layout_width="wrap_content"
-					android:layout_height="fill_parent" />
-			</LinearLayout>
 			<EditText android:id="@+id/altitude" android:text="0"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
@@ -76,6 +43,10 @@
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:numeric="signed|decimal" android:singleLine="true" />
+			<Spinner android:id="@+id/rounding_types"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:drawSelectorOnTop="true" />
 			<Button android:id="@+id/save_and_apply_settings"
 				android:text="@string/save_and_apply"
 				android:layout_width="fill_parent"
