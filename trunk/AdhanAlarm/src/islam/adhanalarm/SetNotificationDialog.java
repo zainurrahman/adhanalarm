@@ -29,13 +29,13 @@ public class SetNotificationDialog extends Dialog {
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.notification_methods, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		notification_methods.setAdapter(adapter);
-		notification_methods.setSelection(settings.getInt("notificationMethodIndex", AdhanAlarm.DEFAULT_NOTIFICATION));
+		notification_methods.setSelection(settings.getInt("notificationMethodIndex", CONSTANT.DEFAULT_NOTIFICATION));
 
 		Spinner extra_alerts = (Spinner)findViewById(R.id.extra_alerts);
 		adapter = ArrayAdapter.createFromResource(getContext(), R.array.extra_alerts, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		extra_alerts.setAdapter(adapter);
-		extra_alerts.setSelection(settings.getInt("extraAlertsIndex", AdhanAlarm.NO_EXTRA_ALERTS));
+		extra_alerts.setSelection(settings.getInt("extraAlertsIndex", CONSTANT.NO_EXTRA_ALERTS));
 		
 		((Button)findViewById(R.id.save_and_apply_settings)).setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {

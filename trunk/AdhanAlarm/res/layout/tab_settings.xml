@@ -6,13 +6,13 @@
 		android:id="@+id/display_time_zone"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content" />
-	<Button android:id="@+id/set_location"
-		android:text="@string/location" android:layout_width="fill_parent"
+	<Button android:id="@+id/set_calculation"
+		android:text="@string/calculation" android:layout_width="fill_parent"
 		android:layout_height="wrap_content" />
 	<Button android:id="@+id/set_notification"
 		android:text="@string/notification" android:layout_width="fill_parent"
 		android:layout_height="wrap_content" />
-	<Button android:id="@+id/set_calculation"
-		android:text="@string/calculation" android:layout_width="fill_parent"
+	<Button android:id="@+id/set_advanced"
+		android:text="@string/advanced" android:layout_width="fill_parent"
 		android:layout_height="wrap_content" />
 </LinearLayout>

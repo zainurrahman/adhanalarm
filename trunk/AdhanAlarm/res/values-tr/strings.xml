@@ -28,7 +28,7 @@
     <string name="bearing_north">1) Kuzey Yatak = (1)°</string>
     <string name="bearing_qibla">2) Kible Yatak = (1) (+/-) (2)° = (3)°</string>
     <string name="settings">Ayarlar</string>
-    <string name="location">Yer</string>
+    <string name="advanced">Yer</string>
     <string name="notification">Duyuru</string>
     <string name="extra_alerts">Ek uyarılar</string>
     <string name="daylight_savings">Aydınlık saklamaları</string>

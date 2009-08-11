@@ -28,6 +28,7 @@
     <string name="bearing_north">1) Relevé du Nord = (1)°</string>
     <string name="bearing_qibla">2) Relevé de la Qibla = (1) (+/-) (2)° = (3)°</string>
     <string name="settings">Paramètres</string>
+    <string name="advanced">Avancé</string>
     <string name="notification">Notification</string>
     <string name="extra_alerts">Plus d’alertes</string>
     <string name="daylight_savings">Heure d'été</string>
