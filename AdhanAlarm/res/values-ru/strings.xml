@@ -28,7 +28,7 @@
     <string name="bearing_north">1) Опора севера = (1)°</string>
     <string name="bearing_qibla">2) Опора Киблы = (1) (+/-) (2)° = (3)°</string>
     <string name="settings">Настройки</string>
-    <string name="advanced">Местонахождение</string>
+    <string name="advanced">Расширенный</string>
     <string name="notification">Оповещение</string>
     <string name="extra_alerts">Дополнительные сигналы</string>
     <string name="daylight_savings">Летнее время</string>

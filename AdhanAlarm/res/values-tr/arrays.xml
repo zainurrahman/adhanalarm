@@ -3,7 +3,7 @@
     <array name="notification_methods">
         <item>Varsayılan bildirim</item>
         <item>Azan oku (sessiz zaman hariç)</item>
-        <item>Bildirimler yok</item>
+        <item>İptal et</item>
     </array>
     <array name="extra_alerts">
         <item>Yok</item>
@@ -11,8 +11,8 @@
     </array>
     <array name="calculation_methods">
         <item>Mısır Genel Anket Yetkilisi</item>
-        <item>Şafiî - Karaçi İslâm Bilimleri Üniversitesi</item>
-        <item>Hanefi - Karaçi İslâm Bilimleri Üniversitesi</item>
+        <item>Şafiî - Karaçi İslâm Bilimleri Üniv.</item>
+        <item>Hanefi - Karaçi İslâm Bilimleri Üniv.</item>
         <item>Kuzey Amerika İslâm Topluluğu</item>
         <item>Müslüman Dünya Ligi</item>
         <item>Umm Al-Qurra, Suudi Arabistani</item>
