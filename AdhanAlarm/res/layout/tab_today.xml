@@ -1,22 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="horizontal" android:layout_width="fill_parent"
-	android:layout_height="wrap_content">
-	<include layout="@layout/panel_timetable" />
-	<LinearLayout android:orientation="vertical"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:paddingTop="5px"
-		android:paddingLeft="10px" android:paddingRight="10px">
-		<ImageButton android:id="@+id/clear"
-			android:src="@drawable/stop" android:layout_width="40px"
-			android:layout_height="40px" />
-		<ImageButton android:id="@+id/previous"
-			android:src="@drawable/previous" android:layout_width="40px"
-			android:layout_height="40px" />
-		<ImageButton android:id="@+id/next" android:src="@drawable/next"
-			android:layout_width="40px" android:layout_height="40px" />
-	</LinearLayout>
-	<TextView style="@style/RegularText" android:id="@+id/notes"
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent" android:gravity="center">
+	<ListView android:id="@+id/timetable"
+        android:layout_width="190px"
+        android:layout_height="210px" android:choiceMode="none" android:clickable="false" />
+	<TextView style="@style/RegularTextFinePrint" android:id="@+id/notes"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="@string/introduction" />

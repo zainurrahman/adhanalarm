@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:paddingTop="4dip" android:paddingBottom="6dip"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content" gravity="right">
+	<TextView android:id="@+id/mark" style="@style/RegularText"
+		android:layout_width="15px" android:layout_height="wrap_content"
+		android:paddingRight="5px" />
+	<TextView android:id="@+id/time_name" style="@style/RegularText"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:paddingRight="5px"
+		android:minWidth="100px" android:layout_weight="2" />
+	<TextView android:id="@+id/time" style="@style/RegularText"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:paddingRight="5px"
+		android:minWidth="50px" android:text="~" />
+	<TextView android:id="@+id/time_am_pm" style="@style/RegularText"
+		android:layout_width="fill_parent" android:textSize="10dip"
+		android:layout_height="wrap_content" android:paddingRight="5px" />
+</LinearLayout>

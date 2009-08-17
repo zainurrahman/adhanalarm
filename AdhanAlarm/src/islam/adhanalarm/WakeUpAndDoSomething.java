@@ -7,7 +7,7 @@ import android.content.BroadcastReceiver;
 public class WakeUpAndDoSomething extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		AdhanAlarmWakeLock.acquire(context);
+		WakeLock.acquire(context);
 		Intent i = new Intent(context, AdhanAlarm.class);
 		i.putExtra("nextNotificationTime", intent.getShortExtra("nextNotificationTime", (short)-1));
 		i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

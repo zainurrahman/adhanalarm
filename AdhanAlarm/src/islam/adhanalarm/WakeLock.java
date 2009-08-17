@@ -3,7 +3,7 @@ package islam.adhanalarm;
 import android.content.Context;
 import android.os.PowerManager;
 
-public class AdhanAlarmWakeLock {
+public class WakeLock {
 
 	private static PowerManager.WakeLock wakeLock;
 	

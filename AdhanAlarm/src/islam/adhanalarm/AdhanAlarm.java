@@ -2,6 +2,8 @@ package islam.adhanalarm;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import net.sourceforge.jitl.Jitl;
@@ -30,15 +32,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TabHost;
 import android.widget.TextView;
 
 public class AdhanAlarm extends Activity {
-	private static TextView[] NOTIFICATION_MARKERS;
-	private static TextView[] ALARM_TIMES;
-	private static TextView[] ALARM_TIMES_AM_PM;
 	private static String[] TIME_NAMES;
+	
+	private ArrayList<HashMap<String, String>> timetable = new ArrayList<HashMap<String, String>>(7);
+	private SimpleAdapter timetableView = null;
 	
 	private static SharedPreferences settings;
 	private static MediaPlayer mediaPlayer;
@@ -51,11 +54,16 @@ public class AdhanAlarm extends Activity {
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		setContentView(R.layout.main);
-
-		NOTIFICATION_MARKERS = new TextView[]{(TextView)findViewById(R.id.mark_fajr), (TextView)findViewById(R.id.mark_sunrise), (TextView)findViewById(R.id.mark_dhuhr), (TextView)findViewById(R.id.mark_asr), (TextView)findViewById(R.id.mark_maghrib), (TextView)findViewById(R.id.mark_ishaa), (TextView)findViewById(R.id.mark_next_fajr)};
-		ALARM_TIMES = new TextView[]{(TextView)findViewById(R.id.fajr), (TextView)findViewById(R.id.sunrise), (TextView)findViewById(R.id.dhuhr), (TextView)findViewById(R.id.asr), (TextView)findViewById(R.id.maghrib), (TextView)findViewById(R.id.ishaa), (TextView)findViewById(R.id.next_fajr)};
-		ALARM_TIMES_AM_PM = new TextView[]{(TextView)findViewById(R.id.fajr_am_pm), (TextView)findViewById(R.id.sunrise_am_pm), (TextView)findViewById(R.id.dhuhr_am_pm), (TextView)findViewById(R.id.asr_am_pm), (TextView)findViewById(R.id.maghrib_am_pm), (TextView)findViewById(R.id.ishaa_am_pm), (TextView)findViewById(R.id.next_fajr_am_pm)};
+		
 		TIME_NAMES = new String[]{getString(R.string.fajr), getString(R.string.sunrise), getString(R.string.dhuhr), getString(R.string.asr), getString(R.string.maghrib), getString(R.string.ishaa), getString(R.string.next_fajr)};
+		
+		for(int i = 0; i < TIME_NAMES.length; i++) {
+			HashMap<String, String> map = new HashMap<String, String>();
+			map.put("time_name", TIME_NAMES[i]);
+			timetable.add(i, map);
+		}
+		timetableView = new SimpleAdapter(this, timetable, R.layout.timetable_row, new String[]{"mark", "time_name", "time", "time_am_pm"}, new int[]{R.id.mark, R.id.time_name, R.id.time, R.id.time_am_pm});
+		((ListView)findViewById(R.id.timetable)).setAdapter(timetableView);
 		
 		settings = getSharedPreferences("settingsFile", MODE_PRIVATE);
 
@@ -70,27 +78,7 @@ public class AdhanAlarm extends Activity {
 		TabHost.TabSpec one = tabs.newTabSpec("one");
 		one.setContent(R.id.content1);
 		one.setIndicator(getString(R.string.today), getResources().getDrawable(R.drawable.calendar));
-		tabs.addTab(one);
-
-		((ImageButton)findViewById(R.id.previous)).setOnClickListener(new ImageButton.OnClickListener() {
-			public void onClick(View v) {
-				int time = getNextNotificationTime() - 1;
-				if(time < CONSTANT.FAJR) time = CONSTANT.ISHAA;
-				if(time == CONSTANT.SUNRISE && !alertSunrise()) time = CONSTANT.FAJR;
-				playAlertIfAppropriate((short)time);
-			}
-		});
-		((ImageButton)findViewById(R.id.next)).setOnClickListener(new ImageButton.OnClickListener() {
-			public void onClick(View v) {
-				playAlertIfAppropriate(getNextNotificationTime());
-			}
-		});
-		((ImageButton)findViewById(R.id.clear)).setOnClickListener(new ImageButton.OnClickListener() {
-			public void onClick(View v) {
-				stopAlert();
-				AdhanAlarmWakeLock.release();
-			}
-		}); /* End of Tab 1 Items */
+		tabs.addTab(one); /* End of Tab 1 Items */
 
 		TabHost.TabSpec two = tabs.newTabSpec("two");
 		two.setContent(R.id.content2);
@@ -141,16 +129,30 @@ public class AdhanAlarm extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+		dialogBuilder.setCancelable(true);
 		switch(item.getItemId()) {
+		case R.id.menu_previous:
+			int time = getNextNotificationTime() - 1;
+			if(time < CONSTANT.FAJR) time = CONSTANT.ISHAA;
+			if(time == CONSTANT.SUNRISE && !alertSunrise()) time = CONSTANT.FAJR;
+			playAlertIfAppropriate((short)time);
+			break;
+		case R.id.menu_next:
+			playAlertIfAppropriate(getNextNotificationTime());
+			break;
+		case R.id.menu_stop:
+			stopAlert();
+			WakeLock.release();
+			break;
 		case R.id.menu_help:
 			dialogBuilder.setMessage(R.string.help_text);
+			dialogBuilder.create().show();
 			break;
 		case R.id.menu_information:
 			dialogBuilder.setMessage(R.string.information_text);
+			dialogBuilder.create().show();
 			break;
 		}
-		dialogBuilder.setCancelable(true);
-		dialogBuilder.create().show();
 		return true;
 	}
 	
@@ -174,7 +176,7 @@ public class AdhanAlarm extends Activity {
 	public void onStop() {
 		if(mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
 		stopTrackingOrientation();
-		AdhanAlarmWakeLock.release();
+		WakeLock.release();
 		super.onStop();
 	}
 
@@ -183,7 +185,7 @@ public class AdhanAlarm extends Activity {
 		if(notificationTime >= CONSTANT.FAJR && notificationTime <= CONSTANT.NEXT_FAJR) playAlertIfAppropriate(notificationTime);
 		updateScheduleAndNotification();
 		((TabHost)findViewById(R.id.tabs)).setCurrentTab(0);
-		AdhanAlarmWakeLock.release();
+		WakeLock.release();
 		super.onResume();
 	}
 
@@ -245,22 +247,24 @@ public class AdhanAlarm extends Activity {
 
 	private short getNextNotificationTime() {
 		for(short i = CONSTANT.FAJR; i <= CONSTANT.NEXT_FAJR; i++) {
-			if(NOTIFICATION_MARKERS[i].getText() == getString(R.string.next_time_marker)) return i;
+			if(timetable.get(i).get("mark") == getString(R.string.next_time_marker)) return i;
 		}
 		return -1;
 	}
 
 	private void indicateNotificationTimes(short nextNotificationTime) {
-		for(short i = CONSTANT.FAJR; i <= CONSTANT.NEXT_FAJR; i++) NOTIFICATION_MARKERS[i].setText(""); // Clear all existing markers in case it was left from the previous day or while phone was turned off
+		for(short i = CONSTANT.FAJR; i <= CONSTANT.NEXT_FAJR; i++) {
+			timetable.get(i).put("mark", ""); // Clear all existing markers in case it was left from the previous day or while phone was turned off
+		}
 
 		int previousNotificationTime = nextNotificationTime - 1 < CONSTANT.FAJR ? CONSTANT.ISHAA : nextNotificationTime - 1;
 		
 		if(!alertSunrise() && nextNotificationTime == CONSTANT.SUNRISE) nextNotificationTime = CONSTANT.DHUHR;
 		if(!alertSunrise() && previousNotificationTime == CONSTANT.SUNRISE) previousNotificationTime = CONSTANT.FAJR;
-
-		NOTIFICATION_MARKERS[nextNotificationTime].setText(getString(R.string.next_time_marker));
 		
-		((TextView)findViewById(R.id.notes)).setText(getString(R.string.last_alert) + ": " + TIME_NAMES[previousNotificationTime] + "\n" + getString(R.string.next_alert) + ": " + TIME_NAMES[nextNotificationTime]);
+		timetable.get(nextNotificationTime).put("mark", getString(R.string.next_time_marker));
+		
+		((TextView)findViewById(R.id.notes)).setText(getString(R.string.last_alert) + ": " + TIME_NAMES[previousNotificationTime] + ".  " + getString(R.string.next_alert) + ": " + TIME_NAMES[nextNotificationTime]);
 	}
 
 	private void updateScheduleAndNotification() {
@@ -290,13 +294,14 @@ public class AdhanAlarm extends Activity {
 					notificationTimes[i] = new GregorianCalendar(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH), allTimes[i].getHour(), allTimes[i].getMinute(), allTimes[i].getSecond());	
 				}
 				String fullTime = timeFormat.format(notificationTimes[i].getTime());
-				ALARM_TIMES[i].setText(fullTime.substring(0, fullTime.lastIndexOf(" ")));
-				ALARM_TIMES_AM_PM[i].setText(fullTime.substring(fullTime.lastIndexOf(" ") + 1, fullTime.length()) + (allTimes[i].isExtreme() ? "*" : ""));
+				timetable.get(i).put("time", fullTime.substring(0, fullTime.lastIndexOf(" ")));
+				timetable.get(i).put("time_am_pm", fullTime.substring(fullTime.lastIndexOf(" ") + 1, fullTime.length()) + (allTimes[i].isExtreme() ? "*" : ""));
 				if(nextNotificationTime < 0 && (currentTime.compareTo(notificationTimes[i]) < 0 || i == CONSTANT.NEXT_FAJR)) {
 					nextNotificationTime = i;
 				}
 			}
 			indicateNotificationTimes(nextNotificationTime);
+			timetableView.notifyDataSetChanged();
 
 			// Add Latitude, Longitude and Qibla DMS location
 			DecimalFormat df = new DecimalFormat("#.###");

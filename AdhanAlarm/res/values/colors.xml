@@ -2,6 +2,6 @@
 <resources>
 	<color name="white">#ffffffff</color>
 	<color name="black">#ff000000</color>
-	<color name="background">#ff003300</color>
-	<color name="alternate_row_background">#ffF7BA00</color>
+	<color name="background_color">#ff5A6131</color>
+	<color name="background">@drawable/bg_pattern_repeat</color>
 </resources>
