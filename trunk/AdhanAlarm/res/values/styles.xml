@@ -2,15 +2,22 @@
 <resources>  
     <style name="AdhanAlarmTheme" parent="android:Theme">
         <item name="android:windowBackground">@color/background</item>
+        <item name="android:tileMode">repeat</item>
+        <item name="android:listViewStyle">@style/listViewStyle</item>
+    </style>
+    
+    <style name="tabWidgetStyle" parent="@android:style/Widget.TabWidget">
+        <item name="android:background">@color/background_color</item>
     </style>
   
     <style name="RegularText" parent="@android:style/Widget.TextView">
         <item name="android:textColor">@color/white</item>
-        <item name="android:background">@color/background</item>
 	</style>
   
-    <style name="AlternateRowText" parent="@android:style/Widget.TextView">
-        <item name="android:textColor">@color/black</item>
-        <item name="android:background">@color/alternate_row_background</item>
+    <style name="RegularTextFinePrint" parent="@style/RegularText">
+        <item name="android:textSize">12dip</item>
+	</style>
+  
+    <style name="listViewStyle" parent="@android:style/Widget.ListView">
 	</style>
 </resources>
