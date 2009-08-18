@@ -16,11 +16,9 @@
     <string name="next_fajr">Prochain Fajr</string>
     <string name="next_time_marker">></string>
     <string name="error_playing_alert">Erreur rencontrée pendant la lecture de l’alerte </string>
-    <string name="introduction">préciser s'il vous plaît <u>Endroit</u></string>
+    <string name="location_not_set">préciser s'il vous plaît <u>Endroit</u></string>
     <string name="allahu_akbar">Dieu est grand</string>
     <string name="time_for">L'heure de</string>
-    <string name="last_alert">Dernière alerte</string>
-    <string name="next_alert">Prochaine alerte</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
     <string name="qibla">Qibla</string>

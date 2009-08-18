@@ -16,8 +16,13 @@
   
     <style name="RegularTextFinePrint" parent="@style/RegularText">
         <item name="android:textSize">12dip</item>
+        <item name="android:paddingTop">10px</item>
+        <item name="android:paddingLeft">10px</item>
+        <item name="android:paddingRight">10px</item>
+        <item name="android:layout_gravity">center</item>
 	</style>
   
     <style name="listViewStyle" parent="@android:style/Widget.ListView">
+        <item name="android:cacheColorHint">@color/transparent</item>
 	</style>
 </resources>
