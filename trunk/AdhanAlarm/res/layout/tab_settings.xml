@@ -2,10 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical" android:layout_width="fill_parent"
 	android:layout_height="wrap_content">
-	<TextView style="@style/RegularText"
+	<TextView style="@style/RegularTextFinePrint"
 		android:id="@+id/display_time_zone"
 		android:layout_width="wrap_content"
-		android:layout_height="wrap_content" />
+		android:layout_height="wrap_content"
+		android:paddingBottom="10px"  />
 	<Button android:id="@+id/set_calculation"
 		android:text="@string/calculation" android:layout_width="fill_parent"
 		android:layout_height="wrap_content" />

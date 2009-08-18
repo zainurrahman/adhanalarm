@@ -71,14 +71,12 @@ public class SetCalculationDialog extends Dialog {
 				try {
 					editor.putFloat("latitude", Float.parseFloat(((EditText)findViewById(R.id.latitude)).getText().toString()));
 				} catch(Exception ex) {
-					editor.putFloat("latitude", 43.67f);
-					((EditText)findViewById(R.id.latitude)).setText("43.67");
+					// Invalid latitude
 				}
 				try {
 					editor.putFloat("longitude", Float.parseFloat(((EditText)findViewById(R.id.longitude)).getText().toString()));
 				} catch(Exception ex) {
-					editor.putFloat("longitude", -79.417f);
-					((EditText)findViewById(R.id.longitude)).setText("-79.417");
+					// Invalid longitude
 				}
 				editor.putInt("calculationMethodsIndex", ((Spinner)findViewById(R.id.calculation_methods)).getSelectedItemPosition());
 				editor.commit();

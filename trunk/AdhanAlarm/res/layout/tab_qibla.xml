@@ -7,8 +7,7 @@
 		android:layout_height="wrap_content">
 		<LinearLayout android:orientation="vertical"
 			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:paddingRight="5px">
+			android:layout_height="wrap_content" android:paddingRight="5px">
 			<TextView style="@style/RegularText"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -121,14 +120,11 @@
 				android:layout_height="wrap_content" android:text="''" />
 		</LinearLayout>
 	</LinearLayout>
-	<TextView style="@style/RegularText"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="@string/compass_disclaimer" />
 	<LinearLayout android:orientation="horizontal"
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:layout_gravity="center_horizontal|center_vertical">
+		android:layout_gravity="center_horizontal|center_vertical"
+		android:paddingTop="5px" android:paddingBottom="5px">
 		<islam.adhanalarm.QiblaCompassView android:layout_width="240px"
 			android:layout_height="240px" android:id="@+id/qibla_compass" />
 	</LinearLayout>
@@ -138,4 +134,8 @@
 	<TextView style="@style/RegularText"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:id="@+id/bearing_qibla" />
+	<TextView style="@style/RegularTextFinePrint"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:paddingTop="3px"
+		android:text="@string/compass_disclaimer" />
 </LinearLayout>

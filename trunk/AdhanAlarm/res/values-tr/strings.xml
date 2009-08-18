@@ -16,11 +16,9 @@
     <string name="next_fajr">Sonraki İmsak</string>
     <string name="next_time_marker">></string>
     <string name="error_playing_alert">Uyarı çalmada yanlışlık</string>
-    <string name="introduction">Lütfen <u>yer</u> ayarlayın</string>
+    <string name="location_not_set">Lütfen <u>yer</u> ayarlayın</string>
     <string name="allahu_akbar">Allahu Akbar</string>
     <string name="time_for"></string>
-    <string name="last_alert">Önceki</string>
-    <string name="next_alert">Sonraki</string>
     <string name="latitude">Enlem</string>
     <string name="longitude">Boylam</string>
     <string name="qibla">Kible</string>

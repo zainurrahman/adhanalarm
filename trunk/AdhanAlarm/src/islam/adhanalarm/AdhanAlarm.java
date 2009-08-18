@@ -62,7 +62,11 @@ public class AdhanAlarm extends Activity {
 			map.put("time_name", TIME_NAMES[i]);
 			timetable.add(i, map);
 		}
-		timetableView = new SimpleAdapter(this, timetable, R.layout.timetable_row, new String[]{"mark", "time_name", "time", "time_am_pm"}, new int[]{R.id.mark, R.id.time_name, R.id.time, R.id.time_am_pm});
+		timetableView = new SimpleAdapter(this, timetable, R.layout.timetable_row, new String[]{"mark", "time_name", "time", "time_am_pm"}, new int[]{R.id.mark, R.id.time_name, R.id.time, R.id.time_am_pm}) {
+				// Disable list's item selection
+				public boolean areAllItemsEnabled() { return false; } 
+				public boolean isEnabled(int position) { return false; }
+		};
 		((ListView)findViewById(R.id.timetable)).setAdapter(timetableView);
 		
 		settings = getSharedPreferences("settingsFile", MODE_PRIVATE);
@@ -78,7 +82,10 @@ public class AdhanAlarm extends Activity {
 		TabHost.TabSpec one = tabs.newTabSpec("one");
 		one.setContent(R.id.content1);
 		one.setIndicator(getString(R.string.today), getResources().getDrawable(R.drawable.calendar));
-		tabs.addTab(one); /* End of Tab 1 Items */
+		tabs.addTab(one);
+		if(!settings.contains("latitude") || !settings.contains("longitude")) {
+			((TextView)findViewById(R.id.notes)).setText(getString(R.string.location_not_set));
+		} /* End of Tab 1 Items */
 
 		TabHost.TabSpec two = tabs.newTabSpec("two");
 		two.setContent(R.id.content2);
@@ -168,6 +175,7 @@ public class AdhanAlarm extends Activity {
 		d.setOnDismissListener(new OnDismissListener() {
 			public void onDismiss(DialogInterface d) {
 				updateScheduleAndNotification();
+				if(settings.contains("latitude") && settings.contains("longitude")) ((TextView)findViewById(R.id.notes)).setText("");
 			}
 		});
 		d.show();
@@ -263,8 +271,6 @@ public class AdhanAlarm extends Activity {
 		if(!alertSunrise() && previousNotificationTime == CONSTANT.SUNRISE) previousNotificationTime = CONSTANT.FAJR;
 		
 		timetable.get(nextNotificationTime).put("mark", getString(R.string.next_time_marker));
-		
-		((TextView)findViewById(R.id.notes)).setText(getString(R.string.last_alert) + ": " + TIME_NAMES[previousNotificationTime] + ".  " + getString(R.string.next_alert) + ": " + TIME_NAMES[nextNotificationTime]);
 	}
 
 	private void updateScheduleAndNotification() {

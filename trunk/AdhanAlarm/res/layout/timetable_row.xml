@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:paddingTop="4dip" android:paddingBottom="6dip"
 	android:layout_width="wrap_content"
-	android:layout_height="wrap_content" gravity="right">
+	android:layout_height="wrap_content">
 	<TextView android:id="@+id/mark" style="@style/RegularText"
 		android:layout_width="15px" android:layout_height="wrap_content"
 		android:paddingRight="5px" />

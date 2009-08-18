@@ -16,11 +16,9 @@
     <string name="next_fajr">Следующий Фаджр</string>
     <string name="next_time_marker">></string>
     <string name="error_playing_alert">Ошибка воспроизведения оповещение</string>
-    <string name="introduction">Укажите <u>место</u></string>
+    <string name="location_not_set">Укажите <u>место</u></string>
     <string name="allahu_akbar">Аллаху акбар</string>
     <string name="time_for">Время для</string>
-    <string name="last_alert">Пред.</string>
-    <string name="next_alert">След.</string>
     <string name="latitude">Широта</string>
     <string name="longitude">Долгота</string>
     <string name="qibla">Кибла</string>
