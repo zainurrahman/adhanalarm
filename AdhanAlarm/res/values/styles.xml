@@ -24,5 +24,6 @@
   
     <style name="listViewStyle" parent="@android:style/Widget.ListView">
         <item name="android:cacheColorHint">@color/transparent</item>
+        <item name="android:divider">@android:drawable/divider_horizontal_dark</item>
 	</style>
 </resources>
