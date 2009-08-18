@@ -101,7 +101,6 @@ public class AdhanAlarm extends Activity {
         	public void onAccuracyChanged(int s, int a) {
         	}
 		}; /* End of Tab 2 Items */
-		startTrackingOrientation();
 		
 		TabHost.TabSpec three = tabs.newTabSpec("three");
 		three.setContent(R.id.content3);
@@ -193,6 +192,7 @@ public class AdhanAlarm extends Activity {
 		if(notificationTime >= CONSTANT.FAJR && notificationTime <= CONSTANT.NEXT_FAJR) playAlertIfAppropriate(notificationTime);
 		updateScheduleAndNotification();
 		((TabHost)findViewById(R.id.tabs)).setCurrentTab(0);
+		startTrackingOrientation();
 		WakeLock.release();
 		super.onResume();
 	}
