@@ -5,8 +5,8 @@
 	<TextView style="@style/RegularTextFinePrint"
 		android:id="@+id/display_time_zone"
 		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:paddingBottom="10px"  />
+		android:layout_height="wrap_content" android:paddingTop="0px"
+		android:paddingBottom="2px" />
 	<Button android:id="@+id/set_calculation"
 		android:text="@string/calculation" android:layout_width="fill_parent"
 		android:layout_height="wrap_content" />
