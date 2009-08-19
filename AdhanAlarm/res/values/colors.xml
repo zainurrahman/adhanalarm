@@ -3,6 +3,7 @@
 	<color name="white">#ffFFFFFF</color>
 	<color name="black">#ff000000</color>
 	<color name="transparent">#00000000</color>
+	<color name="semi_transparent">#55000000</color>
 	<color name="background_color">#ff5A6131</color>
 	<color name="background">@drawable/bg_pattern_repeat</color>
 </resources>

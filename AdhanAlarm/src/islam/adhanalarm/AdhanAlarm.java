@@ -31,6 +31,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup.OnHierarchyChangeListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -63,11 +64,20 @@ public class AdhanAlarm extends Activity {
 			timetable.add(i, map);
 		}
 		timetableView = new SimpleAdapter(this, timetable, R.layout.timetable_row, new String[]{"mark", "time_name", "time", "time_am_pm"}, new int[]{R.id.mark, R.id.time_name, R.id.time, R.id.time_am_pm}) {
-				// Disable list's item selection
-				public boolean areAllItemsEnabled() { return false; } 
+				public boolean areAllItemsEnabled() { return false; } // Disable list's item selection
 				public boolean isEnabled(int position) { return false; }
 		};
 		((ListView)findViewById(R.id.timetable)).setAdapter(timetableView);
+		
+		((ListView)findViewById(R.id.timetable)).setOnHierarchyChangeListener(new OnHierarchyChangeListener() { // Set zebra stripes
+			private int numChildren = 0;
+        	public void onChildViewAdded(View parent, View child) {
+        		child.setBackgroundResource(++numChildren % 2 == 0 ? R.color.semi_transparent : R.color.transparent);
+        		if(numChildren == 7) numChildren = 0; // Last row has been reached, reset for next time
+        	}
+        	public void onChildViewRemoved(View parent, View child) {
+        	}
+		});
 		
 		settings = getSharedPreferences("settingsFile", MODE_PRIVATE);
 
