@@ -125,7 +125,7 @@
 		android:layout_width="wrap_content"
 		android:layout_gravity="center_horizontal|center_vertical"
 		android:paddingTop="5px" android:paddingBottom="5px">
-		<islam.adhanalarm.QiblaCompassView android:layout_width="240px"
+		<islam.adhanalarm.view.QiblaCompassView android:layout_width="240px"
 			android:layout_height="240px" android:id="@+id/qibla_compass" />
 	</LinearLayout>
 	<TextView style="@style/RegularText"
