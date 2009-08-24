@@ -46,7 +46,7 @@ public class Schedule {
 	}
 	public short nextTimeIndex() {
 		GregorianCalendar today = new GregorianCalendar();
-		Calendar currentTime = new GregorianCalendar(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH), today.get(Calendar.HOUR), today.get(Calendar.MINUTE), today.get(Calendar.SECOND));
+		Calendar currentTime = new GregorianCalendar(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH), today.get(Calendar.HOUR_OF_DAY), today.get(Calendar.MINUTE), today.get(Calendar.SECOND));
 		if(currentTime.before(schedule[CONSTANT.FAJR])) return CONSTANT.FAJR;
 		for(short i = CONSTANT.FAJR; i < CONSTANT.NEXT_FAJR; i++) {
 			if(currentTime.compareTo(schedule[i]) <= 0 && currentTime.before(schedule[i + 1])) {
