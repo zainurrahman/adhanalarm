@@ -4,7 +4,7 @@ import net.sourceforge.jitl.Method;
 import net.sourceforge.jitl.Rounding;
 
 public class CONSTANT {
-	public static final boolean DEBUG = false;
+	public static final boolean DEBUG = true;
 	
 	public static final short FAJR = 0, SUNRISE = 1, DHUHR = 2, ASR = 3, MAGHRIB = 4, ISHAA = 5, NEXT_FAJR = 6; // Notification Times
 	public static final short DEFAULT_NOTIFICATION = 0, RECITE_ADHAN = 1, NO_NOTIFICATIONS = 2; // Notification Methods
