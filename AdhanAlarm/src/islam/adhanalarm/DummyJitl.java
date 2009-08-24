@@ -24,12 +24,13 @@ public class DummyJitl extends Jitl {
 		
 		for(short i = START_PRAYER; i <= CONSTANT.NEXT_FAJR; i++) {
 			currentTime.add(Calendar.MINUTE, 1);
-			times[i] = new Prayer(currentTime.get(Calendar.HOUR) + INC_HOUR, currentTime.get(Calendar.MINUTE) + INC_MIN, 0, false);
+			currentTime.getTime().getMinutes();
+			times[i] = new Prayer(currentTime.get(Calendar.HOUR_OF_DAY) + INC_HOUR, currentTime.get(Calendar.MINUTE) + INC_MIN, 0, false);
 		}
 		currentTime.add(Calendar.MINUTE, -(CONSTANT.NEXT_FAJR - START_PRAYER));
 		for(short i = START_PRAYER; i >= CONSTANT.FAJR; i--) {
 			currentTime.add(Calendar.MINUTE, -1);
-			times[i] = new Prayer(currentTime.get(Calendar.HOUR) + INC_HOUR, currentTime.get(Calendar.MINUTE) + INC_MIN, 0, false);
+			times[i] = new Prayer(currentTime.get(Calendar.HOUR_OF_DAY) + INC_HOUR, currentTime.get(Calendar.MINUTE) + INC_MIN, 0, false);
 		}
 	}
 	public DayPrayers getPrayerTimes(final GregorianCalendar date) {
