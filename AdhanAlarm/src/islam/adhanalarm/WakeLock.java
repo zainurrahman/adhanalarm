@@ -7,7 +7,7 @@ public class WakeLock {
 
 	private static PowerManager.WakeLock wakeLock;
 	
-	static void acquire(Context context) {
+	public static void acquire(Context context) {
 		release();
 		PowerManager powerManager = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
 
@@ -15,7 +15,7 @@ public class WakeLock {
         wakeLock.acquire();
 	}
 	
-	static void release() {
+	public static void release() {
         if(wakeLock != null && wakeLock.isHeld()) wakeLock.release();
         wakeLock = null;
 	}

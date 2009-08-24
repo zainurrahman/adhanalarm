@@ -1,8 +1,8 @@
 package islam.adhanalarm.dialog; 
 
 import islam.adhanalarm.R;
+import islam.adhanalarm.VARIABLE;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -13,10 +13,8 @@ import android.widget.Spinner;
 
 public class AdvancedSettingsDialog extends Dialog {
 	
-	private static SharedPreferences settings;
-	
-	public AdvancedSettingsDialog(Context context) {
-		super(context);
+	public AdvancedSettingsDialog() {
+		super(VARIABLE.applicationContext);
 	}
 	
 	@Override
@@ -24,22 +22,20 @@ public class AdvancedSettingsDialog extends Dialog {
 		super.onCreate(icicle);
 		setContentView(R.layout.settings_advanced);
 		setTitle(R.string.advanced);
-		
-		settings = getContext().getSharedPreferences("settingsFile", Context.MODE_PRIVATE);
 
-		((EditText)findViewById(R.id.pressure)).setText(Float.toString(settings.getFloat("pressure", 1010)));
-		((EditText)findViewById(R.id.temperature)).setText(Float.toString(settings.getFloat("temperature", 10)));
-		((EditText)findViewById(R.id.altitude)).setText(Float.toString(settings.getFloat("altitude", 0)));
+		((EditText)findViewById(R.id.pressure)).setText(Float.toString(VARIABLE.settings.getFloat("pressure", 1010)));
+		((EditText)findViewById(R.id.temperature)).setText(Float.toString(VARIABLE.settings.getFloat("temperature", 10)));
+		((EditText)findViewById(R.id.altitude)).setText(Float.toString(VARIABLE.settings.getFloat("altitude", 0)));
 
 		Spinner rounding_types = (Spinner)findViewById(R.id.rounding_types);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.rounding_types, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		rounding_types.setAdapter(adapter);
-		rounding_types.setSelection(settings.getInt("roundingTypesIndex", 2));
+		rounding_types.setSelection(VARIABLE.settings.getInt("roundingTypesIndex", 2));
 		
 		((Button)findViewById(R.id.save_and_apply_settings)).setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
-				SharedPreferences.Editor editor = settings.edit();
+				SharedPreferences.Editor editor = VARIABLE.settings.edit();
 				try {
 					editor.putFloat("altitude", Float.parseFloat(((EditText)findViewById(R.id.altitude)).getText().toString()));
 				} catch(Exception ex) {

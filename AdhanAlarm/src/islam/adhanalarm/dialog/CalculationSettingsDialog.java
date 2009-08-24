@@ -1,6 +1,7 @@
 package islam.adhanalarm.dialog;
 
 import islam.adhanalarm.R;
+import islam.adhanalarm.VARIABLE;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -16,10 +17,8 @@ import android.widget.Spinner;
 
 public class CalculationSettingsDialog extends Dialog {
 	
-	private static SharedPreferences settings;
-	
-	public CalculationSettingsDialog(Context context) {
-		super(context);
+	public CalculationSettingsDialog() {
+		super(VARIABLE.applicationContext);
 	}
 	
 	@Override
@@ -28,16 +27,14 @@ public class CalculationSettingsDialog extends Dialog {
 		setContentView(R.layout.settings_calculation);
 		setTitle(R.string.calculation);
 
-		settings = getContext().getSharedPreferences("settingsFile", Context.MODE_PRIVATE);
-
-		((EditText)findViewById(R.id.latitude)).setText(Float.toString(settings.getFloat("latitude", 43.67f)));
-		((EditText)findViewById(R.id.longitude)).setText(Float.toString(settings.getFloat("longitude", -79.417f)));
+		((EditText)findViewById(R.id.latitude)).setText(Float.toString(VARIABLE.settings.getFloat("latitude", 43.67f)));
+		((EditText)findViewById(R.id.longitude)).setText(Float.toString(VARIABLE.settings.getFloat("longitude", -79.417f)));
 
 		Spinner calculation_methods = (Spinner)findViewById(R.id.calculation_methods);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.calculation_methods, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		calculation_methods.setAdapter(adapter);
-		calculation_methods.setSelection(settings.getInt("calculationMethodsIndex", 4));
+		calculation_methods.setSelection(VARIABLE.settings.getInt("calculationMethodsIndex", 4));
 
 		((Button)findViewById(R.id.lookup_gps)).setOnClickListener(new Button.OnClickListener() {  
 			public void onClick(View v) {
@@ -68,7 +65,7 @@ public class CalculationSettingsDialog extends Dialog {
 		
 		((Button)findViewById(R.id.save_and_apply_settings)).setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
-				SharedPreferences.Editor editor = settings.edit();
+				SharedPreferences.Editor editor = VARIABLE.settings.edit();
 				try {
 					editor.putFloat("latitude", Float.parseFloat(((EditText)findViewById(R.id.latitude)).getText().toString()));
 				} catch(Exception ex) {
