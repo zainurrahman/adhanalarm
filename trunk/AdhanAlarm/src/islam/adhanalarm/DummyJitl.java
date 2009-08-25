@@ -11,7 +11,7 @@ import net.sourceforge.jitl.astro.Location;
 
 public class DummyJitl extends Jitl {
 
-	private final short START_PRAYER = CONSTANT.DHUHR;
+	private static short START_PRAYER = CONSTANT.DHUHR;
 	private final int INC_HOUR = 0;
 	private final int INC_MIN = 0;
 	
@@ -32,6 +32,7 @@ public class DummyJitl extends Jitl {
 			currentTime.add(Calendar.MINUTE, -1);
 			times[i] = new Prayer(currentTime.get(Calendar.HOUR_OF_DAY) + INC_HOUR, currentTime.get(Calendar.MINUTE) + INC_MIN, 0, false);
 		}
+		START_PRAYER++;
 	}
 	public DayPrayers getPrayerTimes(final GregorianCalendar date) {
 		dp.fajr().setHour(times[0].getHour()); dp.fajr().setMinute(times[0].getMinute()); dp.fajr().setSecond(0);

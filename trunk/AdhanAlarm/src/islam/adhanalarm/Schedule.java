@@ -52,7 +52,7 @@ public class Schedule {
 				return i;
 			}
 		}
-		return -1;
+		return CONSTANT.NEXT_FAJR;
 	}
 	public static double getGMTOffset() {
 		Calendar currentTime = new GregorianCalendar();

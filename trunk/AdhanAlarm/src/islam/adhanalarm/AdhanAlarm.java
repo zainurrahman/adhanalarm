@@ -4,7 +4,8 @@ import islam.adhanalarm.dialog.AdvancedSettingsDialog;
 import islam.adhanalarm.dialog.CalculationSettingsDialog;
 import islam.adhanalarm.dialog.NotificationSettingsDialog;
 import islam.adhanalarm.view.QiblaCompassView;
-import islam.adhanalarm.service.NotifierService;
+import islam.adhanalarm.receiver.NotificationReceiver;
+import islam.adhanalarm.service.NotificationService;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -144,14 +145,14 @@ public class AdhanAlarm extends Activity {
 			time--;
 			if(time < CONSTANT.FAJR) time = CONSTANT.ISHAA;
 			if(time == CONSTANT.SUNRISE && !VARIABLE.alertSunrise()) time = CONSTANT.FAJR;
-			NotifierService.start(time, today.getTodaysTimes()[time].getTimeInMillis());
+			NotificationService.start(time, today.getTodaysTimes()[time].getTimeInMillis());
 			break;
 		case R.id.menu_next:
 			if(time == CONSTANT.SUNRISE && !VARIABLE.alertSunrise()) time = CONSTANT.DHUHR;
-			NotifierService.start(time, today.getTodaysTimes()[time].getTimeInMillis());
+			NotificationService.start(time, today.getTodaysTimes()[time].getTimeInMillis());
 			break;
 		case R.id.menu_stop:
-			NotifierService.stop();
+			NotificationService.stop();
 			break;
 		case R.id.menu_help:
 			dialogBuilder.setMessage(R.string.help_text);
@@ -166,17 +167,12 @@ public class AdhanAlarm extends Activity {
 	}
 	@Override
 	public void onStop() {
-		NotifierService.stop();
 		stopTrackingOrientation();
 		VARIABLE.mainActivityIsRunning = false;
 		super.onStop();
 	}
 	@Override
 	public void onResume() {
-		if(getIntent().getBooleanExtra("clearNotification", false)) {
-			NotifierService.stop();
-			getIntent().removeExtra("clearNotification");
-		}
 		updateScheduleAndNotification();
 		((TabHost)findViewById(R.id.tabs)).setCurrentTab(0);
 		startTrackingOrientation();
@@ -253,7 +249,7 @@ public class AdhanAlarm extends Activity {
 			((TextView)findViewById(R.id.current_qibla_min)).setText(String.valueOf(qibla.getMinute()));
 			((TextView)findViewById(R.id.current_qibla_sec)).setText(df.format(qibla.getSecond()));
 
-			WakeUpAndDoSomething.setNotificationTime(this, getIntent(), nextNotificationTime, schedule[nextNotificationTime]);
+			NotificationReceiver.setNotificationTime(this, getIntent(), nextNotificationTime, schedule[nextNotificationTime]);
 		} catch(Exception ex) {
 			java.io.StringWriter sw = new java.io.StringWriter();
 			java.io.PrintWriter pw = new java.io.PrintWriter(sw, true);

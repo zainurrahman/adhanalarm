@@ -1,15 +1,20 @@
-package islam.adhanalarm;
+package islam.adhanalarm.receiver;
 
 import java.util.Calendar;
 
-import islam.adhanalarm.service.NotifierService;
+import islam.adhanalarm.AdhanAlarm;
+import islam.adhanalarm.CONSTANT;
+import islam.adhanalarm.Schedule;
+import islam.adhanalarm.VARIABLE;
+import islam.adhanalarm.WakeLock;
+import islam.adhanalarm.service.NotificationService;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.BroadcastReceiver;
 
-public class WakeUpAndDoSomething extends BroadcastReceiver {
+public class NotificationReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		WakeLock.acquire(VARIABLE.applicationContext);
@@ -17,7 +22,7 @@ public class WakeUpAndDoSomething extends BroadcastReceiver {
 		short timeIndex = intent.getShortExtra("timeIndex", (short)-1);
 		long actualTime = intent.getLongExtra("actualTime", System.currentTimeMillis());
 		if(timeIndex >= CONSTANT.FAJR && timeIndex <= CONSTANT.NEXT_FAJR) {
-			NotifierService.start(timeIndex, actualTime);
+			NotificationService.start(timeIndex, actualTime);
 		} else {
 			WakeLock.release(); // Only need this to prevent notification being cut off
 		}
@@ -40,14 +45,12 @@ public class WakeUpAndDoSomething extends BroadcastReceiver {
 		int notificationMethod = VARIABLE.settings.getInt("notificationMethodIndex", CONSTANT.DEFAULT_NOTIFICATION);
 		if(notificationMethod == CONSTANT.NO_NOTIFICATIONS) return;
 		
-		if(!VARIABLE.alertSunrise() && nextNotificationTime == CONSTANT.SUNRISE) nextNotificationTime = CONSTANT.DHUHR;
-		
-		Intent i = new Intent(context.getApplicationContext(), WakeUpAndDoSomething.class);
+		Intent i = new Intent(context, NotificationReceiver.class);
 		i.putExtra("timeIndex", nextNotificationTime);
 		i.putExtra("actualTime", actualTime.getTimeInMillis());
 		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 		
 		AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-		am.set(AlarmManager.RTC_WAKEUP, actualTime.getTimeInMillis(), PendingIntent.getBroadcast(context.getApplicationContext(), 0, i, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT));
+		am.set(AlarmManager.RTC_WAKEUP, actualTime.getTimeInMillis(), PendingIntent.getBroadcast(context, 0, i, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT));
 	}
 }
