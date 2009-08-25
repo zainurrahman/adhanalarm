@@ -5,6 +5,8 @@ import islam.adhanalarm.CONSTANT;
 import islam.adhanalarm.R;
 import islam.adhanalarm.VARIABLE;
 import islam.adhanalarm.WakeLock;
+import islam.adhanalarm.receiver.ClickNotificationReceiver;
+import islam.adhanalarm.receiver.ClearNotificationReceiver;
 import android.app.Service;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -15,7 +17,7 @@ import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.telephony.TelephonyManager;
 
-public class NotifierService extends Service {
+public class NotificationService extends Service {
 	
 	private static Intent notifier;
 	private static MediaPlayer mediaPlayer;
@@ -35,19 +37,19 @@ public class NotifierService extends Service {
 		Notification notification = new Notification(R.drawable.icon, notificationTitle, actualTime);
 		
 		int notificationMethod = VARIABLE.settings.getInt("notificationMethodIndex", CONSTANT.DEFAULT_NOTIFICATION);
-		if(notificationMethod == CONSTANT.NO_NOTIFICATIONS) return;
+		if(notificationMethod == CONSTANT.NO_NOTIFICATIONS || (timeIndex == CONSTANT.SUNRISE && !VARIABLE.alertSunrise())) return;
 		
 		int ringerMode = ((AudioManager)getSystemService(AUDIO_SERVICE)).getRingerMode();
 		int callState = ((TelephonyManager)getSystemService(TELEPHONY_SERVICE)).getCallState();
 		if(notificationMethod == CONSTANT.RECITE_ADHAN && ringerMode != AudioManager.RINGER_MODE_SILENT && ringerMode != AudioManager.RINGER_MODE_VIBRATE && callState == TelephonyManager.CALL_STATE_IDLE) {
-			notificationTitle += ": " + getString(R.string.click_to_stop);
+			notificationTitle += " (" + getString(R.string.stop) + ")";
 			int alarm = R.raw.beep;
-			if(timeIndex == CONSTANT.DHUHR || timeIndex == CONSTANT.ASR || timeIndex == CONSTANT.MAGHRIB || timeIndex == CONSTANT.ISHAA || (timeIndex == CONSTANT.SUNRISE && !VARIABLE.alertSunrise())) {
+			if(timeIndex == CONSTANT.DHUHR || timeIndex == CONSTANT.ASR || timeIndex == CONSTANT.MAGHRIB || timeIndex == CONSTANT.ISHAA) {
 				alarm = R.raw.adhan;
 			} else if(timeIndex == CONSTANT.FAJR || timeIndex == CONSTANT.NEXT_FAJR) {
 				alarm = R.raw.adhan_fajr;
 			}
-			mediaPlayer = MediaPlayer.create(NotifierService.this, alarm);
+			mediaPlayer = MediaPlayer.create(NotificationService.this, alarm);
 			mediaPlayer.setScreenOnWhilePlaying(true);
 			try {
 				mediaPlayer.start();
@@ -59,8 +61,9 @@ public class NotifierService extends Service {
 			notification.defaults = Notification.DEFAULT_ALL;
 		}
 		Intent i = new Intent(this, AdhanAlarm.class);
-		i.putExtra("clearNotification", true);
 		notification.setLatestEventInfo(this, getString(R.string.app_name), notificationTitle, PendingIntent.getActivity(this, 0, i, 0));
+		notification.contentIntent = PendingIntent.getBroadcast(this, 0, new Intent(this, ClickNotificationReceiver.class), 0);
+		notification.deleteIntent = PendingIntent.getBroadcast(this, 0, new Intent(this, ClearNotificationReceiver.class), 0);
 		((NotificationManager)getSystemService(NOTIFICATION_SERVICE)).notify(1, notification);
 	}
 	@Override
@@ -80,7 +83,7 @@ public class NotifierService extends Service {
 	public static void start(short timeIndex, long actualTime) {
 		WakeLock.acquire(VARIABLE.applicationContext);
 		stop();
-		notifier = new Intent(VARIABLE.applicationContext, NotifierService.class);
+		notifier = new Intent(VARIABLE.applicationContext, NotificationService.class);
 		notifier.putExtra("timeIndex", timeIndex);
 		notifier.putExtra("actualTime", actualTime);
 		notifier.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
