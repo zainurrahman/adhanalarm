@@ -33,6 +33,7 @@ public class DummyJitl extends Jitl {
 			times[i] = new Prayer(currentTime.get(Calendar.HOUR_OF_DAY) + INC_HOUR, currentTime.get(Calendar.MINUTE) + INC_MIN, 0, false);
 		}
 		START_PRAYER++;
+		if(START_PRAYER == CONSTANT.NEXT_FAJR) START_PRAYER = 0;
 	}
 	public DayPrayers getPrayerTimes(final GregorianCalendar date) {
 		dp.fajr().setHour(times[0].getHour()); dp.fajr().setMinute(times[0].getMinute()); dp.fajr().setSecond(0);

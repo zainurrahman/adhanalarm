@@ -61,9 +61,9 @@ public class NotificationService extends Service {
 			notification.defaults = Notification.DEFAULT_ALL;
 		}
 		Intent i = new Intent(this, AdhanAlarm.class);
-		notification.setLatestEventInfo(this, getString(R.string.app_name), notificationTitle, PendingIntent.getActivity(this, 0, i, 0));
-		notification.contentIntent = PendingIntent.getBroadcast(this, 0, new Intent(this, ClickNotificationReceiver.class), 0);
-		notification.deleteIntent = PendingIntent.getBroadcast(this, 0, new Intent(this, ClearNotificationReceiver.class), 0);
+		notification.setLatestEventInfo(this, getString(R.string.app_name), notificationTitle, PendingIntent.getActivity(this, 0, i, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT));
+		notification.contentIntent = PendingIntent.getBroadcast(this, 0, new Intent(this, ClickNotificationReceiver.class), PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+		notification.deleteIntent = PendingIntent.getBroadcast(this, 0, new Intent(this, ClearNotificationReceiver.class), PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
 		((NotificationManager)getSystemService(NOTIFICATION_SERVICE)).notify(1, notification);
 	}
 	@Override
@@ -78,7 +78,7 @@ public class NotificationService extends Service {
 		((NotificationManager)getSystemService(NOTIFICATION_SERVICE)).cancelAll();
 	}
 
-	/** We use this class in a static way by setting the context and using the subsequent start and stop functions **/
+	/** We use this class in a static way by using the following start and stop functions **/
 	
 	public static void start(short timeIndex, long actualTime) {
 		WakeLock.acquire(VARIABLE.applicationContext);
