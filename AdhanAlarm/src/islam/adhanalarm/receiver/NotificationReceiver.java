@@ -19,27 +19,28 @@ public class NotificationReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		WakeLock.acquire(VARIABLE.applicationContext);
 		
-		short timeIndex = intent.getShortExtra("timeIndex", (short)-1);
-		long actualTime = intent.getLongExtra("actualTime", System.currentTimeMillis());
-		if(timeIndex >= CONSTANT.FAJR && timeIndex <= CONSTANT.NEXT_FAJR) {
-			NotificationService.start(timeIndex, actualTime);
-		} else {
-			WakeLock.release(); // Only need this to prevent notification being cut off
-		}
-		Schedule today = new Schedule();
-		timeIndex = today.nextTimeIndex();
-		setNotificationTime(context, intent, timeIndex, today.getTodaysTimes()[timeIndex]);
+		setNextNotificationTime(context, intent);
 		
-		if(VARIABLE.mainActivityIsRunning) { // Update the gui marker to show the next prayer
+		if(VARIABLE.mainActivityIsRunning) {
 			Intent i = new Intent(context, AdhanAlarm.class);
 			i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-			context.startActivity(i);
+			context.startActivity(i); // Update the gui marker to show the next prayer
 		}
+		
+		short timeIndex = intent.getShortExtra("timeIndex", (short)-1);
+		long actualTime = intent.getLongExtra("actualTime", System.currentTimeMillis());
+		intent.removeExtra("timeIndex");
+		intent.removeExtra("actualTime");
+		NotificationService.start(timeIndex, actualTime); // Notify the user for the current time
+	}
+	
+	private static void setNextNotificationTime(Context context, Intent intent) {
+		Schedule today = new Schedule();
+		short nextTimeIndex = today.nextTimeIndex();
+		setNotificationTime(context, intent, nextTimeIndex, today.getTodaysTimes()[nextTimeIndex]);
 	}
 
 	public static void setNotificationTime(Context context, Intent intent, short nextNotificationTime, Calendar actualTime) {
-		intent.removeExtra("timeIndex");
-		intent.removeExtra("actualTime");
 		if(Calendar.getInstance().after(actualTime)) return; // Somehow current time is greater than the prayer time
 		
 		int notificationMethod = VARIABLE.settings.getInt("notificationMethodIndex", CONSTANT.DEFAULT_NOTIFICATION);
