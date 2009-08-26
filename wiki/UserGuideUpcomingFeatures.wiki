@@ -8,6 +8,6 @@ The following features are planned:
   # [http://adhanalarm.googlecode.com/svn/trunk/AdhanAlarm/res/values/arrays.xml arrays.xml]
   # [http://adhanalarm.googlecode.com/svn/trunk/AdhanAlarm/res/values/strings.xml strings.xml]
  * Show date from Islamic calendar
- * Make notifications like the standard Android ones (i.e. should not open entire app).  This includes an ongoing notification for when the Adhan is playing which the user can stop quickly.
+ * Choose a custom sound for each prayer time
 
 [UserGuideUsage << 4. Usage]
