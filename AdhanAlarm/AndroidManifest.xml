@@ -18,5 +18,11 @@
         <receiver android:name=".receiver.NotificationReceiver" />
         <receiver android:name=".receiver.ClickNotificationReceiver" />
         <receiver android:name=".receiver.ClearNotificationReceiver" />
+        <receiver android:name=".receiver.StartupReceiver">
+			<intent-filter>
+				<action android:name="android.intent.action.BOOT_COMPLETED" />
+				<category android:name="android.intent.category.HOME" />
+			</intent-filter>
+		</receiver>
     </application>
 </manifest>

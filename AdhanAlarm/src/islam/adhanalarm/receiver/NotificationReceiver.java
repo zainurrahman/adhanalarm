@@ -34,7 +34,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 		NotificationService.start(timeIndex, actualTime); // Notify the user for the current time
 	}
 	
-	private static void setNextNotificationTime(Context context, Intent intent) {
+	public static void setNextNotificationTime(Context context, Intent intent) {
 		Schedule today = new Schedule();
 		short nextTimeIndex = today.nextTimeIndex();
 		setNotificationTime(context, intent, nextTimeIndex, today.getTodaysTimes()[nextTimeIndex]);
