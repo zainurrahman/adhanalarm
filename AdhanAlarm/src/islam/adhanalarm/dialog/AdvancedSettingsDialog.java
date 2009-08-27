@@ -1,8 +1,10 @@
 package islam.adhanalarm.dialog; 
 
+import islam.adhanalarm.CONSTANT;
 import islam.adhanalarm.R;
 import islam.adhanalarm.VARIABLE;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -13,8 +15,8 @@ import android.widget.Spinner;
 
 public class AdvancedSettingsDialog extends Dialog {
 	
-	public AdvancedSettingsDialog() {
-		super(VARIABLE.applicationContext);
+	public AdvancedSettingsDialog(Context context) {
+		super(context);
 	}
 	
 	@Override
@@ -31,7 +33,7 @@ public class AdvancedSettingsDialog extends Dialog {
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.rounding_types, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		rounding_types.setAdapter(adapter);
-		rounding_types.setSelection(VARIABLE.settings.getInt("roundingTypesIndex", 2));
+		rounding_types.setSelection(VARIABLE.settings.getInt("roundingTypesIndex", CONSTANT.DEFAULT_ROUNDING_TYPE));
 		
 		((Button)findViewById(R.id.save_and_apply_settings)).setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
@@ -64,7 +66,7 @@ public class AdvancedSettingsDialog extends Dialog {
 				((EditText)findViewById(R.id.pressure)).setText("1010.0");
 				((EditText)findViewById(R.id.temperature)).setText("10.0");
 				((EditText)findViewById(R.id.altitude)).setText("0.0");
-				((Spinner)findViewById(R.id.rounding_types)).setSelection(2);
+				((Spinner)findViewById(R.id.rounding_types)).setSelection(CONSTANT.DEFAULT_ROUNDING_TYPE);
 			}
 		});
 	}

@@ -1,14 +1,15 @@
 package islam.adhanalarm;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 
 public class VARIABLE {
 	
-	public static String[] TIME_NAMES;
+	public static String[] TIME_NAMES; // Convenience array to store for different languages
 	public static SharedPreferences settings;
-	public static Context applicationContext;
 	public static boolean mainActivityIsRunning = false;
+	
+	public static boolean themeDirty = false;
+	public static boolean languageDirty = false;
 	
 	private VARIABLE() {
 		// Private constructor to enforce un-instantiability.

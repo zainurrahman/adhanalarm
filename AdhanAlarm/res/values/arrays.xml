@@ -24,4 +24,15 @@
         <item>Special</item>
         <item>Aggressive</item>
     </array>
+    <array name="themes">
+        <item>Default</item>
+        <item>Green Theme</item>
+    </array>
+    <array name="languages">
+        <item>@string/sdefault</item>
+        <item>English</item>
+        <item>Français</item>
+        <item>Русский</item>
+        <item>Türkçe</item>
+    </array>
 </resources>
