@@ -235,6 +235,9 @@ public class AdhanAlarm extends Activity {
 	}
 	private void setLocale() {
 		String languageKey = VARIABLE.settings.getString("locale", CONSTANT.LANGUAGE_KEYS[0]);
+		if(languageKey.equals(CONSTANT.LANGUAGE_KEYS[0])) {
+			languageKey = Locale.getDefault().getCountry();
+		}
         Locale locale = new Locale(languageKey);
         Locale.setDefault(locale);
         Configuration config = new Configuration();
