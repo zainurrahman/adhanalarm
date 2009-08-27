@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="islam.adhanalarm" android:versionCode="65" android:versionName="1.0.64" xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest package="islam.adhanalarm" android:versionCode="66" android:versionName="1.0.65" xmlns:android="http://schemas.android.com/apk/res/android">
 	<uses-sdk android:minSdkVersion="1" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_LOCATION" />
@@ -15,7 +15,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".service.NotificationService" />
         <receiver android:name=".receiver.NotificationReceiver" />
         <receiver android:name=".receiver.ClickNotificationReceiver" />
         <receiver android:name=".receiver.ClearNotificationReceiver" />

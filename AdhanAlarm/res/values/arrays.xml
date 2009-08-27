@@ -25,7 +25,7 @@
         <item>Aggressive</item>
     </array>
     <array name="themes">
-        <item>Default</item>
+        <item>@string/sdefault</item>
         <item>Green Theme</item>
     </array>
     <!-- Translators do not copy languages array into your locale's arrays.xml file -->
