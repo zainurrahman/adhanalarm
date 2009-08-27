@@ -12,7 +12,7 @@ public class CONSTANT {
 	public static final int[] ALL_THEMES = new int[]{R.style.DefaultTheme, R.style.GreenTheme};
 	public static final int[] ALTERNATE_ROW_COLORS = new int[]{R.color.semi_transparent_white, R.color.semi_transparent_black};
 
-	public static final String[] LANGUAGE_KEYS = new String[]{"default", "en", "fr", "ru", "tr"};
+	public static final String[] LANGUAGE_KEYS = new String[]{"default", "en", "de", "fr", "ru", "tr"};
 	
 	public static final short FAJR = 0, SUNRISE = 1, DHUHR = 2, ASR = 3, MAGHRIB = 4, ISHAA = 5, NEXT_FAJR = 6; // Notification Times
 	public static final short DEFAULT_NOTIFICATION = 0, RECITE_ADHAN = 1, NO_NOTIFICATIONS = 2; // Notification Methods
