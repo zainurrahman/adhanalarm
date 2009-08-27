@@ -4,10 +4,9 @@ import java.util.Calendar;
 
 import islam.adhanalarm.AdhanAlarm;
 import islam.adhanalarm.CONSTANT;
+import islam.adhanalarm.Notifier;
 import islam.adhanalarm.Schedule;
 import islam.adhanalarm.VARIABLE;
-import islam.adhanalarm.WakeLock;
-import islam.adhanalarm.service.NotificationService;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -17,16 +16,17 @@ import android.content.BroadcastReceiver;
 public class NotificationReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		setNextNotificationTime(context);
-		
 		if(VARIABLE.mainActivityIsRunning) {
 			Intent i = new Intent(context, AdhanAlarm.class);
 			i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 			context.startActivity(i); // Update the gui marker to show the next prayer
 		}
-
-		WakeLock.acquire(context);
-		NotificationService.start(context, intent); // Notify the user for the current time
+		
+        short timeIndex = intent.getShortExtra("timeIndex", (short)-1);
+        long actualTime = intent.getLongExtra("actualTime", (long)0);
+		Notifier.start(context, timeIndex, actualTime); // Notify the user for the current time
+		
+		setNextNotificationTime(context);
 	}
 	
 	public static void setNextNotificationTime(Context context) {
@@ -46,6 +46,6 @@ public class NotificationReceiver extends BroadcastReceiver {
 		intent.putExtra("actualTime", actualTime.getTimeInMillis());
 		
 		AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-		am.set(AlarmManager.RTC_WAKEUP, actualTime.getTimeInMillis(), PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_ONE_SHOT));
+		am.set(AlarmManager.RTC_WAKEUP, actualTime.getTimeInMillis(), PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT));
 	}
 }

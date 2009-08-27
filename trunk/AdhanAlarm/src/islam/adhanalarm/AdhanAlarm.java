@@ -6,7 +6,6 @@ import islam.adhanalarm.dialog.NotificationSettingsDialog;
 import islam.adhanalarm.dialog.InterfaceSettingsDialog;
 import islam.adhanalarm.view.QiblaCompassView;
 import islam.adhanalarm.receiver.NotificationReceiver;
-import islam.adhanalarm.service.NotificationService;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -161,14 +160,14 @@ public class AdhanAlarm extends Activity {
 			time--;
 			if(time < CONSTANT.FAJR) time = CONSTANT.ISHAA;
 			if(time == CONSTANT.SUNRISE && !VARIABLE.alertSunrise()) time = CONSTANT.FAJR;
-			NotificationService.start(this, time, today.getTodaysTimes()[time].getTimeInMillis());
+			Notifier.start(this, time, today.getTodaysTimes()[time].getTimeInMillis());
 			break;
 		case R.id.menu_next:
 			if(time == CONSTANT.SUNRISE && !VARIABLE.alertSunrise()) time = CONSTANT.DHUHR;
-			NotificationService.start(this, time, today.getTodaysTimes()[time].getTimeInMillis());
+			Notifier.start(this, time, today.getTodaysTimes()[time].getTimeInMillis());
 			break;
 		case R.id.menu_stop:
-			NotificationService.stop();
+			Notifier.stop();
 			break;
 		case R.id.menu_help:
 			dialogBuilder.setMessage(R.string.help_text);
