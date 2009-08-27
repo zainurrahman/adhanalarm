@@ -1,5 +1,6 @@
 package islam.adhanalarm.dialog;
 
+import islam.adhanalarm.CONSTANT;
 import islam.adhanalarm.R;
 import islam.adhanalarm.VARIABLE;
 import android.app.Dialog;
@@ -17,8 +18,8 @@ import android.widget.Spinner;
 
 public class CalculationSettingsDialog extends Dialog {
 	
-	public CalculationSettingsDialog() {
-		super(VARIABLE.applicationContext);
+	public CalculationSettingsDialog(Context context) {
+		super(context);
 	}
 	
 	@Override
@@ -34,7 +35,7 @@ public class CalculationSettingsDialog extends Dialog {
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.calculation_methods, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		calculation_methods.setAdapter(adapter);
-		calculation_methods.setSelection(VARIABLE.settings.getInt("calculationMethodsIndex", 4));
+		calculation_methods.setSelection(VARIABLE.settings.getInt("calculationMethodsIndex", CONSTANT.DEFAULT_CALCULATION_METHOD));
 
 		((Button)findViewById(R.id.lookup_gps)).setOnClickListener(new Button.OnClickListener() {  
 			public void onClick(View v) {
@@ -83,7 +84,7 @@ public class CalculationSettingsDialog extends Dialog {
 		});
 		((Button)findViewById(R.id.reset_settings)).setOnClickListener(new Button.OnClickListener() {  
 			public void onClick(View v) {
-				((Spinner)findViewById(R.id.calculation_methods)).setSelection(4);
+				((Spinner)findViewById(R.id.calculation_methods)).setSelection(CONSTANT.DEFAULT_CALCULATION_METHOD);
 			}
 		});
 	}

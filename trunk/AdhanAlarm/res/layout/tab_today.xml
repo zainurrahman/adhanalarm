@@ -5,7 +5,7 @@
 	<ListView android:id="@+id/timetable" android:layout_width="230px"
 		android:layout_height="205px"
 		android:choiceMode="none" />
-	<TextView style="@style/RegularTextFinePrint"
+	<TextView style="@style/finePrint"
 		android:id="@+id/notes" android:layout_width="wrap_content"
 		android:layout_height="wrap_content" />
 </LinearLayout>

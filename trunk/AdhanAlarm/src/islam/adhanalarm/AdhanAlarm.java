@@ -3,6 +3,7 @@ package islam.adhanalarm;
 import islam.adhanalarm.dialog.AdvancedSettingsDialog;
 import islam.adhanalarm.dialog.CalculationSettingsDialog;
 import islam.adhanalarm.dialog.NotificationSettingsDialog;
+import islam.adhanalarm.dialog.InterfaceSettingsDialog;
 import islam.adhanalarm.view.QiblaCompassView;
 import islam.adhanalarm.receiver.NotificationReceiver;
 import islam.adhanalarm.service.NotificationService;
@@ -10,16 +11,22 @@ import islam.adhanalarm.service.NotificationService;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Locale;
 import net.sourceforge.jitl.Jitl;
 import net.sourceforge.jitl.astro.Dms;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
@@ -47,11 +54,13 @@ public class AdhanAlarm extends Activity {
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
-		setContentView(R.layout.main);
 		
 		VARIABLE.mainActivityIsRunning = true;
-		VARIABLE.applicationContext = this;
 		VARIABLE.settings = getSharedPreferences("settingsFile", MODE_PRIVATE);
+
+		setTheme();
+		setLocale();
+		setContentView(R.layout.main);
 		
 		VARIABLE.TIME_NAMES = new String[]{getString(R.string.fajr), getString(R.string.sunrise), getString(R.string.dhuhr), getString(R.string.asr), getString(R.string.maghrib), getString(R.string.ishaa), getString(R.string.next_fajr)};
 		
@@ -69,7 +78,9 @@ public class AdhanAlarm extends Activity {
 		((ListView)findViewById(R.id.timetable)).setOnHierarchyChangeListener(new OnHierarchyChangeListener() { // Set zebra stripes
 			private int numChildren = 0;
         	public void onChildViewAdded(View parent, View child) {
-        		child.setBackgroundResource(++numChildren % 2 == 0 ? R.color.semi_transparent : R.color.transparent);
+        		int themeIndex = VARIABLE.settings.getInt("themeIndex", CONSTANT.DEFAULT_THEME);
+        		int alternateRowColor = CONSTANT.ALTERNATE_ROW_COLORS[themeIndex];
+        		child.setBackgroundResource(++numChildren % 2 == 0 ? alternateRowColor : R.color.transparent);
         		if(numChildren == VARIABLE.TIME_NAMES.length) numChildren = 0; // Last row has been reached, reset for next time
         	}
         	public void onChildViewRemoved(View parent, View child) {
@@ -114,17 +125,22 @@ public class AdhanAlarm extends Activity {
 
 		((Button)findViewById(R.id.set_advanced)).setOnClickListener(new Button.OnClickListener() {  
 			public void onClick(View v) {
-				showSettingsDialog(new AdvancedSettingsDialog());
+				showSettingsDialog(new AdvancedSettingsDialog(v.getContext()), v.getContext());
 			}
 		});
 		((Button)findViewById(R.id.set_notification)).setOnClickListener(new Button.OnClickListener() {  
 			public void onClick(View v) {
-				showSettingsDialog(new NotificationSettingsDialog());
+				showSettingsDialog(new NotificationSettingsDialog(v.getContext()), v.getContext());
+			}
+		});
+		((Button)findViewById(R.id.set_interface)).setOnClickListener(new Button.OnClickListener() {  
+			public void onClick(View v) {
+				showSettingsDialog(new InterfaceSettingsDialog(v.getContext()), v.getContext());
 			}
 		});
 		((Button)findViewById(R.id.set_calculation)).setOnClickListener(new Button.OnClickListener() {  
 			public void onClick(View v) {
-				showSettingsDialog(new CalculationSettingsDialog());
+				showSettingsDialog(new CalculationSettingsDialog(v.getContext()), v.getContext());
 			}
 		});	/* End of Tab 3 Items */
 	}
@@ -145,11 +161,11 @@ public class AdhanAlarm extends Activity {
 			time--;
 			if(time < CONSTANT.FAJR) time = CONSTANT.ISHAA;
 			if(time == CONSTANT.SUNRISE && !VARIABLE.alertSunrise()) time = CONSTANT.FAJR;
-			NotificationService.start(time, today.getTodaysTimes()[time].getTimeInMillis());
+			NotificationService.start(this, time, today.getTodaysTimes()[time].getTimeInMillis());
 			break;
 		case R.id.menu_next:
 			if(time == CONSTANT.SUNRISE && !VARIABLE.alertSunrise()) time = CONSTANT.DHUHR;
-			NotificationService.start(time, today.getTodaysTimes()[time].getTimeInMillis());
+			NotificationService.start(this, time, today.getTodaysTimes()[time].getTimeInMillis());
 			break;
 		case R.id.menu_stop:
 			NotificationService.stop();
@@ -178,11 +194,6 @@ public class AdhanAlarm extends Activity {
 		startTrackingOrientation();
 		super.onResume();
 	}
-	@Override
-	public void onNewIntent(Intent intent) {
-		setIntent(intent);
-		super.onNewIntent(intent);
-	}
 	
 	private void startTrackingOrientation() {
 		if(!isTrackingOrientation) isTrackingOrientation = ((SensorManager)getSystemService(SENSOR_SERVICE)).registerListener(orientationListener, android.hardware.SensorManager.SENSOR_ORIENTATION);
@@ -192,14 +203,43 @@ public class AdhanAlarm extends Activity {
 		isTrackingOrientation = false;
 	}
 
-	private void showSettingsDialog(Dialog d) {
+	private void showSettingsDialog(Dialog d, final Context context) {
 		d.setOnDismissListener(new OnDismissListener() {
 			public void onDismiss(DialogInterface d) {
 				updateScheduleAndNotification();
 				if(VARIABLE.settings.contains("latitude") && VARIABLE.settings.contains("longitude")) ((TextView)findViewById(R.id.notes)).setText("");
+				if(VARIABLE.themeDirty || VARIABLE.languageDirty) {
+					VARIABLE.themeDirty = false;
+					VARIABLE.languageDirty = false;
+					restart(context);
+				}
 			}
 		});
 		d.show();
+	}
+	
+	private void restart(Context context) {
+		Intent intent = new Intent(context, AdhanAlarm.class);
+		long restartTime = Calendar.getInstance().getTimeInMillis() + CONSTANT.RESTART_DELAY;
+		AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+		am.set(AlarmManager.RTC_WAKEUP, restartTime, PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_CANCEL_CURRENT));
+		finish();
+	}
+	
+	private void setTheme() {
+		int themeIndex = VARIABLE.settings.getInt("themeIndex", CONSTANT.DEFAULT_THEME);
+		try {
+			clearWallpaper();
+		} catch (Exception ex) {}
+		setTheme(CONSTANT.ALL_THEMES[themeIndex]);
+	}
+	private void setLocale() {
+		String languageKey = VARIABLE.settings.getString("locale", CONSTANT.LANGUAGE_KEYS[0]);
+        Locale locale = new Locale(languageKey);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
 	}
 
 	private void indicateNotificationTimes(short nextNotificationTime) {
@@ -249,7 +289,7 @@ public class AdhanAlarm extends Activity {
 			((TextView)findViewById(R.id.current_qibla_min)).setText(String.valueOf(qibla.getMinute()));
 			((TextView)findViewById(R.id.current_qibla_sec)).setText(df.format(qibla.getSecond()));
 
-			NotificationReceiver.setNotificationTime(this, getIntent(), nextNotificationTime, schedule[nextNotificationTime]);
+			NotificationReceiver.setNotificationTime(this, nextNotificationTime, schedule[nextNotificationTime]);
 		} catch(Exception ex) {
 			java.io.StringWriter sw = new java.io.StringWriter();
 			java.io.PrintWriter pw = new java.io.PrintWriter(sw, true);

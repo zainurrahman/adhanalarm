@@ -11,6 +11,7 @@ import android.app.Service;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -21,6 +22,7 @@ public class NotificationService extends Service {
 	
 	private static Intent notifier;
 	private static MediaPlayer mediaPlayer;
+	private static Context context;
 
 	public IBinder onBind(Intent i) {
 		return null;
@@ -65,12 +67,17 @@ public class NotificationService extends Service {
 		notification.contentIntent = PendingIntent.getBroadcast(this, 0, new Intent(this, ClickNotificationReceiver.class), PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
 		notification.deleteIntent = PendingIntent.getBroadcast(this, 0, new Intent(this, ClearNotificationReceiver.class), PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
 		((NotificationManager)getSystemService(NOTIFICATION_SERVICE)).notify(1, notification);
+		try {
+			Thread.sleep(CONSTANT.POST_NOTIFICATION_DELAY);
+		} catch(Exception ex) {
+			// We're just trying to buy a little bit of time to make sure the notification completes.
+		}
+		WakeLock.release();
 	}
 	@Override
 	public void onDestroy() {
-		super.onDestroy();
 		stopNotification();
-		WakeLock.release();
+		super.onDestroy();
 	}
 	
 	private void stopNotification() {
@@ -80,17 +87,21 @@ public class NotificationService extends Service {
 
 	/** We use this class in a static way by using the following start and stop functions **/
 	
-	public static void start(short timeIndex, long actualTime) {
-		WakeLock.acquire(VARIABLE.applicationContext);
-		stop();
-		notifier = new Intent(VARIABLE.applicationContext, NotificationService.class);
+	public static void start(Context context, short timeIndex, long actualTime) {
+		NotificationService.context = context;
+		notifier = new Intent(context, NotificationService.class);
 		notifier.putExtra("timeIndex", timeIndex);
 		notifier.putExtra("actualTime", actualTime);
 		notifier.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-		VARIABLE.applicationContext.startService(notifier);
+		context.startService(notifier);
+	}
+	public static void start(Context context, Intent intent) {
+		short timeIndex = intent.getShortExtra("timeIndex", (short)-1);
+		long actualTime = intent.getLongExtra("actualTime", System.currentTimeMillis());
+		start(context, timeIndex, actualTime);
 	}
 	public static void stop() {
-		if(notifier != null) VARIABLE.applicationContext.stopService(notifier);
+		if(notifier != null) context.stopService(notifier);
 		notifier = null;
 	}
 }

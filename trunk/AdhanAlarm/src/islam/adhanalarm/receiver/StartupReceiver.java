@@ -7,6 +7,6 @@ import android.content.Intent;
 public class StartupReceiver extends BroadcastReceiver {
 
 	public void onReceive(Context context, Intent intent) {
-		NotificationReceiver.setNextNotificationTime(context, intent);
+		NotificationReceiver.setNextNotificationTime(context);
 	}
 }

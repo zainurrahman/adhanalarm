@@ -4,6 +4,7 @@ import islam.adhanalarm.CONSTANT;
 import islam.adhanalarm.R;
 import islam.adhanalarm.VARIABLE;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -13,8 +14,8 @@ import android.widget.Spinner;
 
 public class NotificationSettingsDialog extends Dialog {
 	
-	public NotificationSettingsDialog() {
-		super(VARIABLE.applicationContext);
+	public NotificationSettingsDialog(Context context) {
+		super(context);
 	}
 	
 	@Override
@@ -46,8 +47,8 @@ public class NotificationSettingsDialog extends Dialog {
 		});
 		((Button)findViewById(R.id.reset_settings)).setOnClickListener(new Button.OnClickListener() {  
 			public void onClick(View v) {
-				((Spinner)findViewById(R.id.notification_methods)).setSelection(0);
-				((Spinner)findViewById(R.id.extra_alerts)).setSelection(0);
+				((Spinner)findViewById(R.id.notification_methods)).setSelection(CONSTANT.DEFAULT_NOTIFICATION);
+				((Spinner)findViewById(R.id.extra_alerts)).setSelection(CONSTANT.NO_EXTRA_ALERTS);
 			}
 		});
 	}
