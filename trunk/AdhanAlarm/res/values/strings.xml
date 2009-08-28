@@ -38,7 +38,7 @@
     <string name="system_time_zone">System Time Zone</string>
     <string name="gmt">GMT</string>
     <string name="sdefault">Default</string>
-    <string name="save_and_apply">Save And Apply</string>
+    <string name="save">Save</string>
     <string name="reset">Reset</string>
     <string name="calculation">Calculation</string>
     <string name="rounding">Rounding</string>

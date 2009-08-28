@@ -36,7 +36,7 @@ public class NotificationSettingsDialog extends Dialog {
 		extra_alerts.setAdapter(adapter);
 		extra_alerts.setSelection(VARIABLE.settings.getInt("extraAlertsIndex", CONSTANT.NO_EXTRA_ALERTS));
 		
-		((Button)findViewById(R.id.save_and_apply_settings)).setOnClickListener(new Button.OnClickListener() {
+		((Button)findViewById(R.id.save_settings)).setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
 				SharedPreferences.Editor editor = VARIABLE.settings.edit();
 				editor.putInt("extraAlertsIndex", ((Spinner)findViewById(R.id.extra_alerts)).getSelectedItemPosition());
