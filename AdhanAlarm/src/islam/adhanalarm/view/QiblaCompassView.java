@@ -29,7 +29,7 @@ public class QiblaCompassView extends View {
 	private int height = 240;
 	private float centre_x = width * 0.5f;
 	private float centre_y = height * 0.5f;
-	
+
 	public QiblaCompassView(Context context) {
 		super(context);
 		initCompassView();
@@ -42,7 +42,7 @@ public class QiblaCompassView extends View {
 		super(context, attrs);
 		initCompassView();
 	}
-	
+
 	private void initCompassView() {
 		centre_x = width  * 0.5f;
 		centre_y = height * 0.5f;
@@ -51,14 +51,14 @@ public class QiblaCompassView extends View {
 		rotateNeedle.postTranslate(centre_x - compassNeedle.getWidth() + 10, centre_y - compassNeedle.getHeight() + 10);
 		invalidate();
 	}
-	
+
 	public void setConstants(TextView bearingNorth, CharSequence bearingNorthString, TextView bearingQibla, CharSequence bearingQiblaString) {
 		this.bearingNorth = bearingNorth;
 		this.bearingNorthString = bearingNorthString.toString();
 		this.bearingQibla = bearingQibla;
 		this.bearingQiblaString = bearingQiblaString.toString();
 	}
-	
+
 	public void setDirections(float directionNorth, float directionQibla) {
 		this.directionNorth = directionNorth;
 		this.directionQibla = directionQibla;
@@ -67,7 +67,7 @@ public class QiblaCompassView extends View {
 		rotateNeedle.postTranslate(centre_x - compassNeedle.getWidth() + 5, centre_y - compassNeedle.getHeight() + 5);
 		invalidate();
 	}
-	
+
 	@Override
 	protected void onDraw(Canvas canvas) {
 		bearingNorth.setText(bearingNorthString.replace("(1)", df.format(directionNorth)));
