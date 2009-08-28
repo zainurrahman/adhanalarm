@@ -22,7 +22,7 @@
     <string name="daylight_savings">Heure d'été</string>
     <string name="lookup_gps">Consultation\nGPS</string>
     <string name="system_time_zone">Fuseau horaire</string>
-    <string name="save_and_apply">Enregistrer et appliquer</string>
+    <string name="save">Enregistrer</string>
     <string name="reset">Réinitialiser</string>
     <string name="calculation">Calcul</string>
     <string name="rounding">Arrondi</string>

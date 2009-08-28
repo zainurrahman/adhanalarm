@@ -36,7 +36,7 @@ public class InterfaceSettingsDialog extends Dialog {
 		languages.setAdapter(adapter);
 		languages.setSelection(CONSTANT.getLanguageIndex());
 		
-		((Button)findViewById(R.id.save_and_apply_settings)).setOnClickListener(new Button.OnClickListener() {
+		((Button)findViewById(R.id.save_settings)).setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
 				SharedPreferences.Editor editor = VARIABLE.settings.edit();
 				int oldThemeIndex = VARIABLE.settings.getInt("themeIndex", CONSTANT.DEFAULT_THEME);
@@ -57,6 +57,7 @@ public class InterfaceSettingsDialog extends Dialog {
 		((Button)findViewById(R.id.reset_settings)).setOnClickListener(new Button.OnClickListener() {  
 			public void onClick(View v) {
 				((Spinner)findViewById(R.id.themes)).setSelection(CONSTANT.DEFAULT_THEME);
+				((Spinner)findViewById(R.id.languages)).setSelection(0);
 			}
 		});
 	}

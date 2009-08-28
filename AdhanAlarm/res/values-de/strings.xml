@@ -29,7 +29,7 @@
     <string name="lookup_gps">Lookup\nGPS</string>
     <string name="system_time_zone">System Zeit Zone</string>
     <string name="sdefault">Standard</string>
-    <string name="save_and_apply">Speichern &amp; übernehmen</string>
+    <string name="save">Speichern</string>
     <string name="reset">Eingaben löschen</string>
     <string name="calculation">Berechnungen</string>
     <string name="rounding">Runden</string>

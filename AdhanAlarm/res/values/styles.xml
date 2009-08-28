@@ -26,5 +26,7 @@
 	
     <style name="labelColumn" parent="@android:style/Widget.TextView">
         <item name="android:minWidth">100px</item>
+        <item name="android:paddingRight">5px</item>
+        <item name="android:paddingLeft">5px</item>
     </style>
 </resources>

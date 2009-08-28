@@ -33,7 +33,7 @@
     <string name="lookup_gps">Поиск\nGPS</string>
     <string name="system_time_zone">Часовой пояс</string>
     <string name="gmt">GMT</string>
-    <string name="save_and_apply">Сохранить и применить</string>
+    <string name="save">Сохранить</string>
     <string name="reset">Сбросить</string>
     <string name="calculation">Расчет</string>
     <string name="rounding">Округление</string>

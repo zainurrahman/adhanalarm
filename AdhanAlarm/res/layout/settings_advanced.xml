@@ -2,55 +2,53 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content">
-	<LinearLayout android:orientation="horizontal"
+	<LinearLayout android:orientation="vertical"
 		android:layout_height="wrap_content"
 		android:layout_width="fill_parent">
-		<LinearLayout android:orientation="vertical"
-			android:layout_height="fill_parent"
-			android:layout_width="wrap_content" android:paddingRight="5px"
-			android:paddingLeft="5px" style="@style/labelColumn">
-			<TextView android:text="@string/altitude"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:layout_weight="1"
-				android:gravity="fill_vertical" />
-			<TextView android:text="@string/pressure"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:layout_weight="1"
-				android:gravity="fill_vertical" />
-			<TextView android:text="@string/temperature"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:layout_weight="1"
-				android:gravity="fill_vertical" />
-			<TextView android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:text="@string/rounding"
-				android:layout_weight="1" android:gravity="fill_vertical" />
-			<Button android:id="@+id/reset_settings"
-				android:text="@string/reset" android:layout_width="fill_parent"
-				android:layout_height="wrap_content" />
-		</LinearLayout>
-		<LinearLayout android:orientation="vertical"
+		<LinearLayout android:orientation="horizontal"
 			android:layout_height="wrap_content"
 			android:layout_width="fill_parent">
-			<EditText android:id="@+id/altitude" android:text="0"
-				android:layout_width="fill_parent"
+			<LinearLayout android:orientation="vertical"
+				android:layout_height="fill_parent"
+				android:layout_width="wrap_content" style="@style/labelColumn">
+				<TextView android:text="@string/altitude"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:layout_weight="1"
+					android:gravity="fill_vertical" />
+				<TextView android:text="@string/pressure"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:layout_weight="1"
+					android:gravity="fill_vertical" />
+				<TextView android:text="@string/temperature"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:layout_weight="1"
+					android:gravity="fill_vertical" />
+				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/rounding" android:layout_weight="1"
+					android:gravity="fill_vertical" />
+			</LinearLayout>
+			<LinearLayout android:orientation="vertical"
 				android:layout_height="wrap_content"
-				android:numeric="signed|decimal" android:singleLine="true" />
-			<EditText android:id="@+id/pressure" android:text="1010"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:numeric="signed|decimal" android:singleLine="true" />
-			<EditText android:id="@+id/temperature" android:text="10"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:numeric="signed|decimal" android:singleLine="true" />
-			<Spinner android:id="@+id/rounding_types"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content"
-				android:drawSelectorOnTop="true" />
-			<Button android:id="@+id/save_and_apply_settings"
-				android:text="@string/save_and_apply"
-				android:layout_width="fill_parent"
-				android:layout_height="wrap_content" />
+				android:layout_width="fill_parent">
+				<EditText android:id="@+id/altitude" android:text="0"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:numeric="signed|decimal" android:singleLine="true" />
+				<EditText android:id="@+id/pressure" android:text="1010"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:numeric="signed|decimal" android:singleLine="true" />
+				<EditText android:id="@+id/temperature"
+					android:text="10" android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:numeric="signed|decimal" android:singleLine="true" />
+				<Spinner android:id="@+id/rounding_types"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:drawSelectorOnTop="true" />
+			</LinearLayout>
 		</LinearLayout>
+		<include layout="@layout/buttons_save_reset" />
 	</LinearLayout>
 </ScrollView>
