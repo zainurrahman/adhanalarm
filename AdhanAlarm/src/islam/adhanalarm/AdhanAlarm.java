@@ -5,7 +5,7 @@ import islam.adhanalarm.dialog.CalculationSettingsDialog;
 import islam.adhanalarm.dialog.NotificationSettingsDialog;
 import islam.adhanalarm.dialog.InterfaceSettingsDialog;
 import islam.adhanalarm.view.QiblaCompassView;
-import islam.adhanalarm.service.DailyTimetableAndNotificationService;
+import islam.adhanalarm.service.FillDailyTimetableAndSetNotificationService;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -235,6 +235,6 @@ public class AdhanAlarm extends Activity {
 		getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
 	}
 	private void updateTodaysTimetableAndNotification() {
-		DailyTimetableAndNotificationService.set(this, true, new GregorianCalendar(), timetable, timetableView, getString(R.string.next_time_marker), ((TextView)findViewById(R.id.current_latitude_deg)), ((TextView)findViewById(R.id.current_latitude_min)), ((TextView)findViewById(R.id.current_latitude_sec)), ((TextView)findViewById(R.id.current_longitude_deg)), ((TextView)findViewById(R.id.current_longitude_min)), ((TextView)findViewById(R.id.current_longitude_sec)), ((TextView)findViewById(R.id.current_qibla_deg)), ((TextView)findViewById(R.id.current_qibla_min)), ((TextView)findViewById(R.id.current_qibla_sec)), ((TextView)findViewById(R.id.notes)));
+		FillDailyTimetableAndSetNotificationService.set(this, true, new GregorianCalendar(), timetable, timetableView, getString(R.string.next_time_marker), ((TextView)findViewById(R.id.current_latitude_deg)), ((TextView)findViewById(R.id.current_latitude_min)), ((TextView)findViewById(R.id.current_latitude_sec)), ((TextView)findViewById(R.id.current_longitude_deg)), ((TextView)findViewById(R.id.current_longitude_min)), ((TextView)findViewById(R.id.current_longitude_sec)), ((TextView)findViewById(R.id.current_qibla_deg)), ((TextView)findViewById(R.id.current_qibla_min)), ((TextView)findViewById(R.id.current_qibla_sec)), ((TextView)findViewById(R.id.notes)));
 	}
 }

@@ -3,11 +3,9 @@ package islam.adhanalarm.receiver;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import islam.adhanalarm.AdhanAlarm;
-import islam.adhanalarm.Notifier;
 import islam.adhanalarm.Schedule;
-import islam.adhanalarm.VARIABLE;
 import islam.adhanalarm.WakeLock;
+import islam.adhanalarm.service.NotifyAndSetNextService;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -18,19 +16,10 @@ public class StartNotificationReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		WakeLock.acquire(context);
+		NotifyAndSetNextService.context = context;
 
-		short timeIndex = intent.getShortExtra("timeIndex", (short)-1);
-		long actualTime = intent.getLongExtra("actualTime", (long)0);
-		Notifier.start(context, timeIndex, actualTime); // Notify the user for the current time
-
-		if(VARIABLE.mainActivityIsRunning) {
-			Intent i = new Intent(context, AdhanAlarm.class);
-			i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-			// Update the gui marker to show the next prayer, have to do this after starting Notifier or intent gets changed
-			context.startActivity(i);
-		}
-
-		setNext(context);
+		intent.setClass(context, NotifyAndSetNextService.class);
+		context.startService(intent);
 	}
 
 	public static void setNext(Context context) {
