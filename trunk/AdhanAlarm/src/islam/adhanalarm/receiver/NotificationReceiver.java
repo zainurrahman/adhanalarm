@@ -22,8 +22,8 @@ public class NotificationReceiver extends BroadcastReceiver {
 			context.startActivity(i); // Update the gui marker to show the next prayer
 		}
 		
-        short timeIndex = intent.getShortExtra("timeIndex", (short)-1);
-        long actualTime = intent.getLongExtra("actualTime", (long)0);
+		short timeIndex = intent.getShortExtra("timeIndex", (short)-1);
+		long actualTime = intent.getLongExtra("actualTime", (long)0);
 		Notifier.start(context, timeIndex, actualTime); // Notify the user for the current time
 		
 		setNextNotificationTime(context);
@@ -46,6 +46,6 @@ public class NotificationReceiver extends BroadcastReceiver {
 		intent.putExtra("actualTime", actualTime.getTimeInMillis());
 		
 		AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-		am.set(AlarmManager.RTC_WAKEUP, actualTime.getTimeInMillis(), PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT));
+		am.set(AlarmManager.RTC_WAKEUP, actualTime.getTimeInMillis(), PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_ONE_SHOT));
 	}
 }
