@@ -6,7 +6,7 @@ import net.sourceforge.jitl.Rounding;
 public class CONSTANT {
 	public static final boolean DEBUG = false;
 	public static final long RESTART_DELAY = 250; // Milliseconds
-	public static final long POST_NOTIFICATION_DELAY = 1000; // Milliseconds
+	public static final long POST_NOTIFICATION_DELAY = 2000; // Milliseconds
 	
 	public static final short DEFAULT_THEME = 0;
 	public static final int[] ALL_THEMES = new int[]{R.style.DefaultTheme, R.style.GreenTheme};

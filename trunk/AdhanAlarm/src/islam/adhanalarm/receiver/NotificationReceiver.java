@@ -7,6 +7,7 @@ import islam.adhanalarm.CONSTANT;
 import islam.adhanalarm.Notifier;
 import islam.adhanalarm.Schedule;
 import islam.adhanalarm.VARIABLE;
+import islam.adhanalarm.WakeLock;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -16,6 +17,7 @@ import android.content.BroadcastReceiver;
 public class NotificationReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		WakeLock.acquire(context);
 		if(VARIABLE.mainActivityIsRunning) {
 			Intent i = new Intent(context, AdhanAlarm.class);
 			i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

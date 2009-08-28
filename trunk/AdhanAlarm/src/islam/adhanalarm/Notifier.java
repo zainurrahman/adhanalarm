@@ -38,6 +38,11 @@ public class Notifier {
 			}
 			mediaPlayer = MediaPlayer.create(context, alarm);
 			mediaPlayer.setScreenOnWhilePlaying(true);
+			mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+				public void onCompletion(MediaPlayer mp) {
+					WakeLock.release();
+				}
+			});
 			try {
 				mediaPlayer.start();
 			} catch(Exception ex) {
@@ -57,6 +62,7 @@ public class Notifier {
 		} catch(Exception ex) {
 			// Just trying to make sure notification completes before phones falls asleep again
 		}
+		if(!mediaPlayer.isPlaying()) WakeLock.release();
 	}
 	
 	public static void stop() {
