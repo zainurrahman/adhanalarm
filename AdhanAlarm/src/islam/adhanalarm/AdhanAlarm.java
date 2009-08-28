@@ -5,7 +5,7 @@ import islam.adhanalarm.dialog.CalculationSettingsDialog;
 import islam.adhanalarm.dialog.NotificationSettingsDialog;
 import islam.adhanalarm.dialog.InterfaceSettingsDialog;
 import islam.adhanalarm.view.QiblaCompassView;
-import islam.adhanalarm.receiver.NotificationReceiver;
+import islam.adhanalarm.receiver.StartNotificationReceiver;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -291,7 +291,7 @@ public class AdhanAlarm extends Activity {
 			((TextView)findViewById(R.id.current_qibla_min)).setText(String.valueOf(qibla.getMinute()));
 			((TextView)findViewById(R.id.current_qibla_sec)).setText(df.format(qibla.getSecond()));
 
-			NotificationReceiver.setNotificationTime(this, nextNotificationTime, schedule[nextNotificationTime]);
+			StartNotificationReceiver.set(this, nextNotificationTime, schedule[nextNotificationTime]);
 		} catch(Exception ex) {
 			java.io.StringWriter sw = new java.io.StringWriter();
 			java.io.PrintWriter pw = new java.io.PrintWriter(sw, true);
