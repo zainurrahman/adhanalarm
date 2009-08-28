@@ -19,7 +19,7 @@ import android.os.IBinder;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-public class DailyTimetableAndNotificationService extends Service {
+public class FillDailyTimetableAndSetNotificationService extends Service {
 
 	private static boolean setNotification;
 
@@ -136,7 +136,7 @@ public class DailyTimetableAndNotificationService extends Service {
 
 		notes = _notes;
 
-		Intent intent = new Intent(context, DailyTimetableAndNotificationService.class);
+		Intent intent = new Intent(context, FillDailyTimetableAndSetNotificationService.class);
 		context.startService(intent);
 	}
 }
