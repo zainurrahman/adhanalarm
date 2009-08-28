@@ -13,32 +13,31 @@ public class Schedule {
 	private static boolean[] extremes = new boolean[7];
 	private Jitl itl = null;
 
-	public Schedule() {
+	public Schedule(GregorianCalendar day) {
 		Method method = CONSTANT.CALCULATION_METHODS[VARIABLE.settings.getInt("calculationMethodsIndex", 4)].copy();
 		method.setRound(CONSTANT.ROUNDING_TYPES[VARIABLE.settings.getInt("roundingTypesIndex", 2)]);
-		
+
 		net.sourceforge.jitl.astro.Location location = new net.sourceforge.jitl.astro.Location(VARIABLE.settings.getFloat("latitude", 43.67f), VARIABLE.settings.getFloat("longitude", -79.417f), getGMTOffset(), 0);
 		location.setSeaLevel(VARIABLE.settings.getFloat("altitude", 0) < 0 ? 0 : VARIABLE.settings.getFloat("altitude", 0));
 		location.setPressure(VARIABLE.settings.getFloat("pressure", 1010));
 		location.setTemperature(VARIABLE.settings.getFloat("temperature", 10));
-		
+
 		itl = CONSTANT.DEBUG ? new DummyJitl(location, method) : new Jitl(location, method);
-		GregorianCalendar today = new GregorianCalendar();
-		GregorianCalendar tomorrow = new GregorianCalendar();
-		tomorrow.add(Calendar.DATE, 1);
-		Prayer[] dayPrayers = itl.getPrayerTimes(today).getPrayers();
-		Prayer[] allTimes = new Prayer[]{dayPrayers[0], dayPrayers[1], dayPrayers[2], dayPrayers[3], dayPrayers[4], dayPrayers[5], itl.getNextDayFajr(today)};
-		
+		GregorianCalendar nextDay = new GregorianCalendar();
+		nextDay.add(Calendar.DATE, 1);
+		Prayer[] dayPrayers = itl.getPrayerTimes(day).getPrayers();
+		Prayer[] allTimes = new Prayer[]{dayPrayers[0], dayPrayers[1], dayPrayers[2], dayPrayers[3], dayPrayers[4], dayPrayers[5], itl.getNextDayFajr(day)};
+
 		for(short i = CONSTANT.FAJR; i <= CONSTANT.NEXT_FAJR; i++) { // Set the times on the schedule
 			if(i == CONSTANT.NEXT_FAJR) {
-				schedule[i] = new GregorianCalendar(tomorrow.get(Calendar.YEAR), tomorrow.get(Calendar.MONTH), tomorrow.get(Calendar.DAY_OF_MONTH), allTimes[i].getHour(), allTimes[i].getMinute(), allTimes[i].getSecond());
+				schedule[i] = new GregorianCalendar(nextDay.get(Calendar.YEAR), nextDay.get(Calendar.MONTH), nextDay.get(Calendar.DAY_OF_MONTH), allTimes[i].getHour(), allTimes[i].getMinute(), allTimes[i].getSecond());
 			} else {
-				schedule[i] = new GregorianCalendar(today.get(Calendar.YEAR), today.get(Calendar.MONTH), today.get(Calendar.DAY_OF_MONTH), allTimes[i].getHour(), allTimes[i].getMinute(), allTimes[i].getSecond());	
+				schedule[i] = new GregorianCalendar(day.get(Calendar.YEAR), day.get(Calendar.MONTH), day.get(Calendar.DAY_OF_MONTH), allTimes[i].getHour(), allTimes[i].getMinute(), allTimes[i].getSecond());	
 			}
 			extremes[i] = allTimes[i].isExtreme();
 		}
 	}
-	public GregorianCalendar[] getTodaysTimes() {
+	public GregorianCalendar[] getTimes() {
 		return schedule;
 	}
 	public boolean isExtreme(int i) {
