@@ -57,12 +57,14 @@ public class Notifier {
 		notification.contentIntent = PendingIntent.getBroadcast(context, 0, new Intent(context, ClickNotificationReceiver.class), PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
 		notification.deleteIntent = PendingIntent.getBroadcast(context, 0, new Intent(context, ClearNotificationReceiver.class), PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
 		((NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(1, notification);
-		try {
-			Thread.sleep(CONSTANT.POST_NOTIFICATION_DELAY);	
-		} catch(Exception ex) {
-			// Just trying to make sure notification completes before phones falls asleep again
+		if(mediaPlayer == null || !mediaPlayer.isPlaying()) {
+			try {
+				Thread.sleep(CONSTANT.POST_NOTIFICATION_DELAY);	
+			} catch(Exception ex) {
+				// Just trying to make sure notification completes before phone falls asleep again
+			}
+			WakeLock.release();
 		}
-		if(!mediaPlayer.isPlaying()) WakeLock.release();
 	}
 	
 	public static void stop() {

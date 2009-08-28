@@ -32,7 +32,6 @@
     <string name="daylight_savings">Aydınlık saklamaları</string>
     <string name="lookup_gps">GPS\naraması</string>
     <string name="system_time_zone">Sistem saati</string>
-    <string name="gmt">GMT</string>
     <string name="save_and_apply">Kaydet ve uygula</string>
     <string name="reset">Sıfırla</string>
     <string name="calculation">Hesaplama</string>
