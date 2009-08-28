@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="DefaultTheme" parent="@style/BaseAdhanAlarmTheme">
-        <item name="android:listViewStyle">@style/listViewStyle</item>
-        <item name="android:tabWidgetStyle">@style/tabWidgetStyle</item>
-    </style>
-</resources>
