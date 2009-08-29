@@ -20,8 +20,9 @@ public class StartNotificationReceiver extends BroadcastReceiver {
 	}
 
 	public static void setNext(Context context) {
-		short nextTimeIndex = Schedule.today().nextTimeIndex();
-		set(context, nextTimeIndex, Schedule.today().getTimes()[nextTimeIndex]);
+		Schedule today = Schedule.today();
+		short nextTimeIndex = today.nextTimeIndex();
+		set(context, nextTimeIndex, today.getTimes()[nextTimeIndex]);
 	}
 
 	private static void set(Context context, short timeIndex, Calendar actualTime) {

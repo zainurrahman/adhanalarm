@@ -67,8 +67,13 @@ public class Schedule {
 	}
 	public static Schedule today() {
 		GregorianCalendar now = new GregorianCalendar();
-		if(today == null || !(schedule[CONSTANT.FAJR].get(Calendar.YEAR) == now.get(Calendar.YEAR) && schedule[CONSTANT.FAJR].get(Calendar.MONTH) == now.get(Calendar.MONTH) && schedule[CONSTANT.FAJR].get(Calendar.DAY_OF_MONTH) == now.get(Calendar.DAY_OF_MONTH))) {
+		if(today == null) {
 			today = new Schedule(now);
+		} else {
+			GregorianCalendar fajr = today.getTimes()[CONSTANT.FAJR];
+			if(fajr.get(Calendar.YEAR) != now.get(Calendar.YEAR) || fajr.get(Calendar.MONTH) != now.get(Calendar.MONTH) || fajr.get(Calendar.DAY_OF_MONTH) != now.get(Calendar.DAY_OF_MONTH)) {
+				today = new Schedule(now);
+			}
 		}
 		return today;
 	}
