@@ -20,7 +20,7 @@ public class Notifier {
 		Notifier.context = context;
 		stop();
 		
-		String notificationTitle = (timeIndex != CONSTANT.SUNRISE ? context.getString(R.string.allahu_akbar) + ": " : "") + context.getString(R.string.time_for) + " " + (timeIndex == CONSTANT.NEXT_FAJR ? VARIABLE.TIME_NAMES[CONSTANT.FAJR] : VARIABLE.TIME_NAMES[timeIndex]).toLowerCase();
+		String notificationTitle = (timeIndex != CONSTANT.SUNRISE ? context.getString(R.string.allahu_akbar) + ": " : "") + context.getString(R.string.time_for) + " " + (timeIndex == CONSTANT.NEXT_FAJR ? context.getString(CONSTANT.TIME_NAMES[CONSTANT.FAJR]) : context.getString(CONSTANT.TIME_NAMES[timeIndex])).toLowerCase();
 		Notification notification = new Notification(R.drawable.icon, notificationTitle, actualTime);
 		
 		int notificationMethod = VARIABLE.settings.getInt("notificationMethodIndex", CONSTANT.DEFAULT_NOTIFICATION);

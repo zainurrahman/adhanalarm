@@ -3,10 +3,5 @@
     <style name="GreenTheme" parent="@style/DefaultTheme">
         <item name="android:windowBackground">@color/green_background</item>
         <item name="android:tileMode">repeat</item>
-        <item name="android:tabWidgetStyle">@style/greenThemeTabWidgetStyle</item>
-    </style>
-	
-    <style name="greenThemeTabWidgetStyle" parent="@android:style/Widget.TabWidget">
-        <item name="android:background">@color/green_background_color</item>
     </style>
 </resources>
