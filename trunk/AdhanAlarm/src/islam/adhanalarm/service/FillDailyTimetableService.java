@@ -11,7 +11,6 @@ import net.sourceforge.jitl.astro.Dms;
 import islam.adhanalarm.CONSTANT;
 import islam.adhanalarm.Schedule;
 import islam.adhanalarm.VARIABLE;
-import islam.adhanalarm.receiver.StartNotificationReceiver;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -19,9 +18,7 @@ import android.os.IBinder;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
-public class FillDailyTimetableAndSetNotificationService extends Service {
-
-	private static boolean setNotification;
+public class FillDailyTimetableService extends Service {
 
 	private static GregorianCalendar forDay;
 
@@ -51,19 +48,15 @@ public class FillDailyTimetableAndSetNotificationService extends Service {
 	@Override
 	public void onStart(Intent intent, int startId) {
 		try {
-			VARIABLE.today = new Schedule(forDay);
-			GregorianCalendar[] schedule = VARIABLE.today.getTimes();
+			Schedule day = new Schedule(forDay);
+			GregorianCalendar[] schedule = day.getTimes();
 			SimpleDateFormat timeFormat = new SimpleDateFormat ("h:mm a");
-			short nextNotificationTime = VARIABLE.today.nextTimeIndex();
-
-			if(setNotification) {
-				StartNotificationReceiver.set(this, nextNotificationTime, schedule[nextNotificationTime]);
-			}
+			short nextNotificationTime = day.nextTimeIndex();
 
 			for(short i = CONSTANT.FAJR; i <= CONSTANT.NEXT_FAJR; i++) {
 				String fullTime = timeFormat.format(schedule[i].getTime());
 				timetable.get(i).put("time", fullTime.substring(0, fullTime.lastIndexOf(" ")));
-				timetable.get(i).put("time_am_pm", fullTime.substring(fullTime.lastIndexOf(" ") + 1, fullTime.length()) + (VARIABLE.today.isExtreme(i) ? "*" : ""));
+				timetable.get(i).put("time_am_pm", fullTime.substring(fullTime.lastIndexOf(" ") + 1, fullTime.length()) + (day.isExtreme(i) ? "*" : ""));
 			}
 			indicateNotificationTimes(nextNotificationTime);
 			timetableView.notifyDataSetChanged();
@@ -114,8 +107,7 @@ public class FillDailyTimetableAndSetNotificationService extends Service {
 	 * We use this class in a static way by using the following set function.
 	 * I'm doing this all in this long way because in the future we may want to be able to display other dates than just today.
 	 *  **/
-	public static void set(Context context, boolean _setNotification, GregorianCalendar _forDay, ArrayList<HashMap<String, String>> _timetable, SimpleAdapter _timetableView, String _marker, TextView _current_latitude_deg, TextView _current_latitude_min, TextView _current_latitude_sec, TextView _current_longitude_deg, TextView _current_longitude_min, TextView _current_longitude_sec, TextView _current_qibla_deg, TextView _current_qibla_min, TextView _current_qibla_sec, TextView _notes) {
-		setNotification = _setNotification;
+	public static void set(Context context, GregorianCalendar _forDay, ArrayList<HashMap<String, String>> _timetable, SimpleAdapter _timetableView, String _marker, TextView _current_latitude_deg, TextView _current_latitude_min, TextView _current_latitude_sec, TextView _current_longitude_deg, TextView _current_longitude_min, TextView _current_longitude_sec, TextView _current_qibla_deg, TextView _current_qibla_min, TextView _current_qibla_sec, TextView _notes) {
 		forDay = _forDay;
 
 		timetable = _timetable;
@@ -136,7 +128,7 @@ public class FillDailyTimetableAndSetNotificationService extends Service {
 
 		notes = _notes;
 
-		Intent intent = new Intent(context, FillDailyTimetableAndSetNotificationService.class);
+		Intent intent = new Intent(context, FillDailyTimetableService.class);
 		context.startService(intent);
 	}
 }
