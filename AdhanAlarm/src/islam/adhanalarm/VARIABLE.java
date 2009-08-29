@@ -8,7 +8,6 @@ public class VARIABLE {
 	public static boolean mainActivityIsRunning = false;
 
 	public static String[] TIME_NAMES; // Convenience array to store for different languages
-	public static Schedule today = null; // Only valid during startup of activity
 
 	public static float qiblaDirection = 0;
 

@@ -5,7 +5,8 @@ import islam.adhanalarm.dialog.CalculationSettingsDialog;
 import islam.adhanalarm.dialog.NotificationSettingsDialog;
 import islam.adhanalarm.dialog.InterfaceSettingsDialog;
 import islam.adhanalarm.view.QiblaCompassView;
-import islam.adhanalarm.service.FillDailyTimetableAndSetNotificationService;
+import islam.adhanalarm.receiver.StartNotificationReceiver;
+import islam.adhanalarm.service.FillDailyTimetableService;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -146,17 +147,17 @@ public class AdhanAlarm extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
 		dialogBuilder.setCancelable(true);
-		short time = VARIABLE.today.nextTimeIndex();
+		short time = Schedule.today().nextTimeIndex();
 		switch(item.getItemId()) {
 		case R.id.menu_previous:
 			time--;
 			if(time < CONSTANT.FAJR) time = CONSTANT.ISHAA;
 			if(time == CONSTANT.SUNRISE && !VARIABLE.alertSunrise()) time = CONSTANT.FAJR;
-			Notifier.start(this, time, VARIABLE.today.getTimes()[time].getTimeInMillis());
+			Notifier.start(this, time, Schedule.today().getTimes()[time].getTimeInMillis());
 			break;
 		case R.id.menu_next:
 			if(time == CONSTANT.SUNRISE && !VARIABLE.alertSunrise()) time = CONSTANT.DHUHR;
-			Notifier.start(this, time, VARIABLE.today.getTimes()[time].getTimeInMillis());
+			Notifier.start(this, time, Schedule.today().getTimes()[time].getTimeInMillis());
 			break;
 		case R.id.menu_stop:
 			Notifier.stop();
@@ -181,9 +182,16 @@ public class AdhanAlarm extends Activity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		updateTodaysTimetableAndNotification();
+		boolean resetNotification = getIntent().getBooleanExtra("setNotification", true);
+		getIntent().removeExtra("setNotification");
+		updateTodaysTimetableAndNotification(resetNotification);
 		((TabHost)findViewById(R.id.tabs)).setCurrentTab(0);
 		startTrackingOrientation();
+	}
+	@Override
+	public void onNewIntent(Intent intent) {
+		setIntent(intent);
+		super.onNewIntent(intent);
 	}
 
 	private void startTrackingOrientation() {
@@ -197,7 +205,7 @@ public class AdhanAlarm extends Activity {
 	private void showSettingsDialog(Dialog d, final Context context) {
 		d.setOnDismissListener(new DialogInterface.OnDismissListener() {
 			public void onDismiss(DialogInterface d) {
-				updateTodaysTimetableAndNotification();
+				updateTodaysTimetableAndNotification(true);
 				if(VARIABLE.settings.contains("latitude") && VARIABLE.settings.contains("longitude")) ((TextView)findViewById(R.id.notes)).setText("");
 				if(VARIABLE.themeDirty || VARIABLE.languageDirty) {
 					VARIABLE.themeDirty = false;
@@ -224,8 +232,8 @@ public class AdhanAlarm extends Activity {
 		setTheme(CONSTANT.ALL_THEMES[themeIndex]);
 	}
 	private void setLocale() {
-		String languageKey = VARIABLE.settings.getString("locale", CONSTANT.LANGUAGE_KEYS[0]);
-		if(languageKey.equals(CONSTANT.LANGUAGE_KEYS[0])) {
+		String languageKey = VARIABLE.settings.getString("locale", CONSTANT.LANGUAGE_KEYS[CONSTANT.DEFAULT_LANGUAGE]);
+		if(languageKey.equals("default")) {
 			languageKey = Locale.getDefault().getCountry();
 		}
 		Locale locale = new Locale(languageKey);
@@ -234,7 +242,10 @@ public class AdhanAlarm extends Activity {
 		config.locale = locale;
 		getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
 	}
-	private void updateTodaysTimetableAndNotification() {
-		FillDailyTimetableAndSetNotificationService.set(this, true, new GregorianCalendar(), timetable, timetableView, getString(R.string.next_time_marker), ((TextView)findViewById(R.id.current_latitude_deg)), ((TextView)findViewById(R.id.current_latitude_min)), ((TextView)findViewById(R.id.current_latitude_sec)), ((TextView)findViewById(R.id.current_longitude_deg)), ((TextView)findViewById(R.id.current_longitude_min)), ((TextView)findViewById(R.id.current_longitude_sec)), ((TextView)findViewById(R.id.current_qibla_deg)), ((TextView)findViewById(R.id.current_qibla_min)), ((TextView)findViewById(R.id.current_qibla_sec)), ((TextView)findViewById(R.id.notes)));
+	private void updateTodaysTimetableAndNotification(boolean resetNotification) {
+		if(resetNotification) {
+			StartNotificationReceiver.setNext(this);
+		}
+		FillDailyTimetableService.set(this, new GregorianCalendar(), timetable, timetableView, getString(R.string.next_time_marker), ((TextView)findViewById(R.id.current_latitude_deg)), ((TextView)findViewById(R.id.current_latitude_min)), ((TextView)findViewById(R.id.current_latitude_sec)), ((TextView)findViewById(R.id.current_longitude_deg)), ((TextView)findViewById(R.id.current_longitude_min)), ((TextView)findViewById(R.id.current_longitude_sec)), ((TextView)findViewById(R.id.current_qibla_deg)), ((TextView)findViewById(R.id.current_qibla_min)), ((TextView)findViewById(R.id.current_qibla_sec)), ((TextView)findViewById(R.id.notes)));
 	}
 }

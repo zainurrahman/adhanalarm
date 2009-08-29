@@ -11,7 +11,9 @@ public class Schedule {
 
 	private static GregorianCalendar[] schedule = new GregorianCalendar[7];
 	private static boolean[] extremes = new boolean[7];
-	private Jitl itl = null;
+	private static Jitl itl;
+	
+	private static Schedule today;
 
 	public Schedule(GregorianCalendar day) {
 		Method method = CONSTANT.CALCULATION_METHODS[VARIABLE.settings.getInt("calculationMethodsIndex", 4)].copy();
@@ -62,5 +64,12 @@ public class Schedule {
 	public static boolean isDaylightSavings() {
 		Calendar currentTime = new GregorianCalendar();
 		return currentTime.getTimeZone().inDaylightTime(currentTime.getTime());
+	}
+	public static Schedule today() {
+		GregorianCalendar now = new GregorianCalendar();
+		if(today == null || !(schedule[CONSTANT.FAJR].get(Calendar.YEAR) == now.get(Calendar.YEAR) && schedule[CONSTANT.FAJR].get(Calendar.MONTH) == now.get(Calendar.MONTH) && schedule[CONSTANT.FAJR].get(Calendar.DAY_OF_MONTH) == now.get(Calendar.DAY_OF_MONTH))) {
+			today = new Schedule(now);
+		}
+		return today;
 	}
 }

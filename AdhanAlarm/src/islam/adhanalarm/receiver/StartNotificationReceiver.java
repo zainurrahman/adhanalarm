@@ -1,7 +1,6 @@
 package islam.adhanalarm.receiver;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import islam.adhanalarm.Schedule;
 import islam.adhanalarm.WakeLock;
@@ -16,19 +15,16 @@ public class StartNotificationReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		WakeLock.acquire(context);
-		NotifyAndSetNextService.context = context;
-
 		intent.setClass(context, NotifyAndSetNextService.class);
 		context.startService(intent);
 	}
 
 	public static void setNext(Context context) {
-		Schedule today = new Schedule(new GregorianCalendar());
-		short nextTimeIndex = today.nextTimeIndex();
-		set(context, nextTimeIndex, today.getTimes()[nextTimeIndex]);
+		short nextTimeIndex = Schedule.today().nextTimeIndex();
+		set(context, nextTimeIndex, Schedule.today().getTimes()[nextTimeIndex]);
 	}
 
-	public static void set(Context context, short timeIndex, Calendar actualTime) {
+	private static void set(Context context, short timeIndex, Calendar actualTime) {
 		if(Calendar.getInstance().after(actualTime)) return; // Somehow current time is greater than the prayer time
 
 		Intent intent = new Intent(context, StartNotificationReceiver.class);
@@ -36,6 +32,6 @@ public class StartNotificationReceiver extends BroadcastReceiver {
 		intent.putExtra("actualTime", actualTime.getTimeInMillis());
 
 		AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-		am.set(AlarmManager.RTC_WAKEUP, actualTime.getTimeInMillis(), PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_ONE_SHOT));
+		am.set(AlarmManager.RTC_WAKEUP, actualTime.getTimeInMillis(), PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT));
 	}
 }
