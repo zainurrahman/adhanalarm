@@ -4,7 +4,7 @@ import net.sourceforge.jitl.Method;
 import net.sourceforge.jitl.Rounding;
 
 public class CONSTANT {
-	public static final boolean DEBUG = true;
+	public static final boolean DEBUG = false;
 
 	public static final long RESTART_DELAY = 250; // Milliseconds
 	public static final long POST_NOTIFICATION_DELAY = 2000; // Milliseconds
