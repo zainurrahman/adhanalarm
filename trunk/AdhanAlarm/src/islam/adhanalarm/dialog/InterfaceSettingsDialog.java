@@ -28,25 +28,24 @@ public class InterfaceSettingsDialog extends Dialog {
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.themes, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		themes.setAdapter(adapter);
-		themes.setSelection(VARIABLE.settings.getInt("themeIndex", CONSTANT.DEFAULT_THEME));
+		themes.setSelection(VARIABLE.getThemeIndex());
 
 		Spinner languages = (Spinner)findViewById(R.id.languages);
 		adapter = ArrayAdapter.createFromResource(getContext(), R.array.languages, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		languages.setAdapter(adapter);
-		languages.setSelection(CONSTANT.getLanguageIndex());
+		languages.setSelection(VARIABLE.getLanguageIndex());
 		
 		((Button)findViewById(R.id.save_settings)).setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
 				SharedPreferences.Editor editor = VARIABLE.settings.edit();
-				int oldThemeIndex = VARIABLE.settings.getInt("themeIndex", CONSTANT.DEFAULT_THEME);
 				int newThemeIndex = ((Spinner)findViewById(R.id.themes)).getSelectedItemPosition();
-				if(oldThemeIndex != newThemeIndex) {
+				if(VARIABLE.getThemeIndex() != newThemeIndex) {
 					editor.putInt("themeIndex", newThemeIndex);
 					VARIABLE.themeDirty = true;
 				}
 				int newLanguageIndex = ((Spinner)findViewById(R.id.languages)).getSelectedItemPosition();
-				if(newLanguageIndex != CONSTANT.getLanguageIndex()) {
+				if(newLanguageIndex != VARIABLE.getLanguageIndex()) {
 					editor.putString("locale", CONSTANT.LANGUAGE_KEYS[newLanguageIndex]);
 					VARIABLE.languageDirty = true;
 				}

@@ -45,20 +45,18 @@ public class AdhanAlarm extends Activity {
 
 	@Override
 	public void onCreate(Bundle icicle) {
-		super.onCreate(icicle);
-
 		VARIABLE.mainActivityIsRunning = true;
 		VARIABLE.settings = getSharedPreferences("settingsFile", MODE_PRIVATE);
-
+		
 		setTheme();
+		super.onCreate(icicle);
+
 		setLocale();
 		setContentView(R.layout.main);
 
-		VARIABLE.TIME_NAMES = new String[]{getString(R.string.fajr), getString(R.string.sunrise), getString(R.string.dhuhr), getString(R.string.asr), getString(R.string.maghrib), getString(R.string.ishaa), getString(R.string.next_fajr)};
-
-		for(int i = 0; i < VARIABLE.TIME_NAMES.length; i++) {
+		for(int i = CONSTANT.FAJR; i <= CONSTANT.NEXT_FAJR; i++) {
 			HashMap<String, String> map = new HashMap<String, String>();
-			map.put("time_name", VARIABLE.TIME_NAMES[i]);
+			map.put("time_name", getString(CONSTANT.TIME_NAMES[i]));
 			timetable.add(i, map);
 		}
 		timetableView = new SimpleAdapter(this, timetable, R.layout.timetable_row, new String[]{"mark", "time_name", "time", "time_am_pm"}, new int[]{R.id.mark, R.id.time_name, R.id.time, R.id.time_am_pm}) {
@@ -73,7 +71,7 @@ public class AdhanAlarm extends Activity {
 				int themeIndex = VARIABLE.settings.getInt("themeIndex", CONSTANT.DEFAULT_THEME);
 				int alternateRowColor = CONSTANT.ALTERNATE_ROW_COLORS[themeIndex];
 				child.setBackgroundResource(++numChildren % 2 == 0 ? alternateRowColor : R.color.transparent);
-				if(numChildren == VARIABLE.TIME_NAMES.length) numChildren = 0; // Last row has been reached, reset for next time
+				if(numChildren > CONSTANT.NEXT_FAJR) numChildren = 0; // Last row has been reached, reset for next time
 			}
 			public void onChildViewRemoved(View parent, View child) {
 			}
@@ -86,6 +84,7 @@ public class AdhanAlarm extends Activity {
 
 		TabHost tabs = (TabHost)findViewById(R.id.tabs);
 		tabs.setup();
+		tabs.getTabWidget().setBackgroundResource(CONSTANT.TAB_WIDGET_BACKGROUND_COLORS[VARIABLE.getThemeIndex()]);
 
 		TabHost.TabSpec one = tabs.newTabSpec("one");
 		one.setContent(R.id.content1);
@@ -225,11 +224,7 @@ public class AdhanAlarm extends Activity {
 	}
 
 	private void setTheme() {
-		int themeIndex = VARIABLE.settings.getInt("themeIndex", CONSTANT.DEFAULT_THEME);
-		try {
-			clearWallpaper();
-		} catch (Exception ex) {}
-		setTheme(CONSTANT.ALL_THEMES[themeIndex]);
+		setTheme(CONSTANT.ALL_THEMES[VARIABLE.getThemeIndex()]);
 	}
 	private void setLocale() {
 		String languageKey = VARIABLE.settings.getString("locale", CONSTANT.LANGUAGE_KEYS[CONSTANT.DEFAULT_LANGUAGE]);
@@ -241,6 +236,7 @@ public class AdhanAlarm extends Activity {
 		Configuration config = new Configuration();
 		config.locale = locale;
 		getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+		setTitle(R.string.app_name);
 	}
 	private void updateTodaysTimetableAndNotification(boolean resetNotification) {
 		if(resetNotification) {
