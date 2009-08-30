@@ -40,7 +40,7 @@ public class AdhanAlarm extends Activity {
 	private SimpleAdapter timetableView;
 
 	private static SensorListener orientationListener;
-	private static float qiblaDirection = 0;
+	//private static float qiblaDirection = 0;
 	private static boolean isTrackingOrientation = false;
 
 	@Override
@@ -103,7 +103,8 @@ public class AdhanAlarm extends Activity {
 		orientationListener = new SensorListener() {
 			public void onSensorChanged(int s, float v[]) {
 				float northDirection = v[android.hardware.SensorManager.DATA_X];
-				((QiblaCompassView)findViewById(R.id.qibla_compass)).setDirections(northDirection, qiblaDirection);
+				((QiblaCompassView)findViewById(R.id.qibla_compass)).setDirections(northDirection, VARIABLE.qiblaDirection);
+				
 			}
 			public void onAccuracyChanged(int s, int a) {
 			}
