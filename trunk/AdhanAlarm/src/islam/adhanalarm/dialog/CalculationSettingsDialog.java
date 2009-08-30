@@ -6,9 +6,7 @@ import islam.adhanalarm.VARIABLE;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -28,8 +26,10 @@ public class CalculationSettingsDialog extends Dialog {
 		setContentView(R.layout.settings_calculation);
 		setTitle(R.string.calculation);
 
-		((EditText)findViewById(R.id.latitude)).setText(Float.toString(VARIABLE.settings.getFloat("latitude", 43.67f)));
-		((EditText)findViewById(R.id.longitude)).setText(Float.toString(VARIABLE.settings.getFloat("longitude", -79.417f)));
+		float latitude = VARIABLE.settings.getFloat("latitude", -999f);
+		float longitude = VARIABLE.settings.getFloat("longitude", -999f);
+		((EditText)findViewById(R.id.latitude)).setText(latitude == -999f ? "" : Float.toString(latitude));
+		((EditText)findViewById(R.id.longitude)).setText(longitude == -999f ? "" : Float.toString(longitude));
 
 		Spinner calculation_methods = (Spinner)findViewById(R.id.calculation_methods);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.calculation_methods, android.R.layout.simple_spinner_item);
@@ -39,21 +39,7 @@ public class CalculationSettingsDialog extends Dialog {
 
 		((Button)findViewById(R.id.lookup_gps)).setOnClickListener(new Button.OnClickListener() {  
 			public void onClick(View v) {
-				Criteria criteria = new Criteria();
-				criteria.setAccuracy(Criteria.ACCURACY_FINE);
-				criteria.setAltitudeRequired(false);
-				criteria.setBearingRequired(false);
-				criteria.setCostAllowed(true);
-				criteria.setPowerRequirement(Criteria.POWER_LOW);
-				
-				LocationManager locationManager = (LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
-				Location currentLocation = null;
-				try {
-					currentLocation = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, true));
-				} catch(Exception ex) {
-					// GPS or wireless networks is disabled
-				}
-				
+				Location currentLocation = VARIABLE.getCurrentLocation(getContext());
 				if(currentLocation != null) {
 					((EditText)findViewById(R.id.latitude)).setText(Double.toString(currentLocation.getLatitude()));
 					((EditText)findViewById(R.id.longitude)).setText(Double.toString(currentLocation.getLongitude()));

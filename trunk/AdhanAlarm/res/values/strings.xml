@@ -19,7 +19,7 @@
     <string name="next_fajr">Next Fajr</string>
     <string name="next_time_marker">></string>
     <string name="error_playing_alert">Error Playing Alert</string>
-    <string name="location_not_set">Please set <u>location</u></string>
+    <string name="location_not_set"><u>Location Not Set</u>\n\nPlease enable the device's GPS or set your location manually through settings.</string>
     <string name="allahu_akbar">God is greater</string>
     <string name="time_for">Time for</string>
     <string name="latitude">Latitude</string>
