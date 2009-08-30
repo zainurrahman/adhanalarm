@@ -1,7 +1,11 @@
 package islam.adhanalarm;
 
 import net.sourceforge.jitl.Rounding;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 
 public class VARIABLE {
 
@@ -27,6 +31,24 @@ public class VARIABLE {
 	public static int getThemeIndex() {
 		if(settings == null) return CONSTANT.DEFAULT_THEME;
 		return settings.getInt("themeIndex", CONSTANT.DEFAULT_THEME);
+	}
+	
+	public static Location getCurrentLocation(Context context) {
+		Criteria criteria = new Criteria();
+		criteria.setAccuracy(Criteria.ACCURACY_FINE);
+		criteria.setAltitudeRequired(false);
+		criteria.setBearingRequired(false);
+		criteria.setCostAllowed(true);
+		criteria.setPowerRequirement(Criteria.POWER_LOW);
+		
+		LocationManager locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+		Location currentLocation = null;
+		try {
+			currentLocation = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, true));
+		} catch(Exception ex) {
+			// GPS or wireless networks is disabled
+		}
+		return currentLocation;
 	}
 
 	private VARIABLE() {

@@ -20,9 +20,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -90,7 +92,15 @@ public class AdhanAlarm extends Activity {
 		one.setIndicator(getString(R.string.today), getResources().getDrawable(R.drawable.calendar));
 		tabs.addTab(one);
 		if(!VARIABLE.settings.contains("latitude") || !VARIABLE.settings.contains("longitude")) {
-			((TextView)findViewById(R.id.notes)).setText(getString(R.string.location_not_set));
+			Location currentLocation = VARIABLE.getCurrentLocation(this);
+			try {
+				SharedPreferences.Editor editor = VARIABLE.settings.edit();
+				editor.putFloat("latitude", (float)currentLocation.getLatitude());
+				editor.putFloat("longitude", (float)currentLocation.getLongitude());
+				editor.commit();
+			} catch(Exception ex) {
+				((TextView)findViewById(R.id.notes)).setText(getString(R.string.location_not_set));
+			}
 		} /* End of Tab 1 Items */
 
 		TabHost.TabSpec two = tabs.newTabSpec("two");
@@ -114,9 +124,9 @@ public class AdhanAlarm extends Activity {
 		three.setIndicator(getString(R.string.settings), getResources().getDrawable(R.drawable.calculator));
 		tabs.addTab(three);
 
-		((Button)findViewById(R.id.set_advanced)).setOnClickListener(new Button.OnClickListener() {  
+		((Button)findViewById(R.id.set_calculation)).setOnClickListener(new Button.OnClickListener() {  
 			public void onClick(View v) {
-				showSettingsDialog(new AdvancedSettingsDialog(v.getContext()), v.getContext());
+				showSettingsDialog(new CalculationSettingsDialog(v.getContext()), v.getContext());
 			}
 		});
 		((Button)findViewById(R.id.set_notification)).setOnClickListener(new Button.OnClickListener() {  
@@ -129,9 +139,9 @@ public class AdhanAlarm extends Activity {
 				showSettingsDialog(new InterfaceSettingsDialog(v.getContext()), v.getContext());
 			}
 		});
-		((Button)findViewById(R.id.set_calculation)).setOnClickListener(new Button.OnClickListener() {  
+		((Button)findViewById(R.id.set_advanced)).setOnClickListener(new Button.OnClickListener() {  
 			public void onClick(View v) {
-				showSettingsDialog(new CalculationSettingsDialog(v.getContext()), v.getContext());
+				showSettingsDialog(new AdvancedSettingsDialog(v.getContext()), v.getContext());
 			}
 		});	/* End of Tab 3 Items */
 	}
