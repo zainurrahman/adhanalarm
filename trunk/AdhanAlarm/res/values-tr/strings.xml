@@ -14,7 +14,6 @@
     <string name="maghrib">Akşam</string>
     <string name="ishaa">Yatsı</string>
     <string name="next_fajr">Sonraki İmsak</string>
-    <string name="next_time_marker">></string>
     <string name="error_playing_alert">Uyarı çalmada yanlışlık</string>
     <string name="location_not_set">Lütfen <u>yer</u> ayarlayın</string>
     <string name="allahu_akbar">Allahu Akbar</string>

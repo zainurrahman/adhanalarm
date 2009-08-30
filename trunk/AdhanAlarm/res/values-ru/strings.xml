@@ -14,7 +14,6 @@
     <string name="maghrib">Магриб</string>
     <string name="ishaa">Иша</string>
     <string name="next_fajr">Следующий Фаджр</string>
-    <string name="next_time_marker">></string>
     <string name="error_playing_alert">Ошибка воспроизведения оповещение</string>
     <string name="location_not_set">Укажите <u>место</u></string>
     <string name="allahu_akbar">Аллаху акбар</string>

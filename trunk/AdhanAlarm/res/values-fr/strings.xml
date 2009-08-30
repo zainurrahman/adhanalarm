@@ -8,7 +8,6 @@
     <string name="today">Aujourd'hui</string>
     <string name="sunrise">Levé du soleil</string>
     <string name="next_fajr">Prochain Fajr</string>
-    <string name="next_time_marker">></string>
     <string name="error_playing_alert">Erreur rencontrée pendant la lecture de l’alerte </string>
     <string name="location_not_set">préciser s'il vous plaît <u>Endroit</u></string>
     <string name="allahu_akbar">Allahou akbar</string>

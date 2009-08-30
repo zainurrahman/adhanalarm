@@ -40,7 +40,6 @@ public class AdhanAlarm extends Activity {
 	private SimpleAdapter timetableView;
 
 	private static SensorListener orientationListener;
-	//private static float qiblaDirection = 0;
 	private static boolean isTrackingOrientation = false;
 
 	@Override
