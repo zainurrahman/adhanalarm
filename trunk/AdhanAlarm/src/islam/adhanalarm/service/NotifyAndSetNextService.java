@@ -17,12 +17,12 @@ public class NotifyAndSetNextService extends Service {
 
 	@Override
 	public void onStart(Intent intent, int startId) {
-		StartNotificationReceiver.setNext(this);
+		short timeIndex = intent.getShortExtra("timeIndex", (short)-1); intent.removeExtra("timeIndex");
+		long actualTime = intent.getLongExtra("actualTime", (long)0); intent.removeExtra("actualTime");
 
-		short timeIndex = intent.getShortExtra("timeIndex", (short)-1);
-		long actualTime = intent.getLongExtra("actualTime", (long)0);
-		intent.removeExtra("timeIndex"); intent.removeExtra("actualTime");
 		Notifier.start(this, timeIndex, actualTime); // Notify the user for the current time
+
+		StartNotificationReceiver.setNext(this);
 
 		if(VARIABLE.mainActivityIsRunning) {
 			Intent i = new Intent(this, AdhanAlarm.class);

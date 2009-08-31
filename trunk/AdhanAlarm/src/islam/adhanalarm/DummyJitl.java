@@ -11,7 +11,7 @@ import net.sourceforge.jitl.astro.Location;
 
 public class DummyJitl extends Jitl {
 
-	private static short START_PRAYER = CONSTANT.NEXT_FAJR;
+	private static short START_PRAYER = CONSTANT.ISHAA;
 	private final int INC_HOUR = 0;
 	private final int INC_MIN = 0;
 	

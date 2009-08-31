@@ -25,17 +25,12 @@ public class Schedule {
 		location.setTemperature(VARIABLE.settings.getFloat("temperature", 10));
 
 		itl = CONSTANT.DEBUG ? new DummyJitl(location, method) : new Jitl(location, method);
-		GregorianCalendar nextDay = new GregorianCalendar();
-		nextDay.add(Calendar.DATE, 1);
 		Prayer[] dayPrayers = itl.getPrayerTimes(day).getPrayers();
 		Prayer[] allTimes = new Prayer[]{dayPrayers[0], dayPrayers[1], dayPrayers[2], dayPrayers[3], dayPrayers[4], dayPrayers[5], itl.getNextDayFajr(day)};
 
 		for(short i = CONSTANT.FAJR; i <= CONSTANT.NEXT_FAJR; i++) { // Set the times on the schedule
-			if(i == CONSTANT.NEXT_FAJR) {
-				schedule[i] = new GregorianCalendar(nextDay.get(Calendar.YEAR), nextDay.get(Calendar.MONTH), nextDay.get(Calendar.DAY_OF_MONTH), allTimes[i].getHour(), allTimes[i].getMinute(), allTimes[i].getSecond());
-			} else {
-				schedule[i] = new GregorianCalendar(day.get(Calendar.YEAR), day.get(Calendar.MONTH), day.get(Calendar.DAY_OF_MONTH), allTimes[i].getHour(), allTimes[i].getMinute(), allTimes[i].getSecond());	
-			}
+			if(i == CONSTANT.NEXT_FAJR) day.add(Calendar.DATE, 1);
+			schedule[i] = new GregorianCalendar(day.get(Calendar.YEAR), day.get(Calendar.MONTH), day.get(Calendar.DAY_OF_MONTH), allTimes[i].getHour(), allTimes[i].getMinute(), allTimes[i].getSecond());
 			extremes[i] = allTimes[i].isExtreme();
 		}
 	}
