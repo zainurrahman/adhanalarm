@@ -8,33 +8,27 @@
 		<LinearLayout android:orientation="vertical"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:paddingRight="5px">
-			<TextView style="@style/regularText"
-				android:layout_width="wrap_content"
+			<TextView android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="@string/latitude" />
-			<TextView style="@style/regularText"
-				android:layout_width="wrap_content"
+			<TextView android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="@string/longitude" />
-			<TextView style="@style/regularText"
-				android:layout_width="wrap_content"
+			<TextView android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text="@string/qibla" />
 		</LinearLayout>
 		<LinearLayout android:orientation="vertical"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content">
-			<TextView style="@style/regularText"
-				android:id="@+id/current_latitude_deg"
+			<TextView android:id="@+id/current_latitude_deg"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:layout_gravity="right"
 				android:text="~" />
-			<TextView style="@style/regularText"
-				android:id="@+id/current_longitude_deg"
+			<TextView android:id="@+id/current_longitude_deg"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:layout_gravity="right"
 				android:text="~" />
-			<TextView style="@style/regularText"
-				android:id="@+id/current_qibla_deg"
+			<TextView android:id="@+id/current_qibla_deg"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:layout_gravity="right"
 				android:text="~" />
@@ -43,31 +37,25 @@
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content" android:paddingLeft="5px"
 			android:paddingRight="5px">
-			<TextView style="@style/regularText"
-				android:layout_width="wrap_content"
+			<TextView android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text="°" />
-			<TextView style="@style/regularText"
-				android:layout_width="wrap_content"
+			<TextView android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text="°" />
-			<TextView style="@style/regularText"
-				android:layout_width="wrap_content"
+			<TextView android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text="°" />
 		</LinearLayout>
 		<LinearLayout android:orientation="vertical"
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content">
-			<TextView style="@style/regularText"
-				android:id="@+id/current_latitude_min"
+			<TextView android:id="@+id/current_latitude_min"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:layout_gravity="right"
 				android:text="~" />
-			<TextView style="@style/regularText"
-				android:id="@+id/current_longitude_min"
+			<TextView android:id="@+id/current_longitude_min"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:layout_gravity="right"
 				android:text="~" />
-			<TextView style="@style/regularText"
-				android:id="@+id/current_qibla_min"
+			<TextView android:id="@+id/current_qibla_min"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:layout_gravity="right"
 				android:text="~" />
@@ -76,31 +64,25 @@
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content" android:paddingLeft="5px"
 			android:paddingRight="5px">
-			<TextView style="@style/regularText"
-				android:layout_width="wrap_content"
+			<TextView android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text="'" />
-			<TextView style="@style/regularText"
-				android:layout_width="wrap_content"
+			<TextView android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text="'" />
-			<TextView style="@style/regularText"
-				android:layout_width="wrap_content"
+			<TextView android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text="'" />
 		</LinearLayout>
 		<LinearLayout android:orientation="vertical"
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content">
-			<TextView style="@style/regularText"
-				android:id="@+id/current_latitude_sec"
+			<TextView android:id="@+id/current_latitude_sec"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:layout_gravity="right"
 				android:text="~" />
-			<TextView style="@style/regularText"
-				android:id="@+id/current_longitude_sec"
+			<TextView android:id="@+id/current_longitude_sec"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:layout_gravity="right"
 				android:text="~" />
-			<TextView style="@style/regularText"
-				android:id="@+id/current_qibla_sec"
+			<TextView android:id="@+id/current_qibla_sec"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:layout_gravity="right"
 				android:text="~" />
@@ -109,14 +91,11 @@
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content" android:paddingLeft="5px"
 			android:paddingRight="5px">
-			<TextView style="@style/regularText"
-				android:layout_width="wrap_content"
+			<TextView android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text="''" />
-			<TextView style="@style/regularText"
-				android:layout_width="wrap_content"
+			<TextView android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text="''" />
-			<TextView style="@style/regularText"
-				android:layout_width="wrap_content"
+			<TextView android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:text="''" />
 		</LinearLayout>
 	</LinearLayout>
@@ -125,15 +104,14 @@
 		android:layout_width="wrap_content"
 		android:layout_gravity="center_horizontal|center_vertical"
 		android:paddingTop="5px" android:paddingBottom="5px">
-		<islam.adhanalarm.view.QiblaCompassView android:layout_width="240px"
-			android:layout_height="240px" android:id="@+id/qibla_compass" />
+		<islam.adhanalarm.view.QiblaCompassView
+			android:layout_width="240px" android:layout_height="240px"
+			android:id="@+id/qibla_compass" />
 	</LinearLayout>
-	<TextView style="@style/regularText"
-		android:layout_width="wrap_content"
+	<TextView android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:id="@+id/bearing_north"
 		android:paddingLeft="2px" />
-	<TextView style="@style/regularText"
-		android:layout_width="wrap_content"
+	<TextView android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:id="@+id/bearing_qibla"
 		android:paddingLeft="2px" />
 	<TextView style="@style/finePrint"

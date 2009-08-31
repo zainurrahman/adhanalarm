@@ -117,7 +117,8 @@ public class AdhanAlarm extends Activity {
 			}
 			public void onAccuracyChanged(int s, int a) {
 			}
-		}; /* End of Tab 2 Items */
+		};
+		startTrackingOrientation(); /* End of Tab 2 Items */
 
 		TabHost.TabSpec three = tabs.newTabSpec("three");
 		three.setContent(R.id.content3);
@@ -195,7 +196,6 @@ public class AdhanAlarm extends Activity {
 		getIntent().removeExtra("setNotification");
 		updateTodaysTimetableAndNotification(resetNotification);
 		((TabHost)findViewById(R.id.tabs)).setCurrentTab(0);
-		startTrackingOrientation();
 	}
 	@Override
 	public void onNewIntent(Intent intent) {
@@ -226,10 +226,9 @@ public class AdhanAlarm extends Activity {
 		d.show();
 	}
 	private void restart(Context context) {
-		Intent intent = new Intent(context, AdhanAlarm.class);
 		long restartTime = Calendar.getInstance().getTimeInMillis() + CONSTANT.RESTART_DELAY;
 		AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-		am.set(AlarmManager.RTC_WAKEUP, restartTime, PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_CANCEL_CURRENT));
+		am.set(AlarmManager.RTC_WAKEUP, restartTime, PendingIntent.getActivity(context, 0, getIntent(), PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_CANCEL_CURRENT));
 		finish();
 	}
 
