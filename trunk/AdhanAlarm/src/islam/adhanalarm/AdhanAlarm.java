@@ -8,6 +8,7 @@ import islam.adhanalarm.view.QiblaCompassView;
 import islam.adhanalarm.receiver.StartNotificationReceiver;
 import islam.adhanalarm.service.FillDailyTimetableService;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -91,17 +92,7 @@ public class AdhanAlarm extends Activity {
 		one.setContent(R.id.content1);
 		one.setIndicator(getString(R.string.today), getResources().getDrawable(R.drawable.calendar));
 		tabs.addTab(one);
-		if(!VARIABLE.settings.contains("latitude") || !VARIABLE.settings.contains("longitude")) {
-			Location currentLocation = VARIABLE.getCurrentLocation(this);
-			try {
-				SharedPreferences.Editor editor = VARIABLE.settings.edit();
-				editor.putFloat("latitude", (float)currentLocation.getLatitude());
-				editor.putFloat("longitude", (float)currentLocation.getLongitude());
-				editor.commit();
-			} catch(Exception ex) {
-				((TextView)findViewById(R.id.notes)).setText(getString(R.string.location_not_set));
-			}
-		} /* End of Tab 1 Items */
+		configureCalculationDefaults(); /* End of Tab 1 Items */
 
 		TabHost.TabSpec two = tabs.newTabSpec("two");
 		two.setContent(R.id.content2);
@@ -247,6 +238,37 @@ public class AdhanAlarm extends Activity {
 		getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
 		setTitle(R.string.app_name);
 	}
+	
+	private void configureCalculationDefaults() {
+		if(!VARIABLE.settings.contains("latitude") || !VARIABLE.settings.contains("longitude")) {
+			Location currentLocation = VARIABLE.getCurrentLocation(this);
+			try {
+				SharedPreferences.Editor editor = VARIABLE.settings.edit();
+				editor.putFloat("latitude", (float)currentLocation.getLatitude());
+				editor.putFloat("longitude", (float)currentLocation.getLongitude());
+				editor.commit();
+			} catch(Exception ex) {
+				((TextView)findViewById(R.id.notes)).setText(getString(R.string.location_not_set));
+			}
+		}
+		if(!VARIABLE.settings.contains("calculationMethodsIndex")) {
+			try {
+				String country = Locale.getDefault().getISO3Country().toUpperCase();
+				
+				SharedPreferences.Editor editor = VARIABLE.settings.edit();
+				for(int i = 0; i < CONSTANT.CALCULATION_METHOD_COUNTRY_CODES.length; i++) {
+					if(Arrays.asList(CONSTANT.CALCULATION_METHOD_COUNTRY_CODES[i]).contains(country)) {
+						editor.putInt("calculationMethodsIndex", i);
+						editor.commit();
+						break;
+					}
+				}
+			} catch(Exception ex) {
+				// Wasn't set, oh well we'll uses DEFAULT_CALCULATION_METHOD later
+			}
+		}
+	}
+	
 	private void updateTodaysTimetableAndNotification(boolean resetNotification) {
 		if(resetNotification) {
 			StartNotificationReceiver.setNext(this);
