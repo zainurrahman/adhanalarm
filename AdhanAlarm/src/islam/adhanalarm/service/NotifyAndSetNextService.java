@@ -26,7 +26,7 @@ public class NotifyAndSetNextService extends Service {
 			Intent i = new Intent(this, AdhanAlarm.class);
 			i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 			i.putExtra("setNotification", false); // Already did this at the top
-			startActivity(i); // Update the gui marker to show the next prayer, have to do this after starting Notifier or intent gets changed
+			startActivity(i); // Update the gui marker to show the next prayer
 		}
 
 		// Notify the user for the current time, need to do this last since it releases the WakeLock
