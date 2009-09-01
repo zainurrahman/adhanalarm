@@ -5,7 +5,7 @@ import net.sourceforge.jitl.Method;
 public class CONSTANT {
 	public static final boolean DEBUG = false;
 
-	public static final long RESTART_DELAY = 500; // Milliseconds
+	public static final long RESTART_DELAY = 1000; // Milliseconds
 	public static final long POST_NOTIFICATION_DELAY = 2000; // Milliseconds
 
 	public static final short DEFAULT_THEME = 0;
