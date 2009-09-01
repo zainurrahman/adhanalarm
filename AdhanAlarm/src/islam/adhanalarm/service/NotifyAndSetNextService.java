@@ -20,8 +20,6 @@ public class NotifyAndSetNextService extends Service {
 		short timeIndex = intent.getShortExtra("timeIndex", (short)-1); intent.removeExtra("timeIndex");
 		long actualTime = intent.getLongExtra("actualTime", (long)0); intent.removeExtra("actualTime");
 
-		Notifier.start(this, timeIndex, actualTime); // Notify the user for the current time
-
 		StartNotificationReceiver.setNext(this);
 
 		if(VARIABLE.mainActivityIsRunning) {
@@ -30,6 +28,9 @@ public class NotifyAndSetNextService extends Service {
 			i.putExtra("setNotification", false); // Already did this at the top
 			startActivity(i); // Update the gui marker to show the next prayer, have to do this after starting Notifier or intent gets changed
 		}
+
+		// Notify the user for the current time, need to do this last since it releases the WakeLock
+		Notifier.start(this, timeIndex, actualTime);
 	}
 
 }
