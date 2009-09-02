@@ -24,8 +24,4 @@
         <item>Spezial</item>
         <item>Aggressiv</item>
     </array>
-    <array name="themes">
-        <item>@string/sdefault</item>
-        <item>Grünes Design</item>
-    </array>
 </resources>
