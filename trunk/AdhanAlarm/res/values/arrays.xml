@@ -24,11 +24,7 @@
         <item>Special</item>
         <item>Aggressive</item>
     </array>
-    <array name="themes">
-        <item>@string/sdefault</item>
-        <item>Green Theme</item>
-    </array>
-    <!-- Translators do not copy languages array into your locale's arrays.xml file -->
+    <!-- Translators do not copy languages or themes arrays into your locale's arrays.xml file -->
     <array name="languages">
         <item>@string/sdefault</item>
         <item>English</item>
@@ -36,5 +32,12 @@
         <item>Français</item>
         <item>Русский</item>
         <item>Türkçe</item>
+    </array>
+    <array name="themes">
+        <item>@string/sdefault</item>
+        <item>@string/brown</item>
+        <item>@string/dialog</item>
+        <item>@string/green</item>
+        <item>@string/light</item>
     </array>
 </resources>

@@ -12,10 +12,10 @@
     </style>
     
     <style name="greenTextAppearance" parent="@style/textAppearance">
-        <item name="android:textColor">@color/green_theme_text</item>
+        <item name="android:textColor">@color/light_yellow</item>
     </style>
     
     <style name="greenTabWidgetStyle" parent="@android:style/Widget.TabWidget">
-        <item name="android:textColor">@color/green_theme_tab_indicator_text</item>
+        <item name="android:textColor">@color/yellow_black_tab_indicator_text</item>
     </style>
 </resources>

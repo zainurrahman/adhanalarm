@@ -72,7 +72,7 @@ public class AdhanAlarm extends Activity {
 			public void onChildViewAdded(View parent, View child) {
 				int themeIndex = VARIABLE.settings.getInt("themeIndex", CONSTANT.DEFAULT_THEME);
 				int alternateRowColor = CONSTANT.ALTERNATE_ROW_COLORS[themeIndex];
-				child.setBackgroundResource(++numChildren % 2 == 0 ? alternateRowColor : R.color.transparent);
+				child.setBackgroundResource(++numChildren % 2 == 0 ? alternateRowColor : android.R.color.transparent);
 				if(numChildren > CONSTANT.NEXT_FAJR) numChildren = 0; // Last row has been reached, reset for next time
 			}
 			public void onChildViewRemoved(View parent, View child) {
