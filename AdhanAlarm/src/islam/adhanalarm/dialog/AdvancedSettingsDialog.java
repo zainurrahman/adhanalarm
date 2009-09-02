@@ -35,6 +35,8 @@ public class AdvancedSettingsDialog extends Dialog {
 		rounding_types.setAdapter(adapter);
 		rounding_types.setSelection(VARIABLE.settings.getInt("roundingTypesIndex", CONSTANT.DEFAULT_ROUNDING_TYPE));
 		
+		((EditText)findViewById(R.id.offset_minutes)).setText(Integer.toString(VARIABLE.settings.getInt("offsetMinutes", 0)));
+		
 		((Button)findViewById(R.id.save_settings)).setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
 				SharedPreferences.Editor editor = VARIABLE.settings.edit();
@@ -42,21 +44,23 @@ public class AdvancedSettingsDialog extends Dialog {
 					editor.putFloat("altitude", Float.parseFloat(((EditText)findViewById(R.id.altitude)).getText().toString()));
 				} catch(Exception ex) {
 					editor.putFloat("altitude", 0);
-					((EditText)findViewById(R.id.pressure)).setText("0.0");
 				}
 				try {
 					editor.putFloat("pressure", Float.parseFloat(((EditText)findViewById(R.id.pressure)).getText().toString()));
 				} catch(Exception ex) {
 					editor.putFloat("pressure", 1010);
-					((EditText)findViewById(R.id.pressure)).setText("1010.0");
 				}
 				try {
 					editor.putFloat("temperature", Float.parseFloat(((EditText)findViewById(R.id.temperature)).getText().toString()));
 				} catch(Exception ex) {
 					editor.putFloat("temperature", 10);
-					((EditText)findViewById(R.id.pressure)).setText("10.0");
 				}
 				editor.putInt("roundingTypesIndex", ((Spinner)findViewById(R.id.rounding_types)).getSelectedItemPosition());
+				try {
+					editor.putInt("offsetMinutes", Integer.parseInt(((EditText)findViewById(R.id.offset_minutes)).getText().toString()));
+				} catch(Exception ex) {
+					editor.putInt("offsetMinutes", 0);
+				}
 				editor.commit();
 				dismiss();
 			}
@@ -67,6 +71,7 @@ public class AdvancedSettingsDialog extends Dialog {
 				((EditText)findViewById(R.id.temperature)).setText("10.0");
 				((EditText)findViewById(R.id.altitude)).setText("0.0");
 				((Spinner)findViewById(R.id.rounding_types)).setSelection(CONSTANT.DEFAULT_ROUNDING_TYPE);
+				((EditText)findViewById(R.id.offset_minutes)).setText("0");
 			}
 		});
 	}

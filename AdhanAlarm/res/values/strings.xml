@@ -41,10 +41,12 @@
     <string name="save">Save</string>
     <string name="reset">Reset</string>
     <string name="calculation">Calculation</string>
-    <string name="rounding">Rounding</string>
     <string name="altitude">Altitude</string>
     <string name="pressure">Pressure</string>
     <string name="temperature">Temperature</string>
+    <string name="rounding">Rounding</string>
+    <string name="offset">Offset</string>
+    <string name="minutes">Minutes</string>
     <string name="theme">Theme</string>
     <string name="language">Language</string>
 </resources>

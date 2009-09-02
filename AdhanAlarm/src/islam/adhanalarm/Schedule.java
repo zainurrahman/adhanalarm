@@ -16,7 +16,7 @@ public class Schedule {
 	private static Schedule today;
 
 	public Schedule(GregorianCalendar day) {
-		Method method = CONSTANT.CALCULATION_METHODS[VARIABLE.settings.getInt("calculationMethodsIndex", 4)].copy();
+		Method method = CONSTANT.CALCULATION_METHODS[VARIABLE.settings.getInt("calculationMethodsIndex", CONSTANT.DEFAULT_CALCULATION_METHOD)].copy();
 		method.setRound(VARIABLE.ROUNDING_TYPES[VARIABLE.settings.getInt("roundingTypesIndex", 2)]);
 
 		net.sourceforge.jitl.astro.Location location = new net.sourceforge.jitl.astro.Location(VARIABLE.settings.getFloat("latitude", 43.67f), VARIABLE.settings.getFloat("longitude", -79.417f), getGMTOffset(), 0);
@@ -29,8 +29,9 @@ public class Schedule {
 		Prayer[] allTimes = new Prayer[]{dayPrayers[0], dayPrayers[1], dayPrayers[2], dayPrayers[3], dayPrayers[4], dayPrayers[5], itl.getNextDayFajr(day)};
 
 		for(short i = CONSTANT.FAJR; i <= CONSTANT.NEXT_FAJR; i++) { // Set the times on the schedule
-			if(i == CONSTANT.NEXT_FAJR) day.add(Calendar.DATE, 1);
+			if(i == CONSTANT.NEXT_FAJR && !CONSTANT.DEBUG) day.add(Calendar.DATE, 1);
 			schedule[i] = new GregorianCalendar(day.get(Calendar.YEAR), day.get(Calendar.MONTH), day.get(Calendar.DAY_OF_MONTH), allTimes[i].getHour(), allTimes[i].getMinute(), allTimes[i].getSecond());
+			schedule[i].add(Calendar.MINUTE, VARIABLE.settings.getInt("offsetMinutes", 0));
 			extremes[i] = allTimes[i].isExtreme();
 		}
 	}
@@ -44,8 +45,8 @@ public class Schedule {
 		Calendar currentTime = Calendar.getInstance();
 		if(currentTime.before(schedule[CONSTANT.FAJR])) return CONSTANT.FAJR;
 		for(short i = CONSTANT.FAJR; i < CONSTANT.NEXT_FAJR; i++) {
-			if(currentTime.compareTo(schedule[i]) <= 0 && currentTime.before(schedule[i + 1])) {
-				return i;
+			if(currentTime.after(schedule[i]) && currentTime.before(schedule[i + 1])) {
+				return ++i;
 			}
 		}
 		return CONSTANT.NEXT_FAJR;
