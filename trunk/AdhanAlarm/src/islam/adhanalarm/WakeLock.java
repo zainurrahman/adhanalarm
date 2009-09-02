@@ -10,16 +10,20 @@ public class WakeLock {
 	private static PowerManager.WakeLock wakeLock;
 
 	public static void acquire(Context context) {
-		if(wakeLock != null && wakeLock.isHeld()) return;
+		if(wakeLock != null && wakeLock.isHeld()) {
+			return;
+		}
 
 		PowerManager powerManager = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
 
-		wakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "Adhan Alarm Wake Lock");
+		wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "Adhan Alarm Wake Lock");
 		wakeLock.acquire();
 	}
 
 	public static void release() {
-		if(wakeLock != null && wakeLock.isHeld()) wakeLock.release();
-		wakeLock = null;
+		if(wakeLock != null) {
+			wakeLock.release();
+			wakeLock = null;
+		}
 	}
 }
