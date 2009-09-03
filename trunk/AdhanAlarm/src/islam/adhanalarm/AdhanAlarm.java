@@ -70,8 +70,7 @@ public class AdhanAlarm extends Activity {
 		((ListView)findViewById(R.id.timetable)).setOnHierarchyChangeListener(new OnHierarchyChangeListener() { // Set zebra stripes
 			private int numChildren = 0;
 			public void onChildViewAdded(View parent, View child) {
-				int themeIndex = VARIABLE.settings.getInt("themeIndex", CONSTANT.DEFAULT_THEME);
-				int alternateRowColor = CONSTANT.ALTERNATE_ROW_COLORS[themeIndex];
+				int alternateRowColor = CONSTANT.ALTERNATE_ROW_COLORS[VARIABLE.getThemeIndex(parent.getContext())];
 				child.setBackgroundResource(++numChildren % 2 == 0 ? alternateRowColor : android.R.color.transparent);
 				if(numChildren > CONSTANT.NEXT_FAJR) numChildren = 0; // Last row has been reached, reset for next time
 			}
@@ -86,7 +85,7 @@ public class AdhanAlarm extends Activity {
 
 		TabHost tabs = (TabHost)findViewById(R.id.tabs);
 		tabs.setup();
-		tabs.getTabWidget().setBackgroundResource(CONSTANT.TAB_WIDGET_BACKGROUND_COLORS[VARIABLE.getThemeIndex()]);
+		tabs.getTabWidget().setBackgroundResource(CONSTANT.TAB_WIDGET_BACKGROUND_COLORS[VARIABLE.getThemeIndex(this)]);
 
 		TabHost.TabSpec one = tabs.newTabSpec("one");
 		one.setContent(R.id.content1);
@@ -224,7 +223,7 @@ public class AdhanAlarm extends Activity {
 	}
 
 	private void setTheme() {
-		setTheme(CONSTANT.ALL_THEMES[VARIABLE.getThemeIndex()]);
+		setTheme(CONSTANT.ALL_THEMES[VARIABLE.getThemeIndex(this)]);
 	}
 	private void setLocale() {
 		String languageKey = VARIABLE.settings.getString("locale", CONSTANT.LANGUAGE_KEYS[CONSTANT.DEFAULT_LANGUAGE]);

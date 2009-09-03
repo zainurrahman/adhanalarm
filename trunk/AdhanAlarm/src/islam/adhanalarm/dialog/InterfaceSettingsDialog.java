@@ -28,7 +28,7 @@ public class InterfaceSettingsDialog extends Dialog {
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.themes, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		themes.setAdapter(adapter);
-		themes.setSelection(VARIABLE.getThemeIndex());
+		themes.setSelection(VARIABLE.getThemeIndex(getContext()));
 
 		Spinner languages = (Spinner)findViewById(R.id.languages);
 		adapter = ArrayAdapter.createFromResource(getContext(), R.array.languages, android.R.layout.simple_spinner_item);
@@ -40,7 +40,7 @@ public class InterfaceSettingsDialog extends Dialog {
 			public void onClick(View v) {
 				SharedPreferences.Editor editor = VARIABLE.settings.edit();
 				int newThemeIndex = ((Spinner)findViewById(R.id.themes)).getSelectedItemPosition();
-				if(VARIABLE.getThemeIndex() != newThemeIndex) {
+				if(VARIABLE.getThemeIndex(getContext()) != newThemeIndex) {
 					editor.putInt("themeIndex", newThemeIndex);
 					VARIABLE.themeDirty = true;
 				}

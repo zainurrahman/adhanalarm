@@ -12,11 +12,11 @@ import android.media.MediaPlayer;
 import android.telephony.TelephonyManager;
 
 public class Notifier {
-	
+
 	private static MediaPlayer mediaPlayer;
 	private static Context context;
 	private static Notification notification;
-	
+
 	public static void start(Context context, short timeIndex, long actualTime) {
 		Notifier.context = context;
 		stopNotification();
@@ -26,7 +26,7 @@ public class Notifier {
 
 		int notificationMethod = VARIABLE.settings.getInt("notificationMethodIndex", CONSTANT.DEFAULT_NOTIFICATION);
 		if(notificationMethod == CONSTANT.NO_NOTIFICATIONS || (timeIndex == CONSTANT.SUNRISE && !VARIABLE.alertSunrise())) return;
-		
+
 		int ringerMode = ((AudioManager)context.getSystemService(Context.AUDIO_SERVICE)).getRingerMode();
 		int callState = ((TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE)).getCallState();
 		if(notificationMethod == CONSTANT.RECITE_ADHAN && ringerMode != AudioManager.RINGER_MODE_SILENT && ringerMode != AudioManager.RINGER_MODE_VIBRATE && callState == TelephonyManager.CALL_STATE_IDLE) {
@@ -61,7 +61,7 @@ public class Notifier {
 		stopNotification();
 		WakeLock.release();
 	}
-	
+
 	private static void stopNotification() {
 		if(mediaPlayer != null && mediaPlayer.isPlaying()) mediaPlayer.stop();
 		if(context != null) ((NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
@@ -73,6 +73,11 @@ public class Notifier {
 		notification.deleteIntent = PendingIntent.getBroadcast(context, 0, new Intent(context, ClearNotificationReceiver.class), PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_ONE_SHOT);
 		((NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(1, notification);
 		if(mediaPlayer == null || !mediaPlayer.isPlaying()) {
+			try {
+				Thread.sleep(CONSTANT.POST_NOTIFICATION_DELAY);
+			} catch(Exception ex) {
+				// Just trying to make sure the notification completes before we fall asleep again
+			}
 			WakeLock.release();
 		}
 	}

@@ -29,8 +29,10 @@ public class Schedule {
 		Prayer[] allTimes = new Prayer[]{dayPrayers[0], dayPrayers[1], dayPrayers[2], dayPrayers[3], dayPrayers[4], dayPrayers[5], itl.getNextDayFajr(day)};
 
 		for(short i = CONSTANT.FAJR; i <= CONSTANT.NEXT_FAJR; i++) { // Set the times on the schedule
-			if(i == CONSTANT.NEXT_FAJR && !CONSTANT.DEBUG) day.add(Calendar.DATE, 1);
 			schedule[i] = new GregorianCalendar(day.get(Calendar.YEAR), day.get(Calendar.MONTH), day.get(Calendar.DAY_OF_MONTH), allTimes[i].getHour(), allTimes[i].getMinute(), allTimes[i].getSecond());
+			if(i == CONSTANT.NEXT_FAJR && !CONSTANT.DEBUG) {
+				schedule[i].add(Calendar.DAY_OF_MONTH, 1); // Next fajr is tomorrow
+			}
 			schedule[i].add(Calendar.MINUTE, VARIABLE.settings.getInt("offsetMinutes", 0));
 			extremes[i] = allTimes[i].isExtreme();
 		}
@@ -46,7 +48,7 @@ public class Schedule {
 		if(currentTime.before(schedule[CONSTANT.FAJR])) return CONSTANT.FAJR;
 		for(short i = CONSTANT.FAJR; i < CONSTANT.NEXT_FAJR; i++) {
 			if(currentTime.after(schedule[i]) && currentTime.before(schedule[i + 1])) {
-				return ++i;
+				return (short)(i + 1);
 			}
 		}
 		return CONSTANT.NEXT_FAJR;

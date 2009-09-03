@@ -1,9 +1,7 @@
 package islam.adhanalarm;
 
-
 import android.content.Context;
 import android.os.PowerManager;
-
 
 public class WakeLock {
 	

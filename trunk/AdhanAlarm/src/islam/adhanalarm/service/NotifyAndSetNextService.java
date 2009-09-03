@@ -9,7 +9,7 @@ import android.content.Intent;
 import android.os.IBinder;
 
 public class NotifyAndSetNextService extends Service {
-	
+
 	@Override
 	public IBinder onBind(Intent arg0) {
 		return null;
@@ -17,9 +17,6 @@ public class NotifyAndSetNextService extends Service {
 
 	@Override
 	public void onStart(Intent intent, int startId) {
-		short timeIndex = intent.getShortExtra("timeIndex", (short)-1); intent.removeExtra("timeIndex");
-		long actualTime = intent.getLongExtra("actualTime", (long)0); intent.removeExtra("actualTime");
-
 		StartNotificationReceiver.setNext(this);
 
 		if(VARIABLE.mainActivityIsRunning) {
@@ -29,8 +26,9 @@ public class NotifyAndSetNextService extends Service {
 			startActivity(i); // Update the gui marker to show the next prayer
 		}
 
-		// Notify the user for the current time, need to do this last since it releases the WakeLock
-		Notifier.start(this, timeIndex, actualTime);
+		short timeIndex = intent.getShortExtra("timeIndex", (short)-1);
+		long actualTime = intent.getLongExtra("actualTime", (long)0);
+		Notifier.start(this, timeIndex, actualTime); // Notify the user for the current time, need to do this last since it releases the WakeLock
 	}
 
 }
