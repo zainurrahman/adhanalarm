@@ -28,9 +28,11 @@ public class VARIABLE {
 		}
 		return 0;
 	}
-	public static int getThemeIndex() {
+	public static int getThemeIndex(Context context) {
 		if(settings == null) return CONSTANT.DEFAULT_THEME;
-		return settings.getInt("themeIndex", CONSTANT.DEFAULT_THEME);
+		int themeIndex = settings.getInt("themeIndex", CONSTANT.DEFAULT_THEME);
+		if(themeIndex >= context.getResources().getTextArray(R.array.themes).length) return CONSTANT.DEFAULT_THEME;
+		return themeIndex;
 	}
 	
 	public static Location getCurrentLocation(Context context) {

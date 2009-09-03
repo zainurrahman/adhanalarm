@@ -15,8 +15,10 @@ public class StartNotificationReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		WakeLock.acquire(context);
-		intent.setClass(context, NotifyAndSetNextService.class);
-		context.startService(intent);
+		Intent i = new Intent(context, NotifyAndSetNextService.class);
+		i.putExtra("timeIndex", intent.getShortExtra("timeIndex", (short)-1));
+		i.putExtra("actualTime", intent.getLongExtra("actualTime", 0));
+		context.startService(i);
 	}
 
 	public static void setNext(Context context) {
@@ -28,11 +30,11 @@ public class StartNotificationReceiver extends BroadcastReceiver {
 	private static void set(Context context, short timeIndex, Calendar actualTime) {
 		if(Calendar.getInstance().after(actualTime)) return; // Somehow current time is greater than the prayer time
 
-		Intent intent = new Intent(context, StartNotificationReceiver.class);
-		intent.putExtra("timeIndex", timeIndex);
-		intent.putExtra("actualTime", actualTime.getTimeInMillis());
+		Intent i = new Intent(context, StartNotificationReceiver.class);
+		i.putExtra("timeIndex", timeIndex);
+		i.putExtra("actualTime", actualTime.getTimeInMillis());
 
 		AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-		am.set(AlarmManager.RTC_WAKEUP, actualTime.getTimeInMillis(), PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT));
+		am.set(AlarmManager.RTC_WAKEUP, actualTime.getTimeInMillis(), PendingIntent.getBroadcast(context, 0, i, PendingIntent.FLAG_CANCEL_CURRENT));
 	}
 }
