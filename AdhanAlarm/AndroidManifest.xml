@@ -15,15 +15,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".service.FillDailyTimetableService" />
-        <service android:name=".service.NotifyAndSetNextService" />
-        <receiver android:name=".receiver.StartNotificationReceiver" />
-        <receiver android:name=".receiver.ClickNotificationReceiver" />
-        <receiver android:name=".receiver.ClearNotificationReceiver" />
-        <receiver android:name=".receiver.BootCompletedReceiver">
+        <receiver android:name=".receiver.StartNotificationReceiver">
 			<intent-filter>
 				<action android:name="android.intent.action.BOOT_COMPLETED" />
 			</intent-filter>
-		</receiver>
+        </receiver>
+        <receiver android:name=".receiver.ClickNotificationReceiver" />
+        <receiver android:name=".receiver.ClearNotificationReceiver" />
+        <service android:name=".service.FillDailyTimetableService" />
+        <service android:name=".service.SetNextAndPossiblyNotifyCurrentService" />
     </application>
 </manifest>

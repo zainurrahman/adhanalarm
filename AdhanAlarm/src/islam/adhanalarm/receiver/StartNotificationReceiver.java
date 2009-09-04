@@ -3,8 +3,9 @@ package islam.adhanalarm.receiver;
 import java.util.Calendar;
 
 import islam.adhanalarm.Schedule;
+import islam.adhanalarm.VARIABLE;
 import islam.adhanalarm.WakeLock;
-import islam.adhanalarm.service.NotifyAndSetNextService;
+import islam.adhanalarm.service.SetNextAndPossiblyNotifyCurrentService;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -15,10 +16,11 @@ public class StartNotificationReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		WakeLock.acquire(context);
-		Intent i = new Intent(context, NotifyAndSetNextService.class);
-		i.putExtra("timeIndex", intent.getShortExtra("timeIndex", (short)-1));
-		i.putExtra("actualTime", intent.getLongExtra("actualTime", 0));
-		context.startService(i);
+		if(VARIABLE.settings == null) { // We are booting up
+			VARIABLE.settings = context.getSharedPreferences("settingsFile", Context.MODE_PRIVATE);
+		}
+		intent.setClass(context, SetNextAndPossiblyNotifyCurrentService.class);
+		context.startService(intent);
 	}
 
 	public static void setNext(Context context) {
@@ -30,11 +32,11 @@ public class StartNotificationReceiver extends BroadcastReceiver {
 	private static void set(Context context, short timeIndex, Calendar actualTime) {
 		if(Calendar.getInstance().after(actualTime)) return; // Somehow current time is greater than the prayer time
 
-		Intent i = new Intent(context, StartNotificationReceiver.class);
-		i.putExtra("timeIndex", timeIndex);
-		i.putExtra("actualTime", actualTime.getTimeInMillis());
+		Intent intent = new Intent(context, StartNotificationReceiver.class);
+		intent.putExtra("timeIndex", timeIndex);
+		intent.putExtra("actualTime", actualTime.getTimeInMillis());
 
 		AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-		am.set(AlarmManager.RTC_WAKEUP, actualTime.getTimeInMillis(), PendingIntent.getBroadcast(context, 0, i, PendingIntent.FLAG_CANCEL_CURRENT));
+		am.set(AlarmManager.RTC_WAKEUP, actualTime.getTimeInMillis(), PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT));
 	}
 }
