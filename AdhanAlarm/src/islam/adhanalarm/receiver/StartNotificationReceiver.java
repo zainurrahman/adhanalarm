@@ -3,9 +3,8 @@ package islam.adhanalarm.receiver;
 import java.util.Calendar;
 
 import islam.adhanalarm.Schedule;
-import islam.adhanalarm.VARIABLE;
 import islam.adhanalarm.WakeLock;
-import islam.adhanalarm.service.SetNextAndPossiblyNotifyCurrentService;
+import islam.adhanalarm.service.StartNotificationService;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -16,11 +15,7 @@ public class StartNotificationReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		WakeLock.acquire(context);
-		if(VARIABLE.settings == null) { // We are booting up
-			VARIABLE.settings = context.getSharedPreferences("settingsFile", Context.MODE_PRIVATE);
-		}
-		intent.setClass(context, SetNextAndPossiblyNotifyCurrentService.class);
-		context.startService(intent);
+		context.startService(new Intent(context, StartNotificationService.class).putExtras(intent));
 	}
 
 	public static void setNext(Context context) {
@@ -28,7 +23,6 @@ public class StartNotificationReceiver extends BroadcastReceiver {
 		short nextTimeIndex = today.nextTimeIndex();
 		set(context, nextTimeIndex, today.getTimes()[nextTimeIndex]);
 	}
-
 	private static void set(Context context, short timeIndex, Calendar actualTime) {
 		if(Calendar.getInstance().after(actualTime)) return; // Somehow current time is greater than the prayer time
 
