@@ -75,4 +75,7 @@ public class Schedule {
 		}
 		return today;
 	}
+	public static void refreshToday() {
+		today = null; // Settings have changed, nullifying causes a new today to be created when today() is called
+	}
 }

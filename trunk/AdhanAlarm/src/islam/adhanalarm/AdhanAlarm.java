@@ -47,8 +47,10 @@ public class AdhanAlarm extends Activity {
 
 	@Override
 	public void onCreate(Bundle icicle) {
+		if(VARIABLE.settings == null) {
+			VARIABLE.settings = getSharedPreferences("settingsFile", MODE_PRIVATE);
+		}
 		VARIABLE.mainActivityIsRunning = true;
-		VARIABLE.settings = getSharedPreferences("settingsFile", MODE_PRIVATE);
 		
 		setTheme();
 		super.onCreate(icicle);
@@ -135,6 +137,7 @@ public class AdhanAlarm extends Activity {
 				showSettingsDialog(new AdvancedSettingsDialog(v.getContext()), v.getContext());
 			}
 		});	/* End of Tab 3 Items */
+		android.widget.Toast.makeText(this, "hello1", android.widget.Toast.LENGTH_SHORT);
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -270,8 +273,9 @@ public class AdhanAlarm extends Activity {
 	
 	private void updateTodaysTimetableAndNotification(boolean resetNotification) {
 		if(resetNotification) {
+			Schedule.refreshToday();
 			StartNotificationReceiver.setNext(this);
 		}
-		FillDailyTimetableService.set(this, new GregorianCalendar(), timetable, timetableView, getString(R.string.next_time_marker), ((TextView)findViewById(R.id.current_latitude_deg)), ((TextView)findViewById(R.id.current_latitude_min)), ((TextView)findViewById(R.id.current_latitude_sec)), ((TextView)findViewById(R.id.current_longitude_deg)), ((TextView)findViewById(R.id.current_longitude_min)), ((TextView)findViewById(R.id.current_longitude_sec)), ((TextView)findViewById(R.id.current_qibla_deg)), ((TextView)findViewById(R.id.current_qibla_min)), ((TextView)findViewById(R.id.current_qibla_sec)), ((TextView)findViewById(R.id.notes)));
+		FillDailyTimetableService.set(this, Schedule.today(), timetable, timetableView, getString(R.string.next_time_marker), ((TextView)findViewById(R.id.current_latitude_deg)), ((TextView)findViewById(R.id.current_latitude_min)), ((TextView)findViewById(R.id.current_latitude_sec)), ((TextView)findViewById(R.id.current_longitude_deg)), ((TextView)findViewById(R.id.current_longitude_min)), ((TextView)findViewById(R.id.current_longitude_sec)), ((TextView)findViewById(R.id.current_qibla_deg)), ((TextView)findViewById(R.id.current_qibla_min)), ((TextView)findViewById(R.id.current_qibla_sec)), ((TextView)findViewById(R.id.notes)));
 	}
 }

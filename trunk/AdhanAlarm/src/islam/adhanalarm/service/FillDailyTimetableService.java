@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 public class FillDailyTimetableService extends Service {
 
-	private static GregorianCalendar forDay;
+	private static Schedule day;
 
 	private static ArrayList<HashMap<String, String>> timetable;
 	private static SimpleAdapter timetableView;
@@ -48,7 +48,6 @@ public class FillDailyTimetableService extends Service {
 	@Override
 	public void onStart(Intent intent, int startId) {
 		try {
-			Schedule day = new Schedule(forDay);
 			GregorianCalendar[] schedule = day.getTimes();
 			SimpleDateFormat timeFormat = new SimpleDateFormat ("h:mm a");
 			short nextNotificationTime = day.nextTimeIndex();
@@ -107,8 +106,8 @@ public class FillDailyTimetableService extends Service {
 	 * We use this class in a static way by using the following set function.
 	 * I'm doing this all in this long way because in the future we may want to be able to display other dates than just today.
 	 *  **/
-	public static void set(Context context, GregorianCalendar _forDay, ArrayList<HashMap<String, String>> _timetable, SimpleAdapter _timetableView, String _marker, TextView _current_latitude_deg, TextView _current_latitude_min, TextView _current_latitude_sec, TextView _current_longitude_deg, TextView _current_longitude_min, TextView _current_longitude_sec, TextView _current_qibla_deg, TextView _current_qibla_min, TextView _current_qibla_sec, TextView _notes) {
-		forDay = _forDay;
+	public static void set(Context context, Schedule _day, ArrayList<HashMap<String, String>> _timetable, SimpleAdapter _timetableView, String _marker, TextView _current_latitude_deg, TextView _current_latitude_min, TextView _current_latitude_sec, TextView _current_longitude_deg, TextView _current_longitude_min, TextView _current_longitude_sec, TextView _current_qibla_deg, TextView _current_qibla_min, TextView _current_qibla_sec, TextView _notes) {
+		day = _day;
 
 		timetable = _timetable;
 		timetableView = _timetableView;
