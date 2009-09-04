@@ -3,12 +3,13 @@ package islam.adhanalarm.service;
 import islam.adhanalarm.AdhanAlarm;
 import islam.adhanalarm.Notifier;
 import islam.adhanalarm.VARIABLE;
+import islam.adhanalarm.WakeLock;
 import islam.adhanalarm.receiver.StartNotificationReceiver;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
-public class NotifyAndSetNextService extends Service {
+public class SetNextAndPossiblyNotifyCurrentService extends Service {
 
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -28,7 +29,11 @@ public class NotifyAndSetNextService extends Service {
 
 		short timeIndex = intent.getShortExtra("timeIndex", (short)-1);
 		long actualTime = intent.getLongExtra("actualTime", (long)0);
-		Notifier.start(this, timeIndex, actualTime); // Notify the user for the current time, need to do this last since it releases the WakeLock
+		if(timeIndex == -1) {
+			WakeLock.release(); // Got here from boot so no need to notify current			
+		} else {
+			Notifier.start(this, timeIndex, actualTime); // Notify the user for the current time, need to do this last since it releases the WakeLock
+		}
 	}
 
 }
