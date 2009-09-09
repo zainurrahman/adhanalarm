@@ -1,8 +1,9 @@
 package islam.adhanalarm.dialog;
 
-import islam.adhanalarm.CONSTANT;
 import islam.adhanalarm.R;
 import islam.adhanalarm.VARIABLE;
+import islam.adhanalarm.util.LocaleManager;
+import islam.adhanalarm.util.ThemeManager;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -13,11 +14,16 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 public class InterfaceSettingsDialog extends Dialog {
-	
-	public InterfaceSettingsDialog(Context context) {
+
+	private static ThemeManager themeManager;
+	private static LocaleManager localeManager;
+
+	public InterfaceSettingsDialog(Context context, ThemeManager tm, LocaleManager lm) {
 		super(context);
+		themeManager = tm;
+		localeManager = lm;
 	}
-	
+
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
@@ -28,26 +34,26 @@ public class InterfaceSettingsDialog extends Dialog {
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.themes, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		themes.setAdapter(adapter);
-		themes.setSelection(VARIABLE.getThemeIndex(getContext()));
+		themes.setSelection(themeManager.getThemeIndex());
 
 		Spinner languages = (Spinner)findViewById(R.id.languages);
 		adapter = ArrayAdapter.createFromResource(getContext(), R.array.languages, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		languages.setAdapter(adapter);
-		languages.setSelection(VARIABLE.getLanguageIndex());
-		
+		languages.setSelection(localeManager.getLanguageIndex());
+
 		((Button)findViewById(R.id.save_settings)).setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
 				SharedPreferences.Editor editor = VARIABLE.settings.edit();
 				int newThemeIndex = ((Spinner)findViewById(R.id.themes)).getSelectedItemPosition();
-				if(VARIABLE.getThemeIndex(getContext()) != newThemeIndex) {
+				if(themeManager.getThemeIndex() != newThemeIndex) {
 					editor.putInt("themeIndex", newThemeIndex);
-					VARIABLE.themeDirty = true;
+					themeManager.setDirty();
 				}
 				int newLanguageIndex = ((Spinner)findViewById(R.id.languages)).getSelectedItemPosition();
-				if(newLanguageIndex != VARIABLE.getLanguageIndex()) {
-					editor.putString("locale", CONSTANT.LANGUAGE_KEYS[newLanguageIndex]);
-					VARIABLE.languageDirty = true;
+				if(newLanguageIndex != localeManager.getLanguageIndex()) {
+					editor.putString("locale", LocaleManager.LANGUAGE_KEYS[newLanguageIndex]);
+					localeManager.setDirty();
 				}
 				editor.commit();
 				dismiss();
@@ -55,7 +61,7 @@ public class InterfaceSettingsDialog extends Dialog {
 		});
 		((Button)findViewById(R.id.reset_settings)).setOnClickListener(new Button.OnClickListener() {  
 			public void onClick(View v) {
-				((Spinner)findViewById(R.id.themes)).setSelection(CONSTANT.DEFAULT_THEME);
+				((Spinner)findViewById(R.id.themes)).setSelection(ThemeManager.DEFAULT_THEME);
 				((Spinner)findViewById(R.id.languages)).setSelection(0);
 			}
 		});

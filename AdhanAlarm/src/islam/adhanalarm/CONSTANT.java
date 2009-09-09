@@ -9,14 +9,6 @@ public class CONSTANT {
 	public static final long RESTART_DELAY = 1000; // 1 second
 	public static final long POST_NOTIFICATION_DELAY = 5000; // 5 seconds
 
-	public static final short DEFAULT_THEME = 0;
-	public static final int[] ALL_THEMES = new int[]{						R.style.DefaultTheme,				R.style.BrownTheme,					R.style.DialogTheme,				R.style.GreenTheme,					R.style.LightTheme};
-	public static final int[] ALTERNATE_ROW_COLORS = new int[]{				R.color.semi_transparent_white,		R.color.semi_transparent_black,		R.color.semi_transparent_white,		R.color.semi_transparent_black,		R.color.semi_transparent_black};
-	public static final int[] TAB_WIDGET_BACKGROUND_COLORS = new int[]{		android.R.color.black,				R.color.brown_background_color,		android.R.color.transparent,		R.color.green_background_color,		android.R.color.transparent};
-
-	public static final String[] LANGUAGE_KEYS = new String[]{"default", "en", "de", "fr", "ru", "tr"};
-	public static final short DEFAULT_LANGUAGE = 0; // LANGUAGE_KEYS[0] represents the default system language (i.e. not necessarily English)
-
 	public static final String[][] CALCULATION_METHOD_COUNTRY_CODES = new String[][]{
 
 		/** METHOD_EGYPT_SURVEY:	Africa, Syria, Iraq, Lebanon, Malaysia, Parts of the USA **/

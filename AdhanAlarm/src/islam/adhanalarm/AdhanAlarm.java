@@ -2,17 +2,21 @@ package islam.adhanalarm;
 
 import islam.adhanalarm.dialog.AdvancedSettingsDialog;
 import islam.adhanalarm.dialog.CalculationSettingsDialog;
-import islam.adhanalarm.dialog.NotificationSettingsDialog;
 import islam.adhanalarm.dialog.InterfaceSettingsDialog;
-import islam.adhanalarm.view.QiblaCompassView;
+import islam.adhanalarm.dialog.NotificationSettingsDialog;
 import islam.adhanalarm.receiver.StartNotificationReceiver;
 import islam.adhanalarm.service.FillDailyTimetableService;
+import islam.adhanalarm.util.LocaleManager;
+import islam.adhanalarm.util.ThemeManager;
+import islam.adhanalarm.view.QiblaCompassView;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Locale;
+
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -22,7 +26,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.location.Location;
@@ -39,6 +42,10 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 public class AdhanAlarm extends Activity {
+
+	private static ThemeManager themeManager;
+	private static LocaleManager localeManager;
+
 	private ArrayList<HashMap<String, String>> timetable = new ArrayList<HashMap<String, String>>(7);
 	private SimpleAdapter timetableView;
 
@@ -47,15 +54,12 @@ public class AdhanAlarm extends Activity {
 
 	@Override
 	public void onCreate(Bundle icicle) {
-		if(VARIABLE.settings == null) {
-			VARIABLE.settings = getSharedPreferences("settingsFile", MODE_PRIVATE);
-		}
-		VARIABLE.mainActivityIsRunning = true;
-		
-		setTheme();
+		if(VARIABLE.settings == null) VARIABLE.settings = getSharedPreferences("settingsFile", MODE_PRIVATE);
+
+		themeManager = new ThemeManager(this);
 		super.onCreate(icicle);
 
-		setLocale();
+		localeManager = new LocaleManager(this);
 		setContentView(R.layout.main);
 
 		for(int i = CONSTANT.FAJR; i <= CONSTANT.NEXT_FAJR; i++) {
@@ -72,8 +76,7 @@ public class AdhanAlarm extends Activity {
 		((ListView)findViewById(R.id.timetable)).setOnHierarchyChangeListener(new OnHierarchyChangeListener() { // Set zebra stripes
 			private int numChildren = 0;
 			public void onChildViewAdded(View parent, View child) {
-				int alternateRowColor = CONSTANT.ALTERNATE_ROW_COLORS[VARIABLE.getThemeIndex(parent.getContext())];
-				child.setBackgroundResource(++numChildren % 2 == 0 ? alternateRowColor : android.R.color.transparent);
+				child.setBackgroundResource(++numChildren % 2 == 0 ? themeManager.getAlternateRowColor() : android.R.color.transparent);
 				if(numChildren > CONSTANT.NEXT_FAJR) numChildren = 0; // Last row has been reached, reset for next time
 			}
 			public void onChildViewRemoved(View parent, View child) {
@@ -87,7 +90,7 @@ public class AdhanAlarm extends Activity {
 
 		TabHost tabs = (TabHost)findViewById(R.id.tabs);
 		tabs.setup();
-		tabs.getTabWidget().setBackgroundResource(CONSTANT.TAB_WIDGET_BACKGROUND_COLORS[VARIABLE.getThemeIndex(this)]);
+		tabs.getTabWidget().setBackgroundResource(themeManager.getTabWidgetBackgroundColor());
 
 		TabHost.TabSpec one = tabs.newTabSpec("one");
 		one.setContent(R.id.content1);
@@ -100,17 +103,16 @@ public class AdhanAlarm extends Activity {
 		two.setIndicator(getString(R.string.qibla), getResources().getDrawable(R.drawable.compass));
 		tabs.addTab(two);
 
-		((QiblaCompassView)findViewById(R.id.qibla_compass)).setConstants(((TextView)findViewById(R.id.bearing_north)), getText(R.string.bearing_north), ((TextView)findViewById(R.id.bearing_qibla)), getText(R.string.bearing_qibla));
+		((QiblaCompassView)findViewById(R.id.qibla_compass)).setConstants(((TextView)findViewById(R.id.bearing_north)), getText(R.string.bearing_north), ((TextView)findViewById(R.id.bearing_qibla)), getText(R.string.bearing_qibla), themeManager);
 		orientationListener = new SensorListener() {
 			public void onSensorChanged(int s, float v[]) {
 				float northDirection = v[android.hardware.SensorManager.DATA_X];
 				((QiblaCompassView)findViewById(R.id.qibla_compass)).setDirections(northDirection, VARIABLE.qiblaDirection);
-				
+
 			}
 			public void onAccuracyChanged(int s, int a) {
 			}
-		};
-		startTrackingOrientation(); /* End of Tab 2 Items */
+		}; /* End of Tab 2 Items */
 
 		TabHost.TabSpec three = tabs.newTabSpec("three");
 		three.setContent(R.id.content3);
@@ -129,7 +131,7 @@ public class AdhanAlarm extends Activity {
 		});
 		((Button)findViewById(R.id.set_interface)).setOnClickListener(new Button.OnClickListener() {  
 			public void onClick(View v) {
-				showSettingsDialog(new InterfaceSettingsDialog(v.getContext()), v.getContext());
+				showSettingsDialog(new InterfaceSettingsDialog(v.getContext(), themeManager, localeManager), v.getContext());
 			}
 		});
 		((Button)findViewById(R.id.set_advanced)).setOnClickListener(new Button.OnClickListener() {  
@@ -137,7 +139,6 @@ public class AdhanAlarm extends Activity {
 				showSettingsDialog(new AdvancedSettingsDialog(v.getContext()), v.getContext());
 			}
 		});	/* End of Tab 3 Items */
-		android.widget.Toast.makeText(this, "hello1", android.widget.Toast.LENGTH_SHORT);
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -177,18 +178,23 @@ public class AdhanAlarm extends Activity {
 		return true;
 	}
 	@Override
-	public void onStop() {
-		super.onStop();
+	public void onPause() {
+		super.onPause();
+
 		stopTrackingOrientation();
 		VARIABLE.mainActivityIsRunning = false;
 	}
 	@Override
 	public void onResume() {
 		super.onResume();
+
+		VARIABLE.mainActivityIsRunning = true;
+
 		boolean resetNotification = getIntent().getBooleanExtra("setNotification", true);
 		getIntent().removeExtra("setNotification");
 		updateTodaysTimetableAndNotification(resetNotification);
-		((TabHost)findViewById(R.id.tabs)).setCurrentTab(0);
+
+		startTrackingOrientation();
 	}
 	@Override
 	public void onNewIntent(Intent intent) {
@@ -208,10 +214,10 @@ public class AdhanAlarm extends Activity {
 		d.setOnDismissListener(new DialogInterface.OnDismissListener() {
 			public void onDismiss(DialogInterface d) {
 				updateTodaysTimetableAndNotification(true);
-				if(VARIABLE.settings.contains("latitude") && VARIABLE.settings.contains("longitude")) ((TextView)findViewById(R.id.notes)).setText("");
-				if(VARIABLE.themeDirty || VARIABLE.languageDirty) {
-					VARIABLE.themeDirty = false;
-					VARIABLE.languageDirty = false;
+				if(VARIABLE.settings.contains("latitude") && VARIABLE.settings.contains("longitude")) {
+					((TextView)findViewById(R.id.notes)).setText("");
+				}
+				if(themeManager.isDirty() || localeManager.isDirty()) {
 					restart(context);
 				}
 			}
@@ -225,22 +231,6 @@ public class AdhanAlarm extends Activity {
 		finish();
 	}
 
-	private void setTheme() {
-		setTheme(CONSTANT.ALL_THEMES[VARIABLE.getThemeIndex(this)]);
-	}
-	private void setLocale() {
-		String languageKey = VARIABLE.settings.getString("locale", CONSTANT.LANGUAGE_KEYS[CONSTANT.DEFAULT_LANGUAGE]);
-		if(languageKey.equals("default")) {
-			languageKey = Locale.getDefault().getCountry();
-		}
-		Locale locale = new Locale(languageKey);
-		Locale.setDefault(locale);
-		Configuration config = new Configuration();
-		config.locale = locale;
-		getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-		setTitle(R.string.app_name);
-	}
-	
 	private void configureCalculationDefaults() {
 		if(!VARIABLE.settings.contains("latitude") || !VARIABLE.settings.contains("longitude")) {
 			Location currentLocation = VARIABLE.getCurrentLocation(this);
@@ -256,7 +246,7 @@ public class AdhanAlarm extends Activity {
 		if(!VARIABLE.settings.contains("calculationMethodsIndex")) {
 			try {
 				String country = Locale.getDefault().getISO3Country().toUpperCase();
-				
+
 				SharedPreferences.Editor editor = VARIABLE.settings.edit();
 				for(int i = 0; i < CONSTANT.CALCULATION_METHOD_COUNTRY_CODES.length; i++) {
 					if(Arrays.asList(CONSTANT.CALCULATION_METHOD_COUNTRY_CODES[i]).contains(country)) {
@@ -270,7 +260,7 @@ public class AdhanAlarm extends Activity {
 			}
 		}
 	}
-	
+
 	private void updateTodaysTimetableAndNotification(boolean resetNotification) {
 		if(resetNotification) {
 			Schedule.refreshToday();

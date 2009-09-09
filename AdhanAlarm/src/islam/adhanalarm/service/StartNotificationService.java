@@ -21,12 +21,15 @@ public class StartNotificationService extends Service {
 	@Override
 	public void onStart(Intent intent, int startId) {
 
-		final class Notify implements Runnable {
+		/**
+		 * We do the actual work in a separate thread since a Service has a limited life and we want to guarantee completion
+		 */
+		final class StartNotificationTask implements Runnable {
 
 			private Context context;
 			private Intent intent;
 
-			public Notify(Context c, Intent i) {
+			public StartNotificationTask(Context c, Intent i) {
 				context = c; intent = i;
 			}
 
@@ -54,6 +57,6 @@ public class StartNotificationService extends Service {
 			}
 		}
 
-		new Thread(new Notify(this, intent)).start();
+		new Thread(new StartNotificationTask(this, intent)).start();
 	}
 }

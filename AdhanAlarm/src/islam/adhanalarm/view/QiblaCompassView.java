@@ -1,6 +1,7 @@
 package islam.adhanalarm.view;
 
 import islam.adhanalarm.R;
+import islam.adhanalarm.util.ThemeManager;
 
 import java.text.DecimalFormat;
 
@@ -52,11 +53,13 @@ public class QiblaCompassView extends View {
 		invalidate();
 	}
 
-	public void setConstants(TextView bearingNorth, CharSequence bearingNorthString, TextView bearingQibla, CharSequence bearingQiblaString) {
+	public void setConstants(TextView bearingNorth, CharSequence bearingNorthString, TextView bearingQibla, CharSequence bearingQiblaString, ThemeManager themeManager) {
 		this.bearingNorth = bearingNorth;
 		this.bearingNorthString = bearingNorthString.toString();
 		this.bearingQibla = bearingQibla;
 		this.bearingQiblaString = bearingQiblaString.toString();
+		compassBackground = BitmapFactory.decodeResource(getResources(), themeManager.getCompassBackground());
+		compassNeedle = BitmapFactory.decodeResource(getResources(), themeManager.getCompassNeedle());
 	}
 
 	public void setDirections(float directionNorth, float directionQibla) {
