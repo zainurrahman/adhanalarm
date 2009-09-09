@@ -54,7 +54,7 @@
 					android:layout_height="wrap_content"
 					android:layout_width="fill_parent">
 					<EditText android:id="@+id/offset_minutes"
-						android:text="0" android:layout_width="100dip"
+						android:text="0" android:layout_width="60dip"
 						android:layout_height="wrap_content" android:numeric="signed"
 						android:maxLength="4"
 						android:singleLine="true" />

@@ -14,11 +14,11 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 public class AdvancedSettingsDialog extends Dialog {
-	
+
 	public AdvancedSettingsDialog(Context context) {
 		super(context);
 	}
-	
+
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
@@ -34,9 +34,9 @@ public class AdvancedSettingsDialog extends Dialog {
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		rounding_types.setAdapter(adapter);
 		rounding_types.setSelection(VARIABLE.settings.getInt("roundingTypesIndex", CONSTANT.DEFAULT_ROUNDING_TYPE));
-		
+
 		((EditText)findViewById(R.id.offset_minutes)).setText(Integer.toString(VARIABLE.settings.getInt("offsetMinutes", 0)));
-		
+
 		((Button)findViewById(R.id.save_settings)).setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
 				SharedPreferences.Editor editor = VARIABLE.settings.edit();
