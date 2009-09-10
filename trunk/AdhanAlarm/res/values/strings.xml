@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Adh&#257;n Alarm</string>
+    <string name="app_name">Adhān Alarm</string>
     <string name="description">Displays and can alert you to the daily Muslim prayer times.</string>
     <string name="previous">Previous</string>
     <string name="next">Next</string>
@@ -24,6 +24,7 @@
     <string name="time_for">Time for</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
+    <string name="extreme">Extreme</string>
     <string name="qibla">Qibla</string>
     <string name="compass_disclaimer">Compass works in portrait mode.</string>
     <string name="bearing_north">1) Bearing North = (1)°</string>

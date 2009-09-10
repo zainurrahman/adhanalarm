@@ -31,7 +31,7 @@ public class InterfaceSettingsDialog extends Dialog {
 		setTitle(R.string.sinterface);
 
 		Spinner themes = (Spinner)findViewById(R.id.themes);
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.themes, android.R.layout.simple_spinner_item);
+		ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(getContext(), android.R.layout.simple_spinner_item, themeManager.getAllThemeNames());
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		themes.setAdapter(adapter);
 		themes.setSelection(themeManager.getThemeIndex());

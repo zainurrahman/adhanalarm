@@ -34,17 +34,14 @@ public class StartNotificationService extends Service {
 			}
 
 			public void run() {
-				if(VARIABLE.settings == null) {
-					VARIABLE.settings = context.getSharedPreferences("settingsFile", Context.MODE_PRIVATE); // Started on device bootup
-				}
+				if(VARIABLE.settings == null) VARIABLE.settings = context.getSharedPreferences("settingsFile", Context.MODE_PRIVATE); // Started on device bootup
 
-				StartNotificationReceiver.setNext(context);
-
-				if(VARIABLE.mainActivityIsRunning) {
+				if(!VARIABLE.mainActivityIsRunning) {
+					StartNotificationReceiver.setNext(context);
+				} else {
 					Intent i = new Intent(context, AdhanAlarm.class);
 					i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-					i.putExtra("setNotification", false); // Already did this at the top
-					startActivity(i); // Update the gui marker to show the next prayer
+					startActivity(i); // Update the gui marker and set the notification for the next prayer
 				}
 
 				short timeIndex = intent.getShortExtra("timeIndex", (short)-1);
