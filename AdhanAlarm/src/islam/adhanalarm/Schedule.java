@@ -12,7 +12,7 @@ public class Schedule {
 	private static GregorianCalendar[] schedule = new GregorianCalendar[7];
 	private static boolean[] extremes = new boolean[7];
 	private static Jitl itl;
-	
+
 	private static Schedule today;
 
 	public Schedule(GregorianCalendar day) {
@@ -75,7 +75,7 @@ public class Schedule {
 		}
 		return today;
 	}
-	public static void refreshToday() {
-		today = null; // Settings have changed, nullifying causes a new today to be created when today() is called
+	public static void settingsChanged() {
+		today = null; // Nullifying causes a new today to be created with new settings when today() is called
 	}
 }

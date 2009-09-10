@@ -24,7 +24,6 @@ import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
@@ -121,31 +120,30 @@ public class AdhanAlarm extends Activity {
 
 		((Button)findViewById(R.id.set_calculation)).setOnClickListener(new Button.OnClickListener() {  
 			public void onClick(View v) {
-				showSettingsDialog(new CalculationSettingsDialog(v.getContext()), v.getContext());
+				showSettingsDialog(new CalculationSettingsDialog(v.getContext()));
 			}
 		});
 		((Button)findViewById(R.id.set_notification)).setOnClickListener(new Button.OnClickListener() {  
 			public void onClick(View v) {
-				showSettingsDialog(new NotificationSettingsDialog(v.getContext()), v.getContext());
+				showSettingsDialog(new NotificationSettingsDialog(v.getContext()));
 			}
 		});
 		((Button)findViewById(R.id.set_interface)).setOnClickListener(new Button.OnClickListener() {  
 			public void onClick(View v) {
-				showSettingsDialog(new InterfaceSettingsDialog(v.getContext(), themeManager, localeManager), v.getContext());
+				showSettingsDialog(new InterfaceSettingsDialog(v.getContext(), themeManager, localeManager));
 			}
 		});
 		((Button)findViewById(R.id.set_advanced)).setOnClickListener(new Button.OnClickListener() {  
 			public void onClick(View v) {
-				showSettingsDialog(new AdvancedSettingsDialog(v.getContext()), v.getContext());
+				showSettingsDialog(new AdvancedSettingsDialog(v.getContext()));
 			}
-		});	/* End of Tab 3 Items */
+		}); /* End of Tab 3 Items */
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		super.onCreateOptionsMenu(menu);
 		MenuInflater inflater = new MenuInflater(this);
 		inflater.inflate(R.layout.menu, menu);
-		return true;
+		return super.onCreateOptionsMenu(menu);
 	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -175,31 +173,20 @@ public class AdhanAlarm extends Activity {
 			dialogBuilder.create().show();
 			break;
 		}
-		return true;
-	}
-	@Override
-	public void onPause() {
-		super.onPause();
-
-		stopTrackingOrientation();
-		VARIABLE.mainActivityIsRunning = false;
+		return super.onOptionsItemSelected(item);
 	}
 	@Override
 	public void onResume() {
-		super.onResume();
-
 		VARIABLE.mainActivityIsRunning = true;
-
-		boolean resetNotification = getIntent().getBooleanExtra("setNotification", true);
-		getIntent().removeExtra("setNotification");
-		updateTodaysTimetableAndNotification(resetNotification);
-
+		updateTodaysTimetableAndNotification();
 		startTrackingOrientation();
+		super.onResume();
 	}
 	@Override
-	public void onNewIntent(Intent intent) {
-		setIntent(intent);
-		super.onNewIntent(intent);
+	public void onPause() {
+		stopTrackingOrientation();
+		VARIABLE.mainActivityIsRunning = false;
+		super.onPause();
 	}
 
 	private void startTrackingOrientation() {
@@ -210,24 +197,26 @@ public class AdhanAlarm extends Activity {
 		isTrackingOrientation = false;
 	}
 
-	private void showSettingsDialog(Dialog d, final Context context) {
+	private void showSettingsDialog(Dialog d) {
 		d.setOnDismissListener(new DialogInterface.OnDismissListener() {
 			public void onDismiss(DialogInterface d) {
-				updateTodaysTimetableAndNotification(true);
-				if(VARIABLE.settings.contains("latitude") && VARIABLE.settings.contains("longitude")) {
-					((TextView)findViewById(R.id.notes)).setText("");
-				}
 				if(themeManager.isDirty() || localeManager.isDirty()) {
-					restart(context);
+					restart();
+				} else {
+					if(VARIABLE.settings.contains("latitude") && VARIABLE.settings.contains("longitude")) {
+						((TextView)findViewById(R.id.notes)).setText("");
+					}
+					Schedule.settingsChanged();
+					updateTodaysTimetableAndNotification();
 				}
 			}
 		});
 		d.show();
 	}
-	private void restart(Context context) {
+	private void restart() {
 		long restartTime = Calendar.getInstance().getTimeInMillis() + CONSTANT.RESTART_DELAY;
-		AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-		am.set(AlarmManager.RTC_WAKEUP, restartTime, PendingIntent.getActivity(context, 0, getIntent(), PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_CANCEL_CURRENT));
+		AlarmManager am = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+		am.set(AlarmManager.RTC_WAKEUP, restartTime, PendingIntent.getActivity(this, 0, getIntent(), PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_CANCEL_CURRENT));
 		finish();
 	}
 
@@ -261,11 +250,8 @@ public class AdhanAlarm extends Activity {
 		}
 	}
 
-	private void updateTodaysTimetableAndNotification(boolean resetNotification) {
-		if(resetNotification) {
-			Schedule.refreshToday();
-			StartNotificationReceiver.setNext(this);
-		}
-		FillDailyTimetableService.set(this, Schedule.today(), timetable, timetableView, getString(R.string.next_time_marker), ((TextView)findViewById(R.id.current_latitude_deg)), ((TextView)findViewById(R.id.current_latitude_min)), ((TextView)findViewById(R.id.current_latitude_sec)), ((TextView)findViewById(R.id.current_longitude_deg)), ((TextView)findViewById(R.id.current_longitude_min)), ((TextView)findViewById(R.id.current_longitude_sec)), ((TextView)findViewById(R.id.current_qibla_deg)), ((TextView)findViewById(R.id.current_qibla_min)), ((TextView)findViewById(R.id.current_qibla_sec)), ((TextView)findViewById(R.id.notes)));
+	private void updateTodaysTimetableAndNotification() {
+		StartNotificationReceiver.setNext(this);
+		FillDailyTimetableService.set(this, Schedule.today(), timetable, timetableView);
 	}
 }

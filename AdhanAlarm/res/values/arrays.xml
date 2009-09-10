@@ -2,7 +2,7 @@
 <resources>
     <array name="notification_methods">
         <item>Default Notification</item>
-        <item>Recite Adh&#257;n (except when silent)</item>
+        <item>Recite Adhān (except when silent)</item>
         <item>No Notifications</item>
     </array>
     <array name="extra_alerts">
@@ -24,7 +24,7 @@
         <item>Special</item>
         <item>Aggressive</item>
     </array>
-    <!-- Translators do not copy languages or themes arrays into your locale's arrays.xml file -->
+    <!-- Translators do not copy the languages array into your locale's arrays.xml file -->
     <array name="languages">
         <item>@string/sdefault</item>
         <item>English</item>
@@ -32,12 +32,5 @@
         <item>Français</item>
         <item>Русский</item>
         <item>Türkçe</item>
-    </array>
-    <array name="themes">
-        <item>@string/sdefault</item>
-        <item>@string/brown</item>
-        <item>@string/dialog</item>
-        <item>@string/green</item>
-        <item>@string/light</item>
     </array>
 </resources>
