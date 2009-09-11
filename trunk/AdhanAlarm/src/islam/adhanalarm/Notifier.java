@@ -24,8 +24,8 @@ public class Notifier {
 		notification = new Notification(R.drawable.icon, "", actualTime);
 		notification.tickerText = (timeIndex != CONSTANT.SUNRISE ? context.getString(R.string.allahu_akbar) + ": " : "") + context.getString(R.string.time_for) + " " + (timeIndex == CONSTANT.NEXT_FAJR ? context.getString(CONSTANT.TIME_NAMES[CONSTANT.FAJR]) : context.getString(CONSTANT.TIME_NAMES[timeIndex])).toLowerCase();
 
-		int notificationMethod = VARIABLE.settings.getInt("notificationMethod" + timeIndex, timeIndex == CONSTANT.SUNRISE ? CONSTANT.NOTIFICATION_SILENT : CONSTANT.NOTIFICATION_DEFAULT);
-		if(notificationMethod == CONSTANT.NOTIFICATION_SILENT || (timeIndex == CONSTANT.SUNRISE && !VARIABLE.alertSunrise())) return;
+		int notificationMethod = VARIABLE.settings.getInt("notificationMethod" + timeIndex, timeIndex == CONSTANT.SUNRISE ? CONSTANT.NOTIFICATION_NONE : CONSTANT.NOTIFICATION_DEFAULT);
+		if(notificationMethod == CONSTANT.NOTIFICATION_NONE || (timeIndex == CONSTANT.SUNRISE && !VARIABLE.alertSunrise())) return;
 
 		int ringerMode = ((AudioManager)context.getSystemService(Context.AUDIO_SERVICE)).getRingerMode();
 		int callState = ((TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE)).getCallState();

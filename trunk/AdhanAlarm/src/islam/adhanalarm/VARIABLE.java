@@ -40,6 +40,6 @@ public class VARIABLE {
 
 	public static boolean alertSunrise() {
 		if(settings == null) return false;
-		return settings.getInt("notificationMethod" + CONSTANT.SUNRISE, CONSTANT.NOTIFICATION_SILENT) != CONSTANT.NOTIFICATION_SILENT;
+		return settings.getInt("notificationMethod" + CONSTANT.SUNRISE, CONSTANT.NOTIFICATION_NONE) != CONSTANT.NOTIFICATION_NONE;
 	}
 }

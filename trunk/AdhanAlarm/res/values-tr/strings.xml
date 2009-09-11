@@ -28,7 +28,7 @@
     <string name="settings">Ayarlar</string>
     <string name="advanced">İleri ayarlar</string>
     <string name="notification">Duyuru</string>
-    <string name="silent">İptal et</string>
+    <string name="none">İptal et</string>
     <string name="recite">Azan oku</string>
     <string name="when_not_silent">sessiz zaman hariç</string>
     <string name="extra_alerts">Ek uyarılar</string>

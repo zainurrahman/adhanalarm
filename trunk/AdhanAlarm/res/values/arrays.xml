@@ -17,7 +17,7 @@
     </array>
     <!-- Translators do not copy the notification_methods or languages array into your locale's arrays.xml file -->
     <array name="notification_methods">
-        <item>@string/silent</item>
+        <item>@string/none</item>
         <item>@string/sdefault</item>
         <item>@string/beep</item>
         <item>@string/recite</item>

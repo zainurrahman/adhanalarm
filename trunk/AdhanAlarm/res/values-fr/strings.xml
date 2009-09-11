@@ -17,7 +17,7 @@
     <string name="bearing_north">1) Relevé du Nord = (1)°</string>
     <string name="bearing_qibla">2) Relevé de la Qibla = (1) (+/-) (2)° = (3)°</string>
     <string name="settings">Paramètres</string>
-    <string name="silent">Pas de notification</string>
+    <string name="none">Pas de notification</string>
     <string name="recite">Appel sonore à la prière</string>
     <string name="when_not_silent">sauf si en mode silencieux</string>
     <string name="advanced">Avancé</string>
