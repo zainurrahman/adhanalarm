@@ -1,5 +1,7 @@
 package islam.adhanalarm.dialog;
 
+import java.util.Arrays;
+import java.util.ArrayList;
 import islam.adhanalarm.CONSTANT;
 import islam.adhanalarm.R;
 import islam.adhanalarm.VARIABLE;
@@ -9,8 +11,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class NotificationSettingsDialog extends Dialog {
 	
@@ -24,31 +28,46 @@ public class NotificationSettingsDialog extends Dialog {
 		setContentView(R.layout.settings_notification);
 		setTitle(R.string.notification);
 
-		Spinner notification_methods = (Spinner)findViewById(R.id.notification_methods);
-		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.notification_methods, android.R.layout.simple_spinner_item);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		notification_methods.setAdapter(adapter);
-		notification_methods.setSelection(VARIABLE.settings.getInt("notificationMethodIndex", CONSTANT.DEFAULT_NOTIFICATION));
-
-		Spinner extra_alerts = (Spinner)findViewById(R.id.extra_alerts);
-		adapter = ArrayAdapter.createFromResource(getContext(), R.array.extra_alerts, android.R.layout.simple_spinner_item);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		extra_alerts.setAdapter(adapter);
-		extra_alerts.setSelection(VARIABLE.settings.getInt("extraAlertsIndex", CONSTANT.NO_EXTRA_ALERTS));
+		final int[] notificationIds = new int[]{R.id.notification_fajr, R.id.notification_sunrise, R.id.notification_dhuhr, R.id.notification_asr, R.id.notification_maghrib, R.id.notification_ishaa};
+		for(short i = CONSTANT.FAJR; i < CONSTANT.NEXT_FAJR; i++) {
+			ArrayList<String> notificationMethods = new ArrayList<String>(Arrays.asList(getContext().getResources().getStringArray(R.array.notification_methods)));
+			notificationMethods.remove(i == CONSTANT.SUNRISE ? 3 : 2);
+			notificationMethods.set(2, notificationMethods.get(2) + " (" + getContext().getString(R.string.when_not_silent) + ")");
+			notificationMethods.set(3, notificationMethods.get(3) + " (" + getContext().getString(R.string.when_not_silent) + ")");
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, notificationMethods);
+			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			Spinner notification = (Spinner)findViewById(notificationIds[i]);
+			notification.setAdapter(adapter);
+			notification.setSelection(VARIABLE.settings.getInt("notificationMethod" + i, i == CONSTANT.SUNRISE ? CONSTANT.NOTIFICATION_SILENT : CONSTANT.NOTIFICATION_DEFAULT));
+			notification.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+				private boolean passedOnceOnLayout = false;
+				public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+					if(passedOnceOnLayout && position == 3) {
+						Toast.makeText(parent.getContext(), "Coming Soon", Toast.LENGTH_SHORT).show();
+					} else {
+						passedOnceOnLayout = true;
+					}
+				}
+				public void onNothingSelected(AdapterView<?> parent) {
+				}
+			});
+		}
 		
 		((Button)findViewById(R.id.save_settings)).setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
-				SharedPreferences.Editor editor = VARIABLE.settings.edit();
-				editor.putInt("extraAlertsIndex", ((Spinner)findViewById(R.id.extra_alerts)).getSelectedItemPosition());
-				editor.putInt("notificationMethodIndex", ((Spinner)findViewById(R.id.notification_methods)).getSelectedItemPosition());
-				editor.commit();
+				for(short i = CONSTANT.FAJR; i < CONSTANT.NEXT_FAJR; i++) {
+					SharedPreferences.Editor editor = VARIABLE.settings.edit();
+					editor.putInt("notificationMethod" + i, ((Spinner)findViewById(notificationIds[i])).getSelectedItemPosition());
+					editor.commit();
+				}
 				dismiss();
 			}
 		});
 		((Button)findViewById(R.id.reset_settings)).setOnClickListener(new Button.OnClickListener() {  
 			public void onClick(View v) {
-				((Spinner)findViewById(R.id.notification_methods)).setSelection(CONSTANT.DEFAULT_NOTIFICATION);
-				((Spinner)findViewById(R.id.extra_alerts)).setSelection(CONSTANT.NO_EXTRA_ALERTS);
+				for(short i = CONSTANT.FAJR; i < CONSTANT.NEXT_FAJR; i++) {
+					((Spinner)findViewById(notificationIds[i])).setSelection(i == CONSTANT.SUNRISE ? 0 : 1);
+				}
 			}
 		});
 	}

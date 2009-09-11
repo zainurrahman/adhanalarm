@@ -18,6 +18,7 @@
     <string name="ishaa">`Ishaa\'</string>
     <string name="next_fajr">Next Fajr</string>
     <string name="next_time_marker">></string>
+    <string name="sdefault">Default</string>
     <string name="error_playing_alert">Error Playing Alert</string>
     <string name="location_not_set"><u>Location Not Set</u>\n\nPlease enable the device\'s GPS or set your location manually through settings.</string>
     <string name="allahu_akbar">God is greater</string>
@@ -31,6 +32,11 @@
     <string name="bearing_qibla">2) Bearing Qibla = (1) (+/-) (2)° = (3)°</string>
     <string name="settings">Settings</string>
     <string name="notification">Notification</string>
+    <string name="silent">Silent</string>
+    <string name="beep">Beep</string>
+    <string name="recite">Recite</string>
+    <string name="custom">Custom</string>
+    <string name="when_not_silent">when not silent</string>
     <string name="sinterface">Interface</string>
     <string name="advanced">Advanced</string>
     <string name="extra_alerts">Extra Alerts</string>
@@ -38,7 +44,6 @@
     <string name="lookup_gps">Lookup\nGPS</string>
     <string name="system_time_zone">System Time Zone</string>
     <string name="gmt">GMT</string>
-    <string name="sdefault">Default</string>
     <string name="save">Save</string>
     <string name="reset">Reset</string>
     <string name="calculation">Calculation</string>

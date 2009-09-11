@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <array name="notification_methods">
-        <item>Уведомление по умолчанию</item>
-        <item>Азан (за искл. беззвучный режим)</item>
-        <item>Не уведомлять</item>
-    </array>
     <array name="extra_alerts">
         <item>Никакой</item>
         <item>Восход</item>

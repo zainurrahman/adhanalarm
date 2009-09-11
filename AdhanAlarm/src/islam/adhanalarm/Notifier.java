@@ -24,12 +24,13 @@ public class Notifier {
 		notification = new Notification(R.drawable.icon, "", actualTime);
 		notification.tickerText = (timeIndex != CONSTANT.SUNRISE ? context.getString(R.string.allahu_akbar) + ": " : "") + context.getString(R.string.time_for) + " " + (timeIndex == CONSTANT.NEXT_FAJR ? context.getString(CONSTANT.TIME_NAMES[CONSTANT.FAJR]) : context.getString(CONSTANT.TIME_NAMES[timeIndex])).toLowerCase();
 
-		int notificationMethod = VARIABLE.settings.getInt("notificationMethodIndex", CONSTANT.DEFAULT_NOTIFICATION);
-		if(notificationMethod == CONSTANT.NO_NOTIFICATIONS || (timeIndex == CONSTANT.SUNRISE && !VARIABLE.alertSunrise())) return;
+		int notificationMethod = VARIABLE.settings.getInt("notificationMethod" + timeIndex, timeIndex == CONSTANT.SUNRISE ? CONSTANT.NOTIFICATION_SILENT : CONSTANT.NOTIFICATION_DEFAULT);
+		if(notificationMethod == CONSTANT.NOTIFICATION_SILENT || (timeIndex == CONSTANT.SUNRISE && !VARIABLE.alertSunrise())) return;
 
 		int ringerMode = ((AudioManager)context.getSystemService(Context.AUDIO_SERVICE)).getRingerMode();
 		int callState = ((TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE)).getCallState();
-		if(notificationMethod == CONSTANT.RECITE_ADHAN && ringerMode != AudioManager.RINGER_MODE_SILENT && ringerMode != AudioManager.RINGER_MODE_VIBRATE && callState == TelephonyManager.CALL_STATE_IDLE) {
+		if((notificationMethod == CONSTANT.NOTIFICATION_PLAY || notificationMethod == CONSTANT.NOTIFICATION_CUSTOM) && ringerMode != AudioManager.RINGER_MODE_SILENT && ringerMode != AudioManager.RINGER_MODE_VIBRATE && callState == TelephonyManager.CALL_STATE_IDLE) {
+			// TODO: Take care of NOTIFICATION_CUSTOM
 			notification.tickerText = notification.tickerText + " (" + context.getString(R.string.stop) + ")";
 			int alarm = R.raw.beep;
 			if(timeIndex == CONSTANT.DHUHR || timeIndex == CONSTANT.ASR || timeIndex == CONSTANT.MAGHRIB || timeIndex == CONSTANT.ISHAA) {
