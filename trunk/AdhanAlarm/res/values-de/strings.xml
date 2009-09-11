@@ -10,6 +10,7 @@
     <string name="information_text"><u>Information</u>\n\nFür mehr Informationen besuchen Sie:\n<u>adhanalarm.googlecode.com</u>\n\nFür mehr über Islam besuchen Sie:\n<u>www.spiritofislam.com</u></string>
     <string name="today">Heute</string>
     <string name="next_fajr">Nächste Fajr</string>
+    <string name="sdefault">Standard</string>
     <string name="error_playing_alert">Error Playing Alert</string>
     <string name="location_not_set">Bitte <u>Standort</u> eingeben</string>
     <string name="allahu_akbar">Gott ist groß</string>
@@ -27,7 +28,6 @@
     <string name="daylight_savings">Daylight Savings</string>
     <string name="lookup_gps">Lookup\nGPS</string>
     <string name="system_time_zone">System Zeit Zone</string>
-    <string name="sdefault">Standard</string>
     <string name="save">Speichern</string>
     <string name="reset">Eingaben löschen</string>
     <string name="calculation">Berechnungen</string>

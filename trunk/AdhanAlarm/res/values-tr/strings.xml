@@ -14,6 +14,7 @@
     <string name="maghrib">Akşam</string>
     <string name="ishaa">Yatsı</string>
     <string name="next_fajr">Sonraki İmsak</string>
+    <string name="sdefault">Varsayılan</string>
     <string name="error_playing_alert">Uyarı çalmada yanlışlık</string>
     <string name="location_not_set">Lütfen <u>yer</u> ayarlayın</string>
     <string name="allahu_akbar">Allahu Akbar</string>
@@ -27,6 +28,9 @@
     <string name="settings">Ayarlar</string>
     <string name="advanced">İleri ayarlar</string>
     <string name="notification">Duyuru</string>
+    <string name="silent">İptal et</string>
+    <string name="recite">Azan oku</string>
+    <string name="when_not_silent">sessiz zaman hariç</string>
     <string name="extra_alerts">Ek uyarılar</string>
     <string name="daylight_savings">Aydınlık saklamaları</string>
     <string name="lookup_gps">GPS\naraması</string>

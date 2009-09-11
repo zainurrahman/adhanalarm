@@ -14,6 +14,7 @@
     <string name="maghrib">Магриб</string>
     <string name="ishaa">Иша</string>
     <string name="next_fajr">Следующий Фаджр</string>
+    <string name="sdefault">Уведомление</string>
     <string name="error_playing_alert">Ошибка воспроизведения оповещение</string>
     <string name="location_not_set">Укажите <u>место</u></string>
     <string name="allahu_akbar">Аллаху акбар</string>
@@ -27,6 +28,9 @@
     <string name="settings">Настройки</string>
     <string name="advanced">Расширенный</string>
     <string name="notification">Оповещение</string>
+    <string name="silent">Не уведомлять</string>
+    <string name="recite">Азан</string>
+    <string name="when_not_silent">за искл. беззвучный режим</string>
     <string name="extra_alerts">Дополнительные сигналы</string>
     <string name="daylight_savings">Летнее время</string>
     <string name="lookup_gps">Поиск\nGPS</string>

@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <array name="notification_methods">
-        <item>Default Notification</item>
-        <item>Recite Adhān (except when silent)</item>
-        <item>No Notifications</item>
-    </array>
-    <array name="extra_alerts">
-        <item>None</item>
-        <item>Sunrise</item>
-    </array>
     <array name="calculation_methods">
         <item>Egyptian General Authority of Survey</item>
         <item>Shaf`i - Karachi University of Islamic Sciences</item>
@@ -24,7 +15,14 @@
         <item>Special</item>
         <item>Aggressive</item>
     </array>
-    <!-- Translators do not copy the languages array into your locale's arrays.xml file -->
+    <!-- Translators do not copy the notification_methods or languages array into your locale's arrays.xml file -->
+    <array name="notification_methods">
+        <item>@string/silent</item>
+        <item>@string/sdefault</item>
+        <item>@string/beep</item>
+        <item>@string/recite</item>
+        <item>@string/custom</item>
+    </array>
     <array name="languages">
         <item>@string/sdefault</item>
         <item>English</item>
