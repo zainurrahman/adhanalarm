@@ -38,7 +38,7 @@ public class NotificationSettingsDialog extends Dialog {
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			Spinner notification = (Spinner)findViewById(notificationIds[i]);
 			notification.setAdapter(adapter);
-			notification.setSelection(VARIABLE.settings.getInt("notificationMethod" + i, i == CONSTANT.SUNRISE ? CONSTANT.NOTIFICATION_SILENT : CONSTANT.NOTIFICATION_DEFAULT));
+			notification.setSelection(VARIABLE.settings.getInt("notificationMethod" + i, i == CONSTANT.SUNRISE ? CONSTANT.NOTIFICATION_NONE : CONSTANT.NOTIFICATION_DEFAULT));
 			notification.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
 				private boolean passedOnceOnLayout = false;
 				public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

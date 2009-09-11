@@ -28,7 +28,7 @@
     <string name="settings">Настройки</string>
     <string name="advanced">Расширенный</string>
     <string name="notification">Оповещение</string>
-    <string name="silent">Не уведомлять</string>
+    <string name="none">Не уведомлять</string>
     <string name="recite">Азан</string>
     <string name="when_not_silent">за искл. беззвучный режим</string>
     <string name="extra_alerts">Дополнительные сигналы</string>
