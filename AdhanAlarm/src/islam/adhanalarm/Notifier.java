@@ -31,7 +31,6 @@ public class Notifier {
 		int ringerMode = ((AudioManager)context.getSystemService(Context.AUDIO_SERVICE)).getRingerMode();
 		int callState = ((TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE)).getCallState();
 		if((notificationMethod == CONSTANT.NOTIFICATION_PLAY || notificationMethod == CONSTANT.NOTIFICATION_CUSTOM) && ringerMode != AudioManager.RINGER_MODE_SILENT && ringerMode != AudioManager.RINGER_MODE_VIBRATE && callState == TelephonyManager.CALL_STATE_IDLE) {
-			// TODO: Take care of NOTIFICATION_CUSTOM
 			notification.tickerText = notification.tickerText + " (" + context.getString(R.string.stop) + ")";
 			int alarm = R.raw.beep;
 			if(timeIndex == CONSTANT.DHUHR || timeIndex == CONSTANT.ASR || timeIndex == CONSTANT.MAGHRIB || timeIndex == CONSTANT.ISHAA) {
