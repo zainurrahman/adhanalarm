@@ -30,7 +30,6 @@
     <string name="notification">Оповещение</string>
     <string name="none">Не уведомлять</string>
     <string name="recite">Азан</string>
-    <string name="when_not_silent">за искл. беззвучный режим</string>
     <string name="extra_alerts">Дополнительные сигналы</string>
     <string name="daylight_savings">Летнее время</string>
     <string name="lookup_gps">Поиск\nGPS</string>

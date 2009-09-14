@@ -14,14 +14,13 @@ import android.widget.ArrayAdapter;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 public class NotificationSettingsDialog extends Dialog {
-	
+
 	public NotificationSettingsDialog(Context context) {
 		super(context);
 	}
-	
+
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
@@ -32,8 +31,6 @@ public class NotificationSettingsDialog extends Dialog {
 		for(short i = CONSTANT.FAJR; i < CONSTANT.NEXT_FAJR; i++) {
 			ArrayList<String> notificationMethods = new ArrayList<String>(Arrays.asList(getContext().getResources().getStringArray(R.array.notification_methods)));
 			notificationMethods.remove(i == CONSTANT.SUNRISE ? 3 : 2);
-			notificationMethods.set(2, notificationMethods.get(2) + " (" + getContext().getString(R.string.when_not_silent) + ")");
-			notificationMethods.set(3, notificationMethods.get(3) + " (" + getContext().getString(R.string.when_not_silent) + ")");
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, notificationMethods);
 			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 			Spinner notification = (Spinner)findViewById(notificationIds[i]);
@@ -43,7 +40,9 @@ public class NotificationSettingsDialog extends Dialog {
 				private boolean passedOnceOnLayout = false;
 				public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 					if(passedOnceOnLayout && position == 3) {
-						Toast.makeText(parent.getContext(), "Coming Soon", Toast.LENGTH_SHORT).show();
+						int timeIndex = CONSTANT.FAJR;
+						for(; timeIndex < CONSTANT.NEXT_FAJR && notificationIds[timeIndex] != parent.getId(); timeIndex++);
+						new FilePathDialog(parent.getContext(), timeIndex).show();
 					} else {
 						passedOnceOnLayout = true;
 					}
@@ -52,7 +51,7 @@ public class NotificationSettingsDialog extends Dialog {
 				}
 			});
 		}
-		
+
 		((Button)findViewById(R.id.save_settings)).setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
 				for(short i = CONSTANT.FAJR; i < CONSTANT.NEXT_FAJR; i++) {

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content">
+	<LinearLayout android:orientation="vertical"
+		android:layout_height="wrap_content"
+		android:layout_width="fill_parent">
+		<TextView android:text="@string/file_path_example"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" style="@style/finePrint" />
+		<LinearLayout android:orientation="horizontal"
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent">
+			<LinearLayout android:orientation="vertical"
+				android:layout_height="fill_parent"
+				android:layout_width="wrap_content" style="@style/labelColumn">
+				<TextView android:text="@string/file_path"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content" android:layout_weight="1"
+					android:gravity="fill_vertical" />
+			</LinearLayout>
+			<LinearLayout android:orientation="vertical"
+				android:layout_height="wrap_content"
+				android:layout_width="fill_parent">
+				<EditText android:id="@+id/file_path" android:text="/"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content" android:minWidth="200dip"
+					android:singleLine="true" />
+			</LinearLayout>
+		</LinearLayout>
+		<include layout="@layout/buttons_save_reset" />
+	</LinearLayout>
+</ScrollView>

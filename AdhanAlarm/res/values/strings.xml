@@ -20,6 +20,7 @@
     <string name="next_time_marker">></string>
     <string name="sdefault">Default</string>
     <string name="error_playing_alert">Error Playing Alert</string>
+    <string name="error_playing_custom_file">Custom File Error</string>
     <string name="location_not_set"><u>Location Not Set</u>\n\nPlease enable the device\'s GPS or set your location manually through settings.</string>
     <string name="allahu_akbar">God is greater</string>
     <string name="time_for">Time for</string>
@@ -32,11 +33,13 @@
     <string name="bearing_qibla">2) Bearing Qibla = (1) (+/-) (2)° = (3)°</string>
     <string name="settings">Settings</string>
     <string name="notification">Notification</string>
+    <string name="notification_disclaimer">If silent mode or call is in progress, default notification used.</string>
     <string name="none">None</string>
     <string name="beep">Beep</string>
     <string name="recite">Recite</string>
     <string name="custom">Custom</string>
-    <string name="when_not_silent">when not silent</string>
+    <string name="file_path">File Path</string>
+    <string name="file_path_example">ex. "/sdcard/Sounds/athan.mp3", "/home/adhan.mp3"</string>
     <string name="sinterface">Interface</string>
     <string name="advanced">Advanced</string>
     <string name="extra_alerts">Extra Alerts</string>

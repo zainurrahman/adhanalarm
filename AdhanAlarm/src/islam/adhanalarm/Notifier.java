@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.telephony.TelephonyManager;
 
 public class Notifier {
@@ -38,13 +39,23 @@ public class Notifier {
 			} else if(timeIndex == CONSTANT.FAJR || timeIndex == CONSTANT.NEXT_FAJR) {
 				alarm = R.raw.adhan_fajr;
 			}
-			mediaPlayer = MediaPlayer.create(context, alarm);
+			if(notificationMethod == CONSTANT.NOTIFICATION_CUSTOM) {
+				mediaPlayer = MediaPlayer.create(context, Uri.parse(VARIABLE.settings.getString("notificationCustomFile" + timeIndex, "/")));
+				try {
+					mediaPlayer.getDuration();
+				} catch(Exception ex) {
+					mediaPlayer = MediaPlayer.create(context, alarm);
+					notification.tickerText = notification.tickerText + " - " + context.getString(R.string.error_playing_custom_file);
+				}
+			} else {
+				mediaPlayer = MediaPlayer.create(context, alarm);
+			}
 			mediaPlayer.setScreenOnWhilePlaying(true);
 			mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 				public void onCompletion(MediaPlayer mp) {
 					notification.tickerText = notification.tickerText.toString().replace(" (" + Notifier.context.getString(R.string.stop) + ")", "");
 					notification.defaults = 0;
-					startNotification();
+					startNotification(); // New notification won't have the "(Stop)" at the end of it since we are done playing
 				}
 			});
 			try {
