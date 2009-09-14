@@ -17,7 +17,7 @@ public class Schedule {
 
 	public Schedule(GregorianCalendar day) {
 		Method method = CONSTANT.CALCULATION_METHODS[VARIABLE.settings.getInt("calculationMethodsIndex", CONSTANT.DEFAULT_CALCULATION_METHOD)].copy();
-		method.setRound(VARIABLE.ROUNDING_TYPES[VARIABLE.settings.getInt("roundingTypesIndex", 2)]);
+		method.setRound(CONSTANT.ROUNDING_TYPES[VARIABLE.settings.getInt("roundingTypesIndex", 2)]);
 
 		net.sourceforge.jitl.astro.Location location = new net.sourceforge.jitl.astro.Location(VARIABLE.settings.getFloat("latitude", 43.67f), VARIABLE.settings.getFloat("longitude", -79.417f), getGMTOffset(), 0);
 		location.setSeaLevel(VARIABLE.settings.getFloat("altitude", 0) < 0 ? 0 : VARIABLE.settings.getFloat("altitude", 0));

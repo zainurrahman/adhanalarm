@@ -40,7 +40,7 @@ public class Notifier {
 				alarm = R.raw.adhan_fajr;
 			}
 			if(notificationMethod == CONSTANT.NOTIFICATION_CUSTOM) {
-				mediaPlayer = MediaPlayer.create(context, Uri.parse(VARIABLE.settings.getString("notificationCustomFile" + timeIndex, "/")));
+				mediaPlayer = MediaPlayer.create(context, Uri.parse(VARIABLE.settings.getString("notificationCustomFile" + timeIndex, "")));
 				try {
 					mediaPlayer.getDuration();
 				} catch(Exception ex) {
