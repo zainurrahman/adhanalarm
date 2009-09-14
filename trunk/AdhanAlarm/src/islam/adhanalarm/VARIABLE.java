@@ -1,6 +1,5 @@
 package islam.adhanalarm;
 
-import net.sourceforge.jitl.Rounding;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Criteria;
@@ -13,8 +12,6 @@ public class VARIABLE {
 	public static boolean mainActivityIsRunning = false;
 
 	public static float qiblaDirection = 0;
-
-	public static final Rounding[] ROUNDING_TYPES = new Rounding[]{Rounding.NONE, Rounding.NORMAL, Rounding.SPECIAL, Rounding.AGRESSIVE};
 
 	public static Location getCurrentLocation(Context context) {
 		Criteria criteria = new Criteria();

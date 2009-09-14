@@ -25,7 +25,7 @@ public class FilePathDialog extends Dialog {
 		setContentView(R.layout.file_path);
 		setTitle(R.string.file_path);
 
-		((EditText)findViewById(R.id.file_path)).setText(VARIABLE.settings.getString("notificationCustomFile" + timeIndex, "/"));
+		((EditText)findViewById(R.id.file_path)).setText(VARIABLE.settings.getString("notificationCustomFile" + timeIndex, ""));
 
 		((Button)findViewById(R.id.save_settings)).setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
@@ -37,7 +37,7 @@ public class FilePathDialog extends Dialog {
 		});
 		((Button)findViewById(R.id.reset_settings)).setOnClickListener(new Button.OnClickListener() {  
 			public void onClick(View v) {
-				((EditText)findViewById(R.id.file_path)).setText("/");
+				((EditText)findViewById(R.id.file_path)).setText("");
 			}
 		});
 	}
