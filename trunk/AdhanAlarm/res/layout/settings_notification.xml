@@ -5,6 +5,10 @@
 	<LinearLayout android:orientation="vertical"
 		android:layout_height="wrap_content"
 		android:layout_width="fill_parent">
+		<TextView android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/notification_disclaimer"
+			style="@style/finePrint" />
 		<LinearLayout android:orientation="horizontal"
 			android:layout_height="wrap_content"
 			android:layout_width="fill_parent">
@@ -12,29 +16,23 @@
 				android:layout_height="fill_parent"
 				android:layout_width="wrap_content" style="@style/labelColumn">
 				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="@string/fajr" android:layout_weight="1"
-					android:gravity="fill_vertical" />
+					android:layout_height="wrap_content" android:text="@string/fajr"
+					android:layout_weight="1" android:gravity="fill_vertical" />
 				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="@string/sunrise" android:layout_weight="1"
-					android:gravity="fill_vertical" />
+					android:layout_height="wrap_content" android:text="@string/sunrise"
+					android:layout_weight="1" android:gravity="fill_vertical" />
 				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="@string/dhuhr" android:layout_weight="1"
-					android:gravity="fill_vertical" />
+					android:layout_height="wrap_content" android:text="@string/dhuhr"
+					android:layout_weight="1" android:gravity="fill_vertical" />
 				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="@string/asr" android:layout_weight="1"
-					android:gravity="fill_vertical" />
+					android:layout_height="wrap_content" android:text="@string/asr"
+					android:layout_weight="1" android:gravity="fill_vertical" />
 				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="@string/maghrib" android:layout_weight="1"
-					android:gravity="fill_vertical" />
+					android:layout_height="wrap_content" android:text="@string/maghrib"
+					android:layout_weight="1" android:gravity="fill_vertical" />
 				<TextView android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="@string/ishaa" android:layout_weight="1"
-					android:gravity="fill_vertical" />
+					android:layout_height="wrap_content" android:text="@string/ishaa"
+					android:layout_weight="1" android:gravity="fill_vertical" />
 			</LinearLayout>
 			<LinearLayout android:orientation="vertical"
 				android:layout_height="wrap_content"

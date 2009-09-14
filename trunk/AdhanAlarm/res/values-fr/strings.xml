@@ -19,7 +19,6 @@
     <string name="settings">Paramètres</string>
     <string name="none">Pas de notification</string>
     <string name="recite">Appel sonore à la prière</string>
-    <string name="when_not_silent">sauf si en mode silencieux</string>
     <string name="advanced">Avancé</string>
     <string name="extra_alerts">Plus d’alertes</string>
     <string name="daylight_savings">Heure d'été</string>
