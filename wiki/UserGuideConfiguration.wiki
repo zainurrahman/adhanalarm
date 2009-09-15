@@ -5,16 +5,24 @@
 It is important to configure the application to your location and settings.
  # Open the application
  # Click on the tab titled `Settings`
- # Enter the latitude and longitude of your location
- # Select the type of notification you would like and if you would also like to be alerted to sunrise
- # You can fill in the extra settings including your chosen calculation method.  The following calculation methods*^1^* are available:
+ # `Calculation`
+  # Enter the latitude and longitude of your location
+  # You can fill in the extra settings including your chosen calculation method.  The following calculation methods*^1^* are available:
    * Egyptian General Authority of Survey
    * University of Islamic Sciences, Karachi (Shaf'i/Hanafi)
    * Islamic Society of North America
    * Muslim World League
    * Umm Al-Qurra, Saudi Arabia
    * Fixed Ishaa Interval (always 90)
- # Click on `Save and Apply`
+  # Click on `Save`
+ # `Notification`
+  # For each prayer, select the type of notification you would like.  For a custom adhan, select `Custom` and then save the full path of the adhan file ex. `/sdcard/Sounds/adhan.mp3`
+  # Click on `Save`
+ # `Interface`
+  # Choose a `Theme` and `Language` for the app and click `Save`.  The application will restart with the new theme and language
+ # `Advanced`
+  # These options are for advanced users who wish to customize their settings.  A note for people living in timezones that are ±30 minutes, enter ±30 as the `Offset` to adjust your prayer times
+  # Click on `Save`
 
 *^1^ If you don't see your favorite method in this list, know that we are using the [http://sourceforge.net/projects/jitl JITL] library to calculate the prayer times.  Please contribute to that project to see your method included.*
 
