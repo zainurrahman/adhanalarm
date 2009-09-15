@@ -33,13 +33,12 @@
     <string name="bearing_qibla">2) Bearing Qibla = (1) (+/-) (2)° = (3)°</string>
     <string name="settings">Settings</string>
     <string name="notification">Notification</string>
-    <string name="notification_disclaimer">If silent mode or call is in progress, default notification is used.</string>
     <string name="none">None</string>
     <string name="beep">Beep</string>
     <string name="recite">Recite</string>
     <string name="custom">Custom</string>
     <string name="file_path">File Path</string>
-    <string name="file_path_example">ex. "/sdcard/Sounds/athan.mp3", "/home/adhan.mp3"</string>
+    <string name="file_path_example">File Path ex. /sdcard/sound.mp3</string>
     <string name="sinterface">Interface</string>
     <string name="advanced">Advanced</string>
     <string name="extra_alerts">Extra Alerts</string>
@@ -50,10 +49,20 @@
     <string name="save">Save</string>
     <string name="reset">Reset</string>
     <string name="calculation">Calculation</string>
+    <string name="egypt_survey">Egyptian General Authority of Survey</string>
+    <string name="karachi_shaf">Shaf`i - Karachi University of Islamic Sciences</string>
+    <string name="karachi_hanaf">Hanafi - Karachi University of Islamic Sciences</string>
+    <string name="north_america">Islamic Society of North America</string>
+    <string name="muslim_league">Muslim World League</string>
+    <string name="umm_alqurra">Umm Al-Qurra, Saudi Arabia</string>
+    <string name="fixed_ishaa">Fixed Ishaa Interval (always 90)</string>
     <string name="altitude">Altitude</string>
     <string name="pressure">Pressure</string>
     <string name="temperature">Temperature</string>
     <string name="rounding">Rounding</string>
+    <string name="normal">Normal</string>
+    <string name="special">Special</string>
+    <string name="aggressive">Aggressive</string>
     <string name="offset">Offset</string>
     <string name="minutes">minutes</string>
     <string name="language">Language</string>

@@ -23,7 +23,7 @@ public class FilePathDialog extends Dialog {
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		setContentView(R.layout.file_path);
-		setTitle(R.string.file_path);
+		setTitle(R.string.file_path_example);
 
 		((EditText)findViewById(R.id.file_path)).setText(VARIABLE.settings.getString("notificationCustomFile" + timeIndex, ""));
 
