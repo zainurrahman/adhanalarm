@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="calculation_methods">
-        <item>Egyptian General Authority of Survey</item>
-        <item>Shaf`i - Karachi University of Islamic Sciences</item>
-        <item>Hanafi - Karachi University of Islamic Sciences</item>
-        <item>Islamic Society of North America</item>
-        <item>Muslim World League</item>
-        <item>Umm Al-Qurra, Saudi Arabia</item>
-        <item>Fixed Ishaa Interval (always 90)</item>
+        <item>@string/egypt_survey</item>
+        <item>@string/karachi_shaf</item>
+        <item>@string/karachi_hanaf</item>
+        <item>@string/north_america</item>
+        <item>@string/muslim_league</item>
+        <item>@string/umm_alqurra</item>
+        <item>@string/fixed_ishaa</item>
     </array>
     <array name="rounding_types">
-        <item>None</item>
-        <item>Normal</item>
-        <item>Special</item>
-        <item>Aggressive</item>
+        <item>@string/none</item>
+        <item>@string/normal</item>
+        <item>@string/special</item>
+        <item>@string/aggressive</item>
     </array>
-    <!-- Translators do not copy the notification_methods or languages array into your locale's arrays.xml file -->
     <array name="notification_methods">
         <item>@string/none</item>
         <item>@string/sdefault</item>

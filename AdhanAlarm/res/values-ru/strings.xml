@@ -28,7 +28,7 @@
     <string name="settings">Настройки</string>
     <string name="advanced">Расширенный</string>
     <string name="notification">Оповещение</string>
-    <string name="none">Не уведомлять</string>
+    <string name="none">Никакой</string>
     <string name="recite">Азан</string>
     <string name="extra_alerts">Дополнительные сигналы</string>
     <string name="daylight_savings">Летнее время</string>
@@ -38,7 +38,17 @@
     <string name="save">Сохранить</string>
     <string name="reset">Сбросить</string>
     <string name="calculation">Расчет</string>
+    <string name="egypt_survey">Египетская ген. админист. по обслед.</string>
+    <string name="karachi_shaf">Шафиитский - Унив. Карачи</string>
+    <string name="karachi_hanaf">Ханифитский - Унив. Карачи</string>
+    <string name="north_america">Исламское общество Сев. Амер.</string>
+    <string name="muslim_league">Всемирная мусульманская лига</string>
+    <string name="umm_alqurra">Умм-Аль-Курра, Сауд. Аравия</string>
+    <string name="fixed_ishaa">Фикс. инт-л для Иша (всегда 90)</string>
     <string name="rounding">Округление</string>
+    <string name="normal">Нормальный</string>
+    <string name="special">Специальный</string>
+    <string name="aggressive">Агрессивный</string>
     <string name="altitude">Высота над уровнем моря</string>
     <string name="pressure">Давление</string>
     <string name="temperature">Температура</string>

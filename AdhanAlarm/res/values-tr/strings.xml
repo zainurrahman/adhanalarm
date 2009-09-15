@@ -28,7 +28,7 @@
     <string name="settings">Ayarlar</string>
     <string name="advanced">İleri ayarlar</string>
     <string name="notification">Duyuru</string>
-    <string name="none">İptal et</string>
+    <string name="none">Yok</string>
     <string name="recite">Azan oku</string>
     <string name="extra_alerts">Ek uyarılar</string>
     <string name="daylight_savings">Aydınlık saklamaları</string>
@@ -37,7 +37,17 @@
     <string name="save">Kaydet</string>
     <string name="reset">Sıfırla</string>
     <string name="calculation">Hesaplama</string>
+    <string name="egypt_survey">Mısır Genel Anket Yetkilisi</string>
+    <string name="karachi_shaf">Şafiî - Karaçi İslâm Bilimleri Üniv.</string>
+    <string name="karachi_hanaf">Hanefi - Karaçi İslâm Bilimleri Üniv.</string>
+    <string name="north_america">Kuzey Amerika İslâm Topluluğu</string>
+    <string name="muslim_league">Müslüman Dünya Ligi</string>
+    <string name="umm_alqurra">Umm Al-Qurra, Suudi Arabistani</string>
+    <string name="fixed_ishaa">Sabit yatsı aralık (her zaman 90 dak)</string>
     <string name="rounding">Yuvarlama</string>
+    <string name="normal">Normal</string>
+    <string name="special">Özel</string>
+    <string name="aggressive">Agresif</string>
     <string name="altitude">Rakım</string>
     <string name="pressure">Basınç</string>
     <string name="temperature">Sıcaklık</string>
