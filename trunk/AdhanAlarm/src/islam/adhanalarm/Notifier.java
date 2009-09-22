@@ -22,8 +22,10 @@ public class Notifier {
 		Notifier.context = context;
 		stopNotification();
 
+		if(timeIndex == CONSTANT.NEXT_FAJR) timeIndex = CONSTANT.FAJR;
+
 		notification = new Notification(R.drawable.icon, "", actualTime);
-		notification.tickerText = (timeIndex != CONSTANT.SUNRISE ? context.getString(R.string.allahu_akbar) + ": " : "") + context.getString(R.string.time_for) + " " + (timeIndex == CONSTANT.NEXT_FAJR ? context.getString(CONSTANT.TIME_NAMES[CONSTANT.FAJR]) : context.getString(CONSTANT.TIME_NAMES[timeIndex])).toLowerCase();
+		notification.tickerText = (timeIndex != CONSTANT.SUNRISE ? context.getString(R.string.allahu_akbar) + ": " : "") + context.getString(R.string.time_for) + " " + context.getString(CONSTANT.TIME_NAMES[timeIndex]).toLowerCase();
 
 		int notificationMethod = VARIABLE.settings.getInt("notificationMethod" + timeIndex, timeIndex == CONSTANT.SUNRISE ? CONSTANT.NOTIFICATION_NONE : CONSTANT.NOTIFICATION_DEFAULT);
 		if(notificationMethod == CONSTANT.NOTIFICATION_NONE || (timeIndex == CONSTANT.SUNRISE && !VARIABLE.alertSunrise())) return;
@@ -35,7 +37,7 @@ public class Notifier {
 			int alarm = R.raw.beep;
 			if(timeIndex == CONSTANT.DHUHR || timeIndex == CONSTANT.ASR || timeIndex == CONSTANT.MAGHRIB || timeIndex == CONSTANT.ISHAA) {
 				alarm = R.raw.adhan;
-			} else if(timeIndex == CONSTANT.FAJR || timeIndex == CONSTANT.NEXT_FAJR) {
+			} else if(timeIndex == CONSTANT.FAJR) {
 				alarm = R.raw.adhan_fajr;
 			}
 			if(notificationMethod == CONSTANT.NOTIFICATION_CUSTOM) {
