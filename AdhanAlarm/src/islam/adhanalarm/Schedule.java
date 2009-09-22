@@ -11,7 +11,6 @@ public class Schedule {
 
 	private static GregorianCalendar[] schedule = new GregorianCalendar[7];
 	private static boolean[] extremes = new boolean[7];
-	private static Jitl itl;
 
 	private static Schedule today;
 
@@ -24,18 +23,16 @@ public class Schedule {
 		location.setPressure(VARIABLE.settings.getFloat("pressure", 1010));
 		location.setTemperature(VARIABLE.settings.getFloat("temperature", 10));
 
-		itl = CONSTANT.DEBUG ? new DummyJitl(location, method) : new Jitl(location, method);
+		Jitl itl = CONSTANT.DEBUG ? new DummyJitl(location, method) : new Jitl(location, method);
 		Prayer[] dayPrayers = itl.getPrayerTimes(day).getPrayers();
 		Prayer[] allTimes = new Prayer[]{dayPrayers[0], dayPrayers[1], dayPrayers[2], dayPrayers[3], dayPrayers[4], dayPrayers[5], itl.getNextDayFajr(day)};
 
 		for(short i = CONSTANT.FAJR; i <= CONSTANT.NEXT_FAJR; i++) { // Set the times on the schedule
 			schedule[i] = new GregorianCalendar(day.get(Calendar.YEAR), day.get(Calendar.MONTH), day.get(Calendar.DAY_OF_MONTH), allTimes[i].getHour(), allTimes[i].getMinute(), allTimes[i].getSecond());
-			if(i == CONSTANT.NEXT_FAJR && !CONSTANT.DEBUG) {
-				schedule[i].add(Calendar.DAY_OF_MONTH, 1); // Next fajr is tomorrow
-			}
 			schedule[i].add(Calendar.MINUTE, VARIABLE.settings.getInt("offsetMinutes", 0));
 			extremes[i] = allTimes[i].isExtreme();
 		}
+		schedule[CONSTANT.NEXT_FAJR].add(Calendar.DAY_OF_MONTH, 1); // Next fajr is tomorrow
 	}
 	public GregorianCalendar[] getTimes() {
 		return schedule;
@@ -44,24 +41,24 @@ public class Schedule {
 		return extremes[i];
 	}
 	public short nextTimeIndex() {
-		Calendar currentTime = Calendar.getInstance();
-		if(currentTime.before(schedule[CONSTANT.FAJR])) return CONSTANT.FAJR;
+		Calendar now = new GregorianCalendar();
+		if(now.before(schedule[CONSTANT.FAJR])) return CONSTANT.FAJR;
 		for(short i = CONSTANT.FAJR; i < CONSTANT.NEXT_FAJR; i++) {
-			if(currentTime.after(schedule[i]) && currentTime.before(schedule[i + 1])) {
-				return (short)(i + 1);
+			if(now.after(schedule[i]) && now.before(schedule[i + 1])) {
+				return ++i;
 			}
 		}
 		return CONSTANT.NEXT_FAJR;
 	}
 	public static double getGMTOffset() {
-		Calendar currentTime = new GregorianCalendar();
-		int gmtOffset = currentTime.getTimeZone().getOffset(currentTime.getTimeInMillis());
+		Calendar now = new GregorianCalendar();
+		int gmtOffset = now.getTimeZone().getOffset(now.getTimeInMillis());
 		return gmtOffset / 3600000;
 	}
 
 	public static boolean isDaylightSavings() {
-		Calendar currentTime = new GregorianCalendar();
-		return currentTime.getTimeZone().inDaylightTime(currentTime.getTime());
+		Calendar now = new GregorianCalendar();
+		return now.getTimeZone().inDaylightTime(now.getTime());
 	}
 	public static Schedule today() {
 		GregorianCalendar now = new GregorianCalendar();
