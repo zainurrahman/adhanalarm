@@ -28,6 +28,10 @@
 					android:text="@string/rounding" android:layout_weight="1"
 					android:gravity="fill_vertical" />
 				<TextView android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/hijri_leap_year" android:layout_weight="1"
+					android:gravity="fill_vertical" />
+				<TextView android:layout_width="wrap_content"
 					android:layout_height="wrap_content" android:text="@string/offset"
 					android:layout_weight="1" android:gravity="fill_vertical" />
 			</LinearLayout>
@@ -47,6 +51,10 @@
 					android:layout_height="wrap_content"
 					android:numeric="signed|decimal" android:singleLine="true" />
 				<Spinner android:id="@+id/rounding_types"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:drawSelectorOnTop="true" />
+				<Spinner android:id="@+id/hijri_leap_year_patterns"
 					android:layout_width="fill_parent"
 					android:layout_height="wrap_content"
 					android:drawSelectorOnTop="true" />
