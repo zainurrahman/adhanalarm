@@ -3,6 +3,6 @@
 [http://code.google.com/p/adhanalarm http://adhanalarm.googlecode.com/svn/trunk/AdhanAlarm/res/drawable/icon.png]
 = Introduction =
 
-Adhân Alarm is an application designed for mobile phones running the [http://code.google.com/android/ Android mobile device software stack].  The purpose of the application is to inform the user of the Muslim prayer times for the day.  An additional feature is to use the accelerometer built into mobile devices to point towards the qibla (the direction of prayer for Muslims i.e. the Ka`ba in Mecca, Saudi Arabia).
+Adhân Alarm is an application designed for mobile phones running the [http://code.google.com/android/ Android mobile device software stack].  The purpose of the application is to inform the user of the Muslim prayer times for the day.  An additional feature is to use the accelerometer built into mobile devices to point towards the qibla (the direction of prayer for Muslims i.e. the Ka`ba in Mecca, Saudi Arabia).  As well the application displays the hijri date.
 
 [UserGuideInstallation 2. Installation >>]
