@@ -4,7 +4,6 @@
 
 The following features are planned:
 
- * Show date from Islamic calendar
  * Translations into multiple languages.  If you wish to help in the translation efforts, please send us a translation of the following file into your languages of choice:
   * [http://adhanalarm.googlecode.com/svn/trunk/AdhanAlarm/res/values/strings.xml strings.xml]
 
