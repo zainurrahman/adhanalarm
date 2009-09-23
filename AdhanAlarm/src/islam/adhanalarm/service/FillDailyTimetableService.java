@@ -36,7 +36,7 @@ public class FillDailyTimetableService extends Service {
 	public void onStart(Intent intent, int startId) {
 		try {
 			GregorianCalendar[] schedule = day.getTimes();
-			SimpleDateFormat timeFormat = new SimpleDateFormat ("h:mm a");
+			SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
 			short nextNotificationTime = day.nextTimeIndex();
 
 			for(short i = CONSTANT.FAJR; i <= CONSTANT.NEXT_FAJR; i++) {

@@ -50,16 +50,21 @@ public class Schedule {
 		}
 		return CONSTANT.NEXT_FAJR;
 	}
+	public boolean currentlyAfterSunset() {
+		Calendar now = new GregorianCalendar();
+		return now.after(schedule[CONSTANT.MAGHRIB]);
+	}
+
 	public static double getGMTOffset() {
 		Calendar now = new GregorianCalendar();
 		int gmtOffset = now.getTimeZone().getOffset(now.getTimeInMillis());
 		return gmtOffset / 3600000;
 	}
-
 	public static boolean isDaylightSavings() {
 		Calendar now = new GregorianCalendar();
 		return now.getTimeZone().inDaylightTime(now.getTime());
 	}
+
 	public static Schedule today() {
 		GregorianCalendar now = new GregorianCalendar();
 		if(today == null) {

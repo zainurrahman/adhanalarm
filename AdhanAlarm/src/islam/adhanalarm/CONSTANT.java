@@ -1,5 +1,7 @@
 package islam.adhanalarm;
 
+import org.joda.time.chrono.IslamicChronology;
+
 import net.sourceforge.jitl.Method;
 import net.sourceforge.jitl.Rounding;
 
@@ -54,6 +56,9 @@ public class CONSTANT {
 
 	public static final Rounding[] ROUNDING_TYPES = new Rounding[]{Rounding.NONE, Rounding.NORMAL, Rounding.SPECIAL, Rounding.AGRESSIVE};
 	public static final short DEFAULT_ROUNDING_TYPE = 2; // Special
+
+	public static final IslamicChronology.LeapYearPatternType[] HIJRI_LEAP_YEAR_PATTERNS = new IslamicChronology.LeapYearPatternType[]{IslamicChronology.LEAP_YEAR_15_BASED, IslamicChronology.LEAP_YEAR_16_BASED, IslamicChronology.LEAP_YEAR_HABASH_AL_HASIB, IslamicChronology.LEAP_YEAR_INDIAN};
+	public static final short DEFAULT_HIJRI_LEAP_YEAR_PATTERN = 1; // 16-based, most commonly used
 
 	private CONSTANT() {
 		// Private constructor to enforce un-instantiability.

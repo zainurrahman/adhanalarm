@@ -35,6 +35,12 @@ public class AdvancedSettingsDialog extends Dialog {
 		rounding_types.setAdapter(adapter);
 		rounding_types.setSelection(VARIABLE.settings.getInt("roundingTypesIndex", CONSTANT.DEFAULT_ROUNDING_TYPE));
 
+		Spinner hijri_leap_year_patterns = (Spinner)findViewById(R.id.hijri_leap_year_patterns);
+		adapter = ArrayAdapter.createFromResource(getContext(), R.array.hijri_leap_year_patterns, android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		hijri_leap_year_patterns.setAdapter(adapter);
+		hijri_leap_year_patterns.setSelection(VARIABLE.settings.getInt("hijriLeapYearPatternIndex", CONSTANT.DEFAULT_HIJRI_LEAP_YEAR_PATTERN));
+
 		((EditText)findViewById(R.id.offset_minutes)).setText(Integer.toString(VARIABLE.settings.getInt("offsetMinutes", 0)));
 
 		((Button)findViewById(R.id.save_settings)).setOnClickListener(new Button.OnClickListener() {
@@ -56,6 +62,7 @@ public class AdvancedSettingsDialog extends Dialog {
 					editor.putFloat("temperature", 10);
 				}
 				editor.putInt("roundingTypesIndex", ((Spinner)findViewById(R.id.rounding_types)).getSelectedItemPosition());
+				editor.putInt("hijriLeapYearPatternIndex", ((Spinner)findViewById(R.id.hijri_leap_year_patterns)).getSelectedItemPosition());
 				try {
 					editor.putInt("offsetMinutes", Integer.parseInt(((EditText)findViewById(R.id.offset_minutes)).getText().toString()));
 				} catch(Exception ex) {
@@ -71,6 +78,7 @@ public class AdvancedSettingsDialog extends Dialog {
 				((EditText)findViewById(R.id.temperature)).setText("10.0");
 				((EditText)findViewById(R.id.altitude)).setText("0.0");
 				((Spinner)findViewById(R.id.rounding_types)).setSelection(CONSTANT.DEFAULT_ROUNDING_TYPE);
+				((Spinner)findViewById(R.id.hijri_leap_year_patterns)).setSelection(CONSTANT.DEFAULT_HIJRI_LEAP_YEAR_PATTERN);
 				((EditText)findViewById(R.id.offset_minutes)).setText("0");
 			}
 		});

@@ -1,7 +1,5 @@
 package islam.adhanalarm.util;
 
-import islam.adhanalarm.R;
-
 import java.util.Locale;
 
 import android.app.Activity;
@@ -34,7 +32,6 @@ public class LocaleManager {
 		Configuration config = new Configuration();
 		config.locale = locale;
 		activity.getBaseContext().getResources().updateConfiguration(config, activity.getBaseContext().getResources().getDisplayMetrics());
-		activity.setTitle(R.string.app_name);
 
 		// Set the language index into the local LANGUAGE_KEYS array
 		for(int i = 0; i < LANGUAGE_KEYS.length; i++) {
