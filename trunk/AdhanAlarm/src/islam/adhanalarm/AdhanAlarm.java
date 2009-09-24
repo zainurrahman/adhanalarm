@@ -17,9 +17,6 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Locale;
 
-import org.joda.time.DateTime;
-import org.joda.time.chrono.IslamicChronology;
-
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -62,6 +59,7 @@ public class AdhanAlarm extends Activity {
 		super.onCreate(icicle);
 
 		localeManager = new LocaleManager(this);
+		setTitle(Schedule.today().hijriDateToString(this));
 		setContentView(R.layout.main);
 
 		for(int i = CONSTANT.FAJR; i <= CONSTANT.NEXT_FAJR; i++) {
@@ -256,16 +254,5 @@ public class AdhanAlarm extends Activity {
 	private void updateTodaysTimetableAndNotification() {
 		StartNotificationReceiver.setNext(this);
 		FillDailyTimetableService.set(this, Schedule.today(), timetable, timetableView);
-		setCurrentIslamicDateInTitle();
-	}
-	private void setCurrentIslamicDateInTitle() {
-		DateTime hijri = new DateTime().withChronology(IslamicChronology.getInstance(null, CONSTANT.HIJRI_LEAP_YEAR_PATTERNS[VARIABLE.settings.getInt("hijriLeapYearPatternIndex", CONSTANT.DEFAULT_HIJRI_LEAP_YEAR_PATTERN)]));
-		if(Schedule.today().currentlyAfterSunset()) {
-			hijri = hijri.plusDays(1);
-		}
-		String day = String.valueOf(hijri.getDayOfMonth());
-		String month = getResources().getStringArray(R.array.hijri_months)[hijri.getMonthOfYear() - 1];
-		String year = String.valueOf(hijri.getYear());
-		setTitle(getResources().getString(R.string.app_name) + " - " + day + " " + month + ", " + year + " " + getResources().getString(R.string.anno_hegirae));
 	}
 }

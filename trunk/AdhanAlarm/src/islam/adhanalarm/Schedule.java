@@ -3,14 +3,20 @@ package islam.adhanalarm;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import org.joda.time.DateTime;
+import org.joda.time.chrono.IslamicChronology;
+
+import android.content.Context;
+
 import net.sourceforge.jitl.Jitl;
 import net.sourceforge.jitl.Method;
 import net.sourceforge.jitl.Prayer;
 
 public class Schedule {
 
-	private static GregorianCalendar[] schedule = new GregorianCalendar[7];
-	private static boolean[] extremes = new boolean[7];
+	private GregorianCalendar[] schedule = new GregorianCalendar[7];
+	private boolean[] extremes = new boolean[7];
+	private DateTime hijriDate;
 
 	private static Schedule today;
 
@@ -33,6 +39,8 @@ public class Schedule {
 			extremes[i] = allTimes[i].isExtreme();
 		}
 		schedule[CONSTANT.NEXT_FAJR].add(Calendar.DAY_OF_MONTH, 1); // Next fajr is tomorrow
+
+		hijriDate = new DateTime().withChronology(IslamicChronology.getInstance(null, CONSTANT.HIJRI_LEAP_YEAR_PATTERNS[VARIABLE.settings.getInt("hijriLeapYearPatternIndex", CONSTANT.DEFAULT_HIJRI_LEAP_YEAR_PATTERN)]));
 	}
 	public GregorianCalendar[] getTimes() {
 		return schedule;
@@ -50,19 +58,20 @@ public class Schedule {
 		}
 		return CONSTANT.NEXT_FAJR;
 	}
-	public boolean currentlyAfterSunset() {
+
+	private boolean currentlyAfterSunset() {
 		Calendar now = new GregorianCalendar();
 		return now.after(schedule[CONSTANT.MAGHRIB]);
 	}
-
-	public static double getGMTOffset() {
-		Calendar now = new GregorianCalendar();
-		int gmtOffset = now.getTimeZone().getOffset(now.getTimeInMillis());
-		return gmtOffset / 3600000;
+	private DateTime currentHijriDate() {
+		return currentlyAfterSunset() ? hijriDate.plusDays(1) : hijriDate;
 	}
-	public static boolean isDaylightSavings() {
-		Calendar now = new GregorianCalendar();
-		return now.getTimeZone().inDaylightTime(now.getTime());
+	public String hijriDateToString(Context context) {
+		DateTime hijriDate = currentHijriDate();
+		String day = String.valueOf(hijriDate.getDayOfMonth());
+		String month = context.getResources().getStringArray(R.array.hijri_months)[hijriDate.getMonthOfYear() - 1];
+		String year = String.valueOf(hijriDate.getYear());
+		return day + " " + month + ", " + year + " " + context.getResources().getString(R.string.anno_hegirae);
 	}
 
 	public static Schedule today() {
@@ -79,5 +88,15 @@ public class Schedule {
 	}
 	public static void settingsChanged() {
 		today = null; // Nullifying causes a new today to be created with new settings when today() is called
+	}
+
+	public static double getGMTOffset() {
+		Calendar now = new GregorianCalendar();
+		int gmtOffset = now.getTimeZone().getOffset(now.getTimeInMillis());
+		return gmtOffset / 3600000;
+	}
+	public static boolean isDaylightSavings() {
+		Calendar now = new GregorianCalendar();
+		return now.getTimeZone().inDaylightTime(now.getTime());
 	}
 }
