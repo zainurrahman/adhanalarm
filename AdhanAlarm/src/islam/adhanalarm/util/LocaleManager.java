@@ -27,7 +27,8 @@ public class LocaleManager {
 		if(languageKey.equals("default")) {
 			languageKey = Locale.getDefault().getCountry();
 		}
-		Locale locale = new Locale(languageKey);
+		String country = Locale.getDefault().getISO3Country().toUpperCase();
+		Locale locale = new Locale(languageKey, country);
 		Locale.setDefault(locale);
 		Configuration config = new Configuration();
 		config.locale = locale;
