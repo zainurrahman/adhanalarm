@@ -3,12 +3,14 @@ package islam.adhanalarm.service;
 import java.lang.Runnable;
 import islam.adhanalarm.AdhanAlarm;
 import islam.adhanalarm.Notifier;
+import islam.adhanalarm.R;
 import islam.adhanalarm.VARIABLE;
 import islam.adhanalarm.WakeLock;
 import islam.adhanalarm.receiver.StartNotificationReceiver;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.IBinder;
 
 public class StartNotificationService extends Service {
@@ -34,7 +36,15 @@ public class StartNotificationService extends Service {
 			}
 
 			public void run() {
-				if(VARIABLE.settings == null) VARIABLE.settings = context.getSharedPreferences("settingsFile", Context.MODE_PRIVATE); // Started on device bootup
+				if(VARIABLE.settings == null) { // Started on device bootup
+					VARIABLE.settings = context.getSharedPreferences("settingsFile", Context.MODE_PRIVATE);
+					if(VARIABLE.settings.getBoolean("bismillahOnBootUp", false)) {
+						try {
+							MediaPlayer.create(context, R.raw.bismillah).start();
+						} catch(Exception ex) {
+						}
+					}
+				}
 
 				if(!VARIABLE.mainActivityIsRunning) {
 					StartNotificationReceiver.setNext(context);

@@ -1,9 +1,6 @@
 package islam.adhanalarm;
 
-import islam.adhanalarm.dialog.AdvancedSettingsDialog;
-import islam.adhanalarm.dialog.CalculationSettingsDialog;
-import islam.adhanalarm.dialog.InterfaceSettingsDialog;
-import islam.adhanalarm.dialog.NotificationSettingsDialog;
+import islam.adhanalarm.dialog.SettingsDialog;
 import islam.adhanalarm.receiver.StartNotificationReceiver;
 import islam.adhanalarm.service.FillDailyTimetableService;
 import islam.adhanalarm.util.LocaleManager;
@@ -13,14 +10,12 @@ import islam.adhanalarm.view.QiblaCompassView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Locale;
 
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -34,7 +29,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.OnHierarchyChangeListener;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TabHost;
@@ -83,11 +77,6 @@ public class AdhanAlarm extends Activity {
 			}
 		});
 
-		double gmtOffset = Schedule.getGMTOffset();
-		String plusMinusGMT = gmtOffset < 0 ? "" + gmtOffset : "+" + gmtOffset;
-		String daylightTime = Schedule.isDaylightSavings() ? " " + getString(R.string.daylight_savings) : "";
-		((TextView)findViewById(R.id.display_time_zone)).setText(getString(R.string.system_time_zone) + ": " + getString(R.string.gmt) + plusMinusGMT + " (" + new GregorianCalendar().getTimeZone().getDisplayName() + daylightTime + ")");
-
 		TabHost tabs = (TabHost)findViewById(R.id.tabs);
 		tabs.setup();
 		tabs.getTabWidget().setBackgroundResource(themeManager.getTabWidgetBackgroundColor());
@@ -113,32 +102,6 @@ public class AdhanAlarm extends Activity {
 			public void onAccuracyChanged(int s, int a) {
 			}
 		}; /* End of Tab 2 Items */
-
-		TabHost.TabSpec three = tabs.newTabSpec("three");
-		three.setContent(R.id.content3);
-		three.setIndicator(getString(R.string.settings), getResources().getDrawable(R.drawable.calculator));
-		tabs.addTab(three);
-
-		((Button)findViewById(R.id.set_calculation)).setOnClickListener(new Button.OnClickListener() {  
-			public void onClick(View v) {
-				showSettingsDialog(new CalculationSettingsDialog(v.getContext()));
-			}
-		});
-		((Button)findViewById(R.id.set_notification)).setOnClickListener(new Button.OnClickListener() {  
-			public void onClick(View v) {
-				showSettingsDialog(new NotificationSettingsDialog(v.getContext()));
-			}
-		});
-		((Button)findViewById(R.id.set_interface)).setOnClickListener(new Button.OnClickListener() {  
-			public void onClick(View v) {
-				showSettingsDialog(new InterfaceSettingsDialog(v.getContext(), themeManager, localeManager));
-			}
-		});
-		((Button)findViewById(R.id.set_advanced)).setOnClickListener(new Button.OnClickListener() {  
-			public void onClick(View v) {
-				showSettingsDialog(new AdvancedSettingsDialog(v.getContext()));
-			}
-		}); /* End of Tab 3 Items */
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -152,6 +115,31 @@ public class AdhanAlarm extends Activity {
 		dialogBuilder.setCancelable(true);
 		short time = Schedule.today().nextTimeIndex();
 		switch(item.getItemId()) {
+		case R.id.menu_settings:
+			SettingsDialog settingsDialog = new SettingsDialog(this, localeManager, themeManager);
+			settingsDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+				public void onDismiss(DialogInterface d) {
+					if(themeManager.isDirty() || localeManager.isDirty()) {
+						restart();
+					} else {
+						if(VARIABLE.settings.contains("latitude") && VARIABLE.settings.contains("longitude")) {
+							((TextView)findViewById(R.id.notes)).setText("");
+						}
+						Schedule.settingsChanged();
+						updateTodaysTimetableAndNotification();
+					}
+				}
+			});
+			settingsDialog.show();
+			break;
+		case R.id.menu_help:
+			dialogBuilder.setMessage(R.string.help_text);
+			dialogBuilder.create().show();
+			break;
+		case R.id.menu_information:
+			dialogBuilder.setMessage(R.string.information_text);
+			dialogBuilder.create().show();
+			break;
 		case R.id.menu_previous:
 			time--;
 			if(time < CONSTANT.FAJR) time = CONSTANT.ISHAA;
@@ -164,14 +152,6 @@ public class AdhanAlarm extends Activity {
 			break;
 		case R.id.menu_stop:
 			Notifier.stop();
-			break;
-		case R.id.menu_help:
-			dialogBuilder.setMessage(R.string.help_text);
-			dialogBuilder.create().show();
-			break;
-		case R.id.menu_information:
-			dialogBuilder.setMessage(R.string.information_text);
-			dialogBuilder.create().show();
 			break;
 		}
 		return super.onOptionsItemSelected(item);
@@ -198,23 +178,7 @@ public class AdhanAlarm extends Activity {
 		isTrackingOrientation = false;
 	}
 
-	private void showSettingsDialog(Dialog d) {
-		d.setOnDismissListener(new DialogInterface.OnDismissListener() {
-			public void onDismiss(DialogInterface d) {
-				if(themeManager.isDirty() || localeManager.isDirty()) {
-					restart();
-				} else {
-					if(VARIABLE.settings.contains("latitude") && VARIABLE.settings.contains("longitude")) {
-						((TextView)findViewById(R.id.notes)).setText("");
-					}
-					Schedule.settingsChanged();
-					updateTodaysTimetableAndNotification();
-				}
-			}
-		});
-		d.show();
-	}
-	private void restart() {
+	public void restart() {
 		long restartTime = Calendar.getInstance().getTimeInMillis() + CONSTANT.RESTART_DELAY;
 		AlarmManager am = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
 		am.set(AlarmManager.RTC_WAKEUP, restartTime, PendingIntent.getActivity(this, 0, getIntent(), PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_CANCEL_CURRENT));
@@ -251,7 +215,7 @@ public class AdhanAlarm extends Activity {
 		}
 	}
 
-	private void updateTodaysTimetableAndNotification() {
+	public void updateTodaysTimetableAndNotification() {
 		StartNotificationReceiver.setNext(this);
 		FillDailyTimetableService.set(this, Schedule.today(), timetable, timetableView);
 	}

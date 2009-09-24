@@ -16,9 +16,5 @@
 			android:layout_height="wrap_content">
 			<include android:id="@+id/content2" layout="@layout/tab_qibla" />
 		</ScrollView>
-		<ScrollView android:layout_width="fill_parent"
-			android:layout_height="wrap_content">
-			<include android:id="@+id/content3" layout="@layout/tab_settings" />
-		</ScrollView>
 	</FrameLayout>
 </TabHost>
