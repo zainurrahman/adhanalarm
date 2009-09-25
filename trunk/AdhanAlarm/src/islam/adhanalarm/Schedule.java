@@ -86,8 +86,11 @@ public class Schedule {
 		}
 		return today;
 	}
-	public static void settingsChanged() {
+	public static void setSettingsDirty() {
 		today = null; // Nullifying causes a new today to be created with new settings when today() is called
+	}
+	public static boolean settingsAreDirty() {
+		return today == null;
 	}
 
 	public static double getGMTOffset() {

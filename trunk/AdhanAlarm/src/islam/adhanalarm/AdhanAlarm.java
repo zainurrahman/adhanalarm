@@ -18,7 +18,6 @@ import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
@@ -116,21 +115,7 @@ public class AdhanAlarm extends Activity {
 		short time = Schedule.today().nextTimeIndex();
 		switch(item.getItemId()) {
 		case R.id.menu_settings:
-			SettingsDialog settingsDialog = new SettingsDialog(this, localeManager, themeManager);
-			settingsDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-				public void onDismiss(DialogInterface d) {
-					if(themeManager.isDirty() || localeManager.isDirty()) {
-						restart();
-					} else {
-						if(VARIABLE.settings.contains("latitude") && VARIABLE.settings.contains("longitude")) {
-							((TextView)findViewById(R.id.notes)).setText("");
-						}
-						Schedule.settingsChanged();
-						updateTodaysTimetableAndNotification();
-					}
-				}
-			});
-			settingsDialog.show();
+			new SettingsDialog(this, localeManager, themeManager).show();
 			break;
 		case R.id.menu_help:
 			dialogBuilder.setMessage(R.string.help_text);
@@ -157,6 +142,20 @@ public class AdhanAlarm extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		super.onWindowFocusChanged(hasFocus);
+		if(hasFocus && (themeManager.isDirty() || localeManager.isDirty())) {
+			restart();
+		} else if(hasFocus) {
+			if(VARIABLE.settings.contains("latitude") && VARIABLE.settings.contains("longitude")) {
+				((TextView)findViewById(R.id.notes)).setText("");
+			}
+			if(Schedule.settingsAreDirty()) {
+				updateTodaysTimetableAndNotification();
+			}
+		}
+	}
+	@Override
 	public void onResume() {
 		VARIABLE.mainActivityIsRunning = true;
 		updateTodaysTimetableAndNotification();
@@ -178,7 +177,7 @@ public class AdhanAlarm extends Activity {
 		isTrackingOrientation = false;
 	}
 
-	public void restart() {
+	private void restart() {
 		long restartTime = Calendar.getInstance().getTimeInMillis() + CONSTANT.RESTART_DELAY;
 		AlarmManager am = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
 		am.set(AlarmManager.RTC_WAKEUP, restartTime, PendingIntent.getActivity(this, 0, getIntent(), PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_CANCEL_CURRENT));
@@ -215,7 +214,7 @@ public class AdhanAlarm extends Activity {
 		}
 	}
 
-	public void updateTodaysTimetableAndNotification() {
+	private void updateTodaysTimetableAndNotification() {
 		StartNotificationReceiver.setNext(this);
 		FillDailyTimetableService.set(this, Schedule.today(), timetable, timetableView);
 	}
