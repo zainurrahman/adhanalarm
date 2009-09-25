@@ -39,10 +39,9 @@ public class StartNotificationService extends Service {
 				if(VARIABLE.settings == null) { // Started on device bootup
 					VARIABLE.settings = context.getSharedPreferences("settingsFile", Context.MODE_PRIVATE);
 					if(VARIABLE.settings.getBoolean("bismillahOnBootUp", false)) {
-						try {
-							MediaPlayer.create(context, R.raw.bismillah).start();
-						} catch(Exception ex) {
-						}
+						MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.bismillah);
+						mediaPlayer.setScreenOnWhilePlaying(true);
+						mediaPlayer.start();
 					}
 				}
 

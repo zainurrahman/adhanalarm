@@ -10,6 +10,7 @@ import islam.adhanalarm.util.ThemeManager;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +22,7 @@ public class SettingsDialog extends Dialog {
 
 	private LocaleManager localeManager;
 	private ThemeManager themeManager;
+	private static MediaPlayer mediaPlayer;
 
 	public SettingsDialog(Context context, LocaleManager localeManager, ThemeManager themeManager) {
 		super(context);
@@ -62,10 +64,27 @@ public class SettingsDialog extends Dialog {
 		((CheckBox)findViewById(R.id.bismillah_on_boot_up)).setChecked(VARIABLE.settings.getBoolean("bismillahOnBootUp", false));
 		((CheckBox)findViewById(R.id.bismillah_on_boot_up)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if(isChecked) {
+					mediaPlayer = MediaPlayer.create(getContext(), R.raw.bismillah);
+					mediaPlayer.setScreenOnWhilePlaying(true);
+					mediaPlayer.start();
+				} else {
+					if(mediaPlayer != null) mediaPlayer.stop();
+				}
 				SharedPreferences.Editor editor = VARIABLE.settings.edit();
 				editor.putBoolean("bismillahOnBootUp", isChecked);
 				editor.commit();
 			}
 		});
+	}
+
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		super.onWindowFocusChanged(hasFocus);
+		if(hasFocus && (themeManager.isDirty() || localeManager.isDirty())) {
+			dismiss();
+		} else if(hasFocus) {
+			Schedule.setSettingsDirty(); // Technically we should do it only when they have changed i.e. if Calculation or Advanced settings changed but this is easier
+		}
 	}
 }
