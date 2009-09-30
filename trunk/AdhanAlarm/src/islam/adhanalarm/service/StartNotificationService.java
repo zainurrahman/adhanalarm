@@ -36,14 +36,7 @@ public class StartNotificationService extends Service {
 			}
 
 			public void run() {
-				if(VARIABLE.settings == null) { // Started on device bootup
-					VARIABLE.settings = context.getSharedPreferences("settingsFile", Context.MODE_PRIVATE);
-					if(VARIABLE.settings.getBoolean("bismillahOnBootUp", false)) {
-						MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.bismillah);
-						mediaPlayer.setScreenOnWhilePlaying(true);
-						mediaPlayer.start();
-					}
-				}
+				if(VARIABLE.settings == null) VARIABLE.settings = context.getSharedPreferences("settingsFile", Context.MODE_PRIVATE);
 
 				if(!VARIABLE.mainActivityIsRunning) {
 					StartNotificationReceiver.setNext(context);
@@ -55,8 +48,19 @@ public class StartNotificationService extends Service {
 
 				short timeIndex = intent.getShortExtra("timeIndex", (short)-1);
 				long actualTime = intent.getLongExtra("actualTime", (long)0);
-				if(timeIndex == -1) {
-					WakeLock.release(); // Got here from boot so no need to notify current			
+				if(timeIndex == -1) { // Got here from boot
+					if(VARIABLE.settings.getBoolean("bismillahOnBootUp", false)) {
+						MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.bismillah);
+						mediaPlayer.setScreenOnWhilePlaying(true);
+						mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+							public void onCompletion(MediaPlayer mp) {
+								WakeLock.release();
+							}
+						});
+						mediaPlayer.start();
+					} else {
+						WakeLock.release();
+					}
 				} else {
 					Notifier.start(context, timeIndex, actualTime); // Notify the user for the current time, need to do this last since it releases the WakeLock
 				}
