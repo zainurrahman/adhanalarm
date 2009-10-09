@@ -20,7 +20,6 @@ public class Notifier {
 
 	public static void start(Context context, short timeIndex, long actualTime) {
 		Notifier.context = context;
-		stopNotification();
 
 		if(timeIndex == CONSTANT.NEXT_FAJR) timeIndex = CONSTANT.FAJR;
 
@@ -32,6 +31,7 @@ public class Notifier {
 			WakeLock.release();
 			return;
 		}
+		stopNotification(); // We put this after since we don't want to clear previous notifications unless we have to
 
 		int ringerMode = ((AudioManager)context.getSystemService(Context.AUDIO_SERVICE)).getRingerMode();
 		int callState = ((TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE)).getCallState();
