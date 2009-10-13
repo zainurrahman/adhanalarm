@@ -37,7 +37,6 @@ public class FillDailyTimetableService extends Service {
 		try {
 			GregorianCalendar[] schedule = day.getTimes();
 			SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
-			short nextNotificationTime = day.nextTimeIndex();
 
 			for(short i = CONSTANT.FAJR; i <= CONSTANT.NEXT_FAJR; i++) {
 				String fullTime = timeFormat.format(schedule[i].getTime());
@@ -46,13 +45,7 @@ public class FillDailyTimetableService extends Service {
 				timetable.get(i).put("time_am_pm", fullTime.substring(fullTime.lastIndexOf(" ") + 1, fullTime.length()) + (day.isExtreme(i) ? "*" : ""));
 				if(day.isExtreme(i)) ((TextView)parent.findViewById(R.id.notes)).setText("* " + getString(R.string.extreme));
 			}
-
-			int previousNotificationTime = nextNotificationTime - 1 < CONSTANT.FAJR ? CONSTANT.ISHAA : nextNotificationTime - 1;
-
-			if(!VARIABLE.alertSunrise() && nextNotificationTime == CONSTANT.SUNRISE) nextNotificationTime = CONSTANT.DHUHR;
-			if(!VARIABLE.alertSunrise() && previousNotificationTime == CONSTANT.SUNRISE) previousNotificationTime = CONSTANT.FAJR;
-
-			timetable.get(nextNotificationTime).put("mark", getString(R.string.next_time_marker));
+			timetable.get(day.nextTimeIndex()).put("mark", getString(R.string.next_time_marker));
 
 			timetableView.notifyDataSetChanged();
 
