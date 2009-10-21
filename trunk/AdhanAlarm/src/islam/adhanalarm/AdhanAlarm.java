@@ -23,6 +23,7 @@ import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -75,6 +76,10 @@ public class AdhanAlarm extends Activity {
 			public void onChildViewRemoved(View parent, View child) {
 			}
 		});
+		DisplayMetrics displayMetrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+		((ListView)findViewById(R.id.timetable)).getLayoutParams().height = displayMetrics.heightPixels * 3/5;
+		((ListView)findViewById(R.id.timetable)).getLayoutParams().width =  displayMetrics.widthPixels  * 4/5;
 
 		TabHost tabs = (TabHost)findViewById(R.id.tabs);
 		tabs.setup();
