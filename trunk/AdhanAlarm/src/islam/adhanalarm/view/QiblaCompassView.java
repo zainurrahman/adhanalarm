@@ -22,7 +22,7 @@ public class QiblaCompassView extends View {
 	private String bearingNorthString;
 	private TextView bearingQibla;
 	private String bearingQiblaString;
-	private DecimalFormat df = new DecimalFormat("#.###");
+	private DecimalFormat df = new DecimalFormat("0.000");
 	private Bitmap compassBackground;
 	private Bitmap compassNeedle;
 	private Matrix rotateNeedle = new Matrix();
@@ -44,11 +44,18 @@ public class QiblaCompassView extends View {
 		initCompassView();
 	}
 
+	@Override
+	public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+		setMeasuredDimension(width, height);
+	}
+
 	private void initCompassView() {
+		compassNeedle = BitmapFactory.decodeResource(getResources(), R.drawable.compass_needle);
+		compassBackground = BitmapFactory.decodeResource(getResources(), R.drawable.compass_background);
+		width = compassBackground.getWidth();
+		height = compassBackground.getHeight();
 		centre_x = width  * 0.5f;
 		centre_y = height * 0.5f;
-		compassBackground = BitmapFactory.decodeResource(getResources(), R.drawable.compass_background);
-		compassNeedle = BitmapFactory.decodeResource(getResources(), R.drawable.compass_needle);
 		rotateNeedle.postTranslate(centre_x - compassNeedle.getWidth() + 10, centre_y - compassNeedle.getHeight() + 10);
 		invalidate();
 	}
