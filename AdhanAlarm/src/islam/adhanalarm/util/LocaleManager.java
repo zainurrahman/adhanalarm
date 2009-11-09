@@ -32,7 +32,10 @@ public class LocaleManager {
 		Locale.setDefault(locale);
 		Configuration config = new Configuration();
 		config.locale = locale;
-		activity.getBaseContext().getResources().updateConfiguration(config, activity.getBaseContext().getResources().getDisplayMetrics());
+		
+		if(!android.os.Build.VERSION.RELEASE.equals("2.0")) { // Breaks on Eclair due to restart bug
+			activity.getBaseContext().getResources().updateConfiguration(config, activity.getBaseContext().getResources().getDisplayMetrics());
+		}
 
 		// Set the language index into the local LANGUAGE_KEYS array
 		for(int i = 0; i < LANGUAGE_KEYS.length; i++) {
