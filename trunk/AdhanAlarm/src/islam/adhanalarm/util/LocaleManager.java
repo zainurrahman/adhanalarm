@@ -13,7 +13,7 @@ public class LocaleManager {
 
 	private static final short DEFAULT_LANGUAGE = 0; // LANGUAGE_KEYS[0] == "default" (represents the default system language (i.e. not necessarily English))
 
-	public static final String[] LANGUAGE_KEYS = new String[]{"default", "en", "de", "fr", "ru", "tr"};
+	public static final String[] LANGUAGE_KEYS = new String[]{"default", "en", "de", "fr", "it", "ru", "tr"};
 
 	/**
 	 * This class should be instantiated after an activity's super.onCreate() call but before setContentView()
@@ -33,9 +33,7 @@ public class LocaleManager {
 		Configuration config = new Configuration();
 		config.locale = locale;
 		
-		if(!android.os.Build.VERSION.RELEASE.equals("2.0")) { // Breaks on Eclair due to restart bug
-			activity.getBaseContext().getResources().updateConfiguration(config, activity.getBaseContext().getResources().getDisplayMetrics());
-		}
+		activity.getBaseContext().getResources().updateConfiguration(config, activity.getBaseContext().getResources().getDisplayMetrics());
 
 		// Set the language index into the local LANGUAGE_KEYS array
 		for(int i = 0; i < LANGUAGE_KEYS.length; i++) {
