@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="description">Menampilkan dan bisa memberitahu kepada anda jadwal adzan sehari-hari.</string>
+    <string name="previous">Sebelumnya</string>
+    <string name="next">Lanjut</string>
+    <string name="help">Bantuan</string>
+    <string name="help_text"><u>Frequently Asked Questions</u>\n\nQ: Kenapa waktu adzan tidak sesuai dengan waktu lokal saya?\n\nA: Banyak sekali faktor yang mempengaruhi penjadwalan termasuk parameter masukan (seperti latitude, longitude, metode perhitungan, ...), perbedaan algoritma dan perbedaan presisi tergantung dengan komputasi pada mesin yang berbeda.\n\nQ: Kenapa kompas kiblat tidak mengarah ke arah yang benar?\n\nA: Pastikan latitude dan longitude anda telah disesuaikan dengan benar dan handphone anda jauh dari pengaruh elektromagnetik.\n\nQ: Kenapa fitur favorit saya tidak ada di aplikasi ini?\n\nA: Mohon kunjungi website proyek di <u>adhanalarm.googlecode.com</u> dan bantu kami dalam mengembangkan program ini.\n</string>
+    <string name="information">Informasi</string>
+    <string name="information_text"><u>Informasi</u>\n\nUntuk informasi tentang program ini kunjungi:\n<u>adhanalarm.googlecode.com</u>\n\nUntuk informasi lebih lanjut mengenai Islam kunjungi:\n<u>www.spiritofislam.com</u></string>
+    <string name="today">Hari ini</string>
+    <string name="fajr">Subuh</string>
+    <string name="sunrise">Pagi</string>
+    <string name="dhuhr">Dhuhur</string>
+    <string name="asr">Asharr</string>
+    <string name="ishaa">`Isha\'</string>
+    <string name="next_fajr">Subuh berikutnya</string>
+    <string name="error_playing_alert">Peringatan Jalannya Error</string>
+    <string name="location_not_set"><u>Lokasi Belum Ditentukan</u>\n\nMohon aktifkan GPS perangkat anda atau tentukan lokasi secara manual lewat setting.</string>
+    <string name="allahu_akbar">Allahu Akbar</string>
+    <string name="time_for">Waktunya untuk</string>
+    <string name="qibla">Kiblat</string>
+    <string name="compass_disclaimer">Kompas bekerja di mode portrait.</string>
+    <string name="settings">Setting</string>
+    <string name="bismillah_on_boot_up">Bismillah Ketika Mulai Hidup</string>
+    <string name="notification">Pemberitahuan</string>
+    <string name="sinterface">Antar muka</string>
+    <string name="extra_alerts">Peringatan Extra</string>
+    <string name="daylight_savings">Penghematan Siang hari</string>
+    <string name="lookup_gps">Cari via \nGPS</string>
+    <string name="save">Simpan</string>
+    <string name="calculation">Metode Perhitungan</string>
+    <string name="altitude">Ketinggian</string>
+    <string name="pressure">Tekanan</string>
+    <string name="temperature">Temperatur</string>
+    <string name="rounding">Pembulatan</string>
+    <string name="special">Spesial</string>
+    <string name="aggressive">Aggresif</string>
+    <string name="minutes">menit</string>
+    <string name="language">Bahasa</string>
+</resources>
