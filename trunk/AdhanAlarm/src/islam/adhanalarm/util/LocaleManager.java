@@ -13,7 +13,7 @@ public class LocaleManager {
 
 	private static final short DEFAULT_LANGUAGE = 0; // LANGUAGE_KEYS[0] == "default" (represents the default system language (i.e. not necessarily English))
 
-	public static final String[] LANGUAGE_KEYS = new String[]{"default", "en", "de", "fr", "it", "ru", "tr"};
+	public static final String[] LANGUAGE_KEYS = new String[]{"default", "en", "de", "fr", "in", "it", "ru", "tr"};
 
 	/**
 	 * This class should be instantiated after an activity's super.onCreate() call but before setContentView()
