@@ -18,10 +18,12 @@ import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Menu;
@@ -115,21 +117,8 @@ public class AdhanAlarm extends Activity {
 	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-		dialogBuilder.setCancelable(true);
 		short time = Schedule.today().nextTimeIndex();
 		switch(item.getItemId()) {
-		case R.id.menu_settings:
-			new SettingsDialog(this, localeManager, themeManager).show();
-			break;
-		case R.id.menu_help:
-			dialogBuilder.setMessage(R.string.help_text);
-			dialogBuilder.create().show();
-			break;
-		case R.id.menu_information:
-			dialogBuilder.setMessage(R.string.information_text);
-			dialogBuilder.create().show();
-			break;
 		case R.id.menu_previous:
 			time--;
 			if(time < CONSTANT.FAJR) time = CONSTANT.ISHAA;
@@ -142,6 +131,18 @@ public class AdhanAlarm extends Activity {
 			break;
 		case R.id.menu_stop:
 			Notifier.stop();
+			break;
+		case R.id.menu_settings:
+			new SettingsDialog(this, localeManager, themeManager).show();
+			break;
+		case R.id.more_applications:
+			startActivity(new Intent("android.intent.action.VIEW", Uri.parse("market://search?q=pub:%22Cantan%20Group%20Inc.%22")));
+			break;
+		case R.id.menu_help:
+			new AlertDialog.Builder(this).setTitle(R.string.help).setMessage(R.string.help_text).create().show();
+			break;
+		case R.id.menu_information:
+			new AlertDialog.Builder(this).setTitle(R.string.information).setMessage(R.string.information_text).create().show();
 			break;
 		}
 		return super.onOptionsItemSelected(item);
