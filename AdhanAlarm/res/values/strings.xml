@@ -62,11 +62,6 @@
     <string name="pressure">Pressure</string>
     <string name="temperature">Temperature</string>
     <string name="rounding">Rounding</string>
-    <string name="hijri_leap_year">Hijri Leap Year</string>
-    <string name="ly_15based">15-based</string>
-    <string name="ly_16based">16-based</string>
-    <string name="ly_habash_al_hasib">Habash al-Hasib</string>
-    <string name="ly_indian">Indian</string>
     <string name="normal">Normal</string>
     <string name="special">Special</string>
     <string name="aggressive">Aggressive</string>
