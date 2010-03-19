@@ -36,12 +36,6 @@
         <item>@string/month10</item>
         <item>@string/month11</item>
     </array>
-    <array name="hijri_leap_year_patterns">
-        <item>@string/ly_15based</item>
-        <item>@string/ly_16based</item>
-        <item>@string/ly_habash_al_hasib</item>
-        <item>@string/ly_indian</item>
-    </array>
     <array name="languages">
         <item>@string/sdefault</item>
         <item>English</item>

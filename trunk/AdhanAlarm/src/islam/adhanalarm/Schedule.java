@@ -3,9 +3,6 @@ package islam.adhanalarm;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import org.joda.time.DateTime;
-import org.joda.time.chrono.IslamicChronology;
-
 import android.content.Context;
 
 import net.sourceforge.jitl.Jitl;
@@ -16,7 +13,7 @@ public class Schedule {
 
 	private GregorianCalendar[] schedule = new GregorianCalendar[7];
 	private boolean[] extremes = new boolean[7];
-	private DateTime hijriDate;
+	private fi.joensuu.joyds1.calendar.Calendar hijriDate;
 
 	private static Schedule today;
 
@@ -40,7 +37,7 @@ public class Schedule {
 		}
 		schedule[CONSTANT.NEXT_FAJR].add(Calendar.DAY_OF_MONTH, 1); // Next fajr is tomorrow
 
-		hijriDate = new DateTime().withChronology(IslamicChronology.getInstance(null, CONSTANT.HIJRI_LEAP_YEAR_PATTERNS[VARIABLE.settings.getInt("hijriLeapYearPatternIndex", CONSTANT.DEFAULT_HIJRI_LEAP_YEAR_PATTERN)]));
+		hijriDate = new fi.joensuu.joyds1.calendar.IslamicCalendar();
 	}
 	public GregorianCalendar[] getTimes() {
 		return schedule;
@@ -63,13 +60,16 @@ public class Schedule {
 		Calendar now = new GregorianCalendar();
 		return now.after(schedule[CONSTANT.MAGHRIB]);
 	}
-	private DateTime currentHijriDate() {
-		return currentlyAfterSunset() ? hijriDate.plusDays(1) : hijriDate;
+	private fi.joensuu.joyds1.calendar.Calendar currentHijriDate() {
+		if(currentlyAfterSunset()) {
+			hijriDate.addDays(1);
+		}
+		return hijriDate;
 	}
 	public String hijriDateToString(Context context) {
-		DateTime hijriDate = currentHijriDate();
-		String day = String.valueOf(hijriDate.getDayOfMonth());
-		String month = context.getResources().getStringArray(R.array.hijri_months)[hijriDate.getMonthOfYear() - 1];
+		fi.joensuu.joyds1.calendar.Calendar hijriDate = currentHijriDate();
+		String day = String.valueOf(hijriDate.getDay());
+		String month = context.getResources().getStringArray(R.array.hijri_months)[hijriDate.getMonth() - 1];
 		String year = String.valueOf(hijriDate.getYear());
 		return day + " " + month + ", " + year + " " + context.getResources().getString(R.string.anno_hegirae);
 	}
