@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Adhān Alarm</string>
     <string name="description">Displays and can alert you to the daily Muslim prayer times.</string>
+    <string name="adhan_timetable">Adhān Timetable</string>
     <string name="previous">Previous</string>
     <string name="next">Next</string>
     <string name="stop">Stop</string>
@@ -18,7 +19,8 @@
     <string name="maghrib">Maghrib</string>
     <string name="ishaa">`Ishaa\'</string>
     <string name="next_fajr">Next Fajr</string>
-    <string name="next_time_marker">></string>
+    <string name="next_time_marker">&gt;</string>
+    <string name="next_time_marker_reverse">&lt;</string>
     <string name="sdefault">Default</string>
     <string name="error_playing_alert">Error Playing Alert</string>
     <string name="error_playing_custom_file">Custom File Error</string>
