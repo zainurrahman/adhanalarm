@@ -1,5 +1,6 @@
 package islam.adhanalarm;
 
+import islam.adhanalarm.widget.NextNotificationWidgetProvider;
 import islam.adhanalarm.widget.TimetableWidgetProvider;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -43,5 +44,6 @@ public class VARIABLE {
 	
 	public static void updateWidgets(Context context) {
 		TimetableWidgetProvider.setLatestTimetable(context);
+		NextNotificationWidgetProvider.setNextTime(context);
 	}
 }
