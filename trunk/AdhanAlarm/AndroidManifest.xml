@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="islam.adhanalarm" android:versionCode="92" android:versionName="1.0.90" xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest package="islam.adhanalarm" android:versionCode="93" android:versionName="1.0.91" xmlns:android="http://schemas.android.com/apk/res/android">
 	<uses-sdk android:minSdkVersion="1" android:targetSdkVersion="4" />
 	<supports-screens />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -25,11 +25,17 @@
         <receiver android:name=".receiver.ClearNotificationReceiver" />
         <service android:name=".service.FillDailyTimetableService" />
         <service android:name=".service.StartNotificationService" />
-	    <receiver android:name=".TimetableWidgetProvider" android:label="@string/adhan_timetable">
+	    <receiver android:name=".widget.TimetableWidgetProvider" android:label="@string/adhan_timetable">
 		    <intent-filter>
 		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
 		    </intent-filter>
-	    	<meta-data android:name="android.appwidget.provider" android:resource="@xml/timetable_widget" />
+	    	<meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_timetable" />
+		</receiver>
+	    <receiver android:name=".widget.NextNotificationWidgetProvider" android:label="@string/adhan_next_notification">
+		    <intent-filter>
+		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+		    </intent-filter>
+	    	<meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_next_notification" />
 		</receiver>
     </application>
 </manifest>

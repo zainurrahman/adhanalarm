@@ -158,6 +158,7 @@ public class AdhanAlarm extends Activity {
 			}
 			if(Schedule.settingsAreDirty()) {
 				updateTodaysTimetableAndNotification();
+				VARIABLE.updateWidgets(this);
 			}
 		}
 	}
@@ -198,6 +199,7 @@ public class AdhanAlarm extends Activity {
 				editor.putFloat("latitude", (float)currentLocation.getLatitude());
 				editor.putFloat("longitude", (float)currentLocation.getLongitude());
 				editor.commit();
+				VARIABLE.updateWidgets(this);
 			} catch(Exception ex) {
 				((TextView)findViewById(R.id.notes)).setText(getString(R.string.location_not_set));
 			}
@@ -211,6 +213,7 @@ public class AdhanAlarm extends Activity {
 					if(Arrays.asList(CONSTANT.CALCULATION_METHOD_COUNTRY_CODES[i]).contains(country)) {
 						editor.putInt("calculationMethodsIndex", i);
 						editor.commit();
+						VARIABLE.updateWidgets(this);
 						break;
 					}
 				}

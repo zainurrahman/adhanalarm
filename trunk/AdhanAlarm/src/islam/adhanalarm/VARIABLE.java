@@ -1,5 +1,6 @@
 package islam.adhanalarm;
 
+import islam.adhanalarm.widget.TimetableWidgetProvider;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Criteria;
@@ -38,5 +39,9 @@ public class VARIABLE {
 	public static boolean alertSunrise() {
 		if(settings == null) return false;
 		return settings.getInt("notificationMethod" + CONSTANT.SUNRISE, CONSTANT.NOTIFICATION_NONE) != CONSTANT.NOTIFICATION_NONE;
+	}
+	
+	public static void updateWidgets(Context context) {
+		TimetableWidgetProvider.setLatestTimetable(context);
 	}
 }

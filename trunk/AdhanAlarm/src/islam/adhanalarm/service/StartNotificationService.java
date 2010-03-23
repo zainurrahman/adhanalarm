@@ -4,7 +4,6 @@ import java.lang.Runnable;
 import islam.adhanalarm.AdhanAlarm;
 import islam.adhanalarm.Notifier;
 import islam.adhanalarm.R;
-import islam.adhanalarm.TimetableWidgetProvider;
 import islam.adhanalarm.VARIABLE;
 import islam.adhanalarm.WakeLock;
 import islam.adhanalarm.receiver.StartNotificationReceiver;
@@ -47,7 +46,7 @@ public class StartNotificationService extends Service {
 					startActivity(i); // Update the gui marker and set the notification for the next prayer
 				}
 
-				TimetableWidgetProvider.setLatestTimetable(context);
+				VARIABLE.updateWidgets(context);
 
 				short timeIndex = intent.getShortExtra("timeIndex", (short)-1);
 				long actualTime = intent.getLongExtra("actualTime", (long)0);

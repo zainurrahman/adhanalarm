@@ -60,15 +60,8 @@ public class Schedule {
 		Calendar now = new GregorianCalendar();
 		return now.after(schedule[CONSTANT.MAGHRIB]);
 	}
-	private fi.joensuu.joyds1.calendar.Calendar currentHijriDate() {
-		if(currentlyAfterSunset()) {
-			hijriDate.addDays(1);
-		}
-		return hijriDate;
-	}
 	public String hijriDateToString(Context context) {
-		fi.joensuu.joyds1.calendar.Calendar hijriDate = currentHijriDate();
-		String day = String.valueOf(hijriDate.getDay());
+		String day = String.valueOf(hijriDate.getDay() + (currentlyAfterSunset() ? 1 : 0));
 		String month = context.getResources().getStringArray(R.array.hijri_months)[hijriDate.getMonth() - 1];
 		String year = String.valueOf(hijriDate.getYear());
 		return day + " " + month + ", " + year + " " + context.getResources().getString(R.string.anno_hegirae);
