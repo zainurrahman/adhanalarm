@@ -17,7 +17,7 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 
 public class NextNotificationWidgetProvider extends AppWidgetProvider {
-	private static final int[] times = new int[]{R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr, R.string.maghrib, R.string.ishaa};
+	private static final int[] times = new int[]{R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr, R.string.maghrib, R.string.ishaa, R.string.next_fajr};
 	private static final SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
 
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
