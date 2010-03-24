@@ -3,6 +3,7 @@ package islam.adhanalarm;
 import islam.adhanalarm.dialog.SettingsDialog;
 import islam.adhanalarm.receiver.StartNotificationReceiver;
 import islam.adhanalarm.service.FillDailyTimetableService;
+import islam.adhanalarm.util.GateKeeper;
 import islam.adhanalarm.util.LocaleManager;
 import islam.adhanalarm.util.ThemeManager;
 import islam.adhanalarm.view.QiblaCompassView;
@@ -25,12 +26,16 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.OnHierarchyChangeListener;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TabHost;
@@ -49,6 +54,7 @@ public class AdhanAlarm extends Activity {
 
 	@Override
 	public void onCreate(Bundle icicle) {
+		VARIABLE.context = this;
 		if(VARIABLE.settings == null) VARIABLE.settings = getSharedPreferences("settingsFile", MODE_PRIVATE);
 
 		themeManager = new ThemeManager(this);
@@ -139,10 +145,22 @@ public class AdhanAlarm extends Activity {
 			startActivity(new Intent("android.intent.action.VIEW", Uri.parse("market://search?q=pub:%22Cantan%20Group%20Inc.%22")));
 			break;
 		case R.id.menu_help:
-			new AlertDialog.Builder(this).setTitle(R.string.help).setMessage(R.string.help_text).create().show();
+			SpannableString s = new SpannableString(getText(R.string.help_text));
+			Linkify.addLinks(s, Linkify.WEB_URLS);
+			LinearLayout help = (LinearLayout)getLayoutInflater().inflate(R.layout.help, null);
+			TextView message = (TextView)help.findViewById(R.id.help);
+			message.setText(s);
+			message.setMovementMethod(LinkMovementMethod.getInstance());
+			new AlertDialog.Builder(this).setTitle(R.string.help).setView(help).setPositiveButton(android.R.string.ok, null).create().show();
 			break;
 		case R.id.menu_information:
-			new AlertDialog.Builder(this).setTitle(R.string.information).setMessage(R.string.information_text).create().show();
+			s = new SpannableString(getText(R.string.information_text).toString().replace("#", GateKeeper.getVersionName()));
+			Linkify.addLinks(s, Linkify.WEB_URLS);
+			LinearLayout information = (LinearLayout)getLayoutInflater().inflate(R.layout.information, null);
+			message = (TextView)information.findViewById(R.id.information);
+			message.setText(s);
+			message.setMovementMethod(LinkMovementMethod.getInstance());
+			new AlertDialog.Builder(this).setIcon(R.drawable.icon).setTitle(R.string.app_name).setView(information).setPositiveButton(android.R.string.ok, null).create().show();
 			break;
 		}
 		return super.onOptionsItemSelected(item);

@@ -4,9 +4,9 @@
     <string name="previous">Sebelumnya</string>
     <string name="next">Lanjut</string>
     <string name="help">Bantuan</string>
-    <string name="help_text"><u>Frequently Asked Questions</u>\n\nQ: Kenapa waktu adzan tidak sesuai dengan waktu lokal saya?\n\nA: Banyak sekali faktor yang mempengaruhi penjadwalan termasuk parameter masukan (seperti latitude, longitude, metode perhitungan, ...), perbedaan algoritma dan perbedaan presisi tergantung dengan komputasi pada mesin yang berbeda.\n\nQ: Kenapa kompas kiblat tidak mengarah ke arah yang benar?\n\nA: Pastikan latitude dan longitude anda telah disesuaikan dengan benar dan handphone anda jauh dari pengaruh elektromagnetik.\n\nQ: Kenapa fitur favorit saya tidak ada di aplikasi ini?\n\nA: Mohon kunjungi website proyek di <u>adhanalarm.googlecode.com</u> dan bantu kami dalam mengembangkan program ini.\n</string>
+    <string name="help_text"><u>Frequently Asked Questions</u>\n\nQ: Kenapa waktu adzan tidak sesuai dengan waktu lokal saya?\n\nA: Banyak sekali faktor yang mempengaruhi penjadwalan termasuk parameter masukan (seperti latitude, longitude, metode perhitungan, ...), perbedaan algoritma dan perbedaan presisi tergantung dengan komputasi pada mesin yang berbeda.\n\nQ: Kenapa kompas kiblat tidak mengarah ke arah yang benar?\n\nA: Pastikan latitude dan longitude anda telah disesuaikan dengan benar dan handphone anda jauh dari pengaruh elektromagnetik.\n\nQ: Kenapa fitur favorit saya tidak ada di aplikasi ini?\n\nA: Mohon kunjungi website proyek di adhanalarm.googlecode.com dan bantu kami dalam mengembangkan program ini.</string>
     <string name="information">Informasi</string>
-    <string name="information_text"><u>Informasi</u>\n\nUntuk informasi tentang program ini kunjungi:\n<u>adhanalarm.googlecode.com</u>\n\nUntuk informasi lebih lanjut mengenai Islam kunjungi:\n<u>www.spiritofislam.com</u></string>
+    <string name="information_text">Untuk informasi tentang program ini kunjungi:\nadhanalarm.googlecode.com\n\nUntuk informasi lebih lanjut mengenai Islam kunjungi:\nwww.spiritofislam.com\n\nVersion: #</string>
     <string name="today">Hari ini</string>
     <string name="fajr">Subuh</string>
     <string name="sunrise">Pagi</string>

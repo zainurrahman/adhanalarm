@@ -3,9 +3,9 @@
     <string name="app_name">Azan Alarmı</string>
     <string name="description">Günlük namaz vakitlerini görüntüler ve sizi uyarabilir.</string>
     <string name="help">Yardım</string>
-    <string name="help_text"><u>Sık Sık Sorulan Sorular</u>\n\nS: Neden namaz vakitleri yerel takvimle eşleşmiyor?\n\nC: Buna etki eden birçok faktörler vardir, örneğin, giriş parametreleri (enlem, boylam, hesaplama yöntemi, ...), algoritmik ve farklı makinelerdeki hesaplama hassaslık farklılıkları.\n\nS: Neden pusula Kıbleyi doğru yönde göstermiyor?\n\nC: Enlem ve boylam doğru ayarlanmış olduğunu onaylayın ve telefonuzu elektro-manyetik etkileşimden uzak tutun.\n\nS: Neden en sevdiğim özellik daha eklenmemiştir?\n\nC: Lütfen <u>adhanalarm.googlecode.com</u> adresindeki proje web sitesini ziyaret edin ve bize programı geliştirmeye yardımcı olun.\n</string>
+    <string name="help_text"><u>Sık Sık Sorulan Sorular</u>\n\nS: Neden namaz vakitleri yerel takvimle eşleşmiyor?\n\nC: Buna etki eden birçok faktörler vardir, örneğin, giriş parametreleri (enlem, boylam, hesaplama yöntemi, ...), algoritmik ve farklı makinelerdeki hesaplama hassaslık farklılıkları.\n\nS: Neden pusula Kıbleyi doğru yönde göstermiyor?\n\nC: Enlem ve boylam doğru ayarlanmış olduğunu onaylayın ve telefonuzu elektro-manyetik etkileşimden uzak tutun.\n\nS: Neden en sevdiğim özellik daha eklenmemiştir?\n\nC: Lütfen adhanalarm.googlecode.com adresindeki proje web sitesini ziyaret edin ve bize programı geliştirmeye yardımcı olun.</string>
     <string name="information">Bilgi</string>
-    <string name="information_text"><u>Bilgi</u>\n\nProgram hakkında daha fazla bilgi için:\n<u>adhanalarm.googlecode.com</u>\n\nİslâm hakkında daha fazla bilgi için:\n<u>www.spiritofislam.com</u></string>
+    <string name="information_text">Program hakkında daha fazla bilgi için:\nadhanalarm.googlecode.com\n\nİslâm hakkında daha fazla bilgi için:\nwww.spiritofislam.com\n\nVersion: #</string>
     <string name="today">Bugün</string>
     <string name="fajr">İmsak</string>
     <string name="sunrise">Güneş</string>
