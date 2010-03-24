@@ -18,17 +18,18 @@ public class VARIABLE {
 	public static Location getCurrentLocation(Context context) {
 		Criteria criteria = new Criteria();
 		criteria.setAccuracy(Criteria.ACCURACY_FINE);
-		criteria.setAltitudeRequired(false);
-		criteria.setBearingRequired(false);
 		criteria.setCostAllowed(true);
-		criteria.setPowerRequirement(Criteria.POWER_LOW);
 
 		LocationManager locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
 		Location currentLocation = null;
 		try {
 			currentLocation = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, true));
+			if(currentLocation == null) {
+				criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+				currentLocation = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, true));
+			}
 		} catch(Exception ex) {
-			// GPS or wireless networks is disabled
+			// GPS and wireless networks are disabled
 		}
 		return currentLocation;
 	}
@@ -41,7 +42,7 @@ public class VARIABLE {
 		if(settings == null) return false;
 		return settings.getInt("notificationMethod" + CONSTANT.SUNRISE, CONSTANT.NOTIFICATION_NONE) != CONSTANT.NOTIFICATION_NONE;
 	}
-	
+
 	public static void updateWidgets(Context context) {
 		TimetableWidgetProvider.setLatestTimetable(context);
 		NextNotificationWidgetProvider.setNextTime(context);
