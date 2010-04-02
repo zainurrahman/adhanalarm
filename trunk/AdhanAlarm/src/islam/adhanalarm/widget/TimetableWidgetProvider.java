@@ -24,8 +24,10 @@ public class TimetableWidgetProvider extends AppWidgetProvider {
 	private static final SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm");
 	private static final SimpleDateFormat amPmFormat = new SimpleDateFormat("a");
 
+	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 		setLatestTimetable(context, appWidgetManager, appWidgetIds);
+		super.onUpdate(context, appWidgetManager, appWidgetIds);
 	}
 
 	public static void setLatestTimetable(Context context) {
