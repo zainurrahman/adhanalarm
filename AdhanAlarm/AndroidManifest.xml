@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="islam.adhanalarm" android:versionCode="98" android:versionName="1.0.97" xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest package="islam.adhanalarm" android:versionCode="99" android:versionName="1.0.98" xmlns:android="http://schemas.android.com/apk/res/android">
 	<uses-sdk android:minSdkVersion="1" android:targetSdkVersion="4" />
 	<supports-screens />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />

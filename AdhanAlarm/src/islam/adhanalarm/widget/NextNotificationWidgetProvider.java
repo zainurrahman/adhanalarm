@@ -20,8 +20,10 @@ public class NextNotificationWidgetProvider extends AppWidgetProvider {
 	private static final int[] times = new int[]{R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr, R.string.maghrib, R.string.ishaa, R.string.next_fajr};
 	private static final SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
 
+	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 		setNextTime(context, appWidgetManager, appWidgetIds);
+		super.onUpdate(context, appWidgetManager, appWidgetIds);
 	}
 
 	public static void setNextTime(Context context) {
