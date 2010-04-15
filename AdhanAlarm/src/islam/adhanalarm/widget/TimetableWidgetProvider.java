@@ -1,6 +1,7 @@
 package islam.adhanalarm.widget;
 
 import islam.adhanalarm.AdhanAlarm;
+import islam.adhanalarm.CONSTANT;
 import islam.adhanalarm.R;
 import islam.adhanalarm.Schedule;
 import islam.adhanalarm.VARIABLE;
@@ -21,9 +22,6 @@ public class TimetableWidgetProvider extends AppWidgetProvider {
 	private static final int[] am_pms = new int[]{R.id.fajr_am_pm, R.id.sunrise_am_pm, R.id.dhuhr_am_pm, R.id.asr_am_pm, R.id.maghrib_am_pm, R.id.ishaa_am_pm, R.id.next_fajr_am_pm};
 	private static final int[] markers = new int[]{R.id.fajr_marker, R.id.sunrise_marker, R.id.dhuhr_marker, R.id.asr_marker, R.id.maghrib_marker, R.id.ishaa_marker, R.id.next_fajr_marker};
 
-	private static final SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm");
-	private static final SimpleDateFormat amPmFormat = new SimpleDateFormat("a");
-
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 		setLatestTimetable(context, appWidgetManager, appWidgetIds);
@@ -38,6 +36,12 @@ public class TimetableWidgetProvider extends AppWidgetProvider {
 	private static void setLatestTimetable(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 		if(VARIABLE.settings == null) VARIABLE.settings = context.getSharedPreferences("settingsFile", Context.MODE_PRIVATE);
 
+		SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm");
+		if(VARIABLE.settings.getInt("timeFormatIndex", CONSTANT.DEFAULT_TIME_FORMAT) != CONSTANT.DEFAULT_TIME_FORMAT) {
+			timeFormat = new SimpleDateFormat("k:mm");
+		}
+		final SimpleDateFormat amPmFormat = new SimpleDateFormat("a");
+
 		final GregorianCalendar[] schedule = Schedule.today().getTimes();
 		for(int i = 0; i < appWidgetIds.length; i++) {
 			RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_timetable);
@@ -47,7 +51,12 @@ public class TimetableWidgetProvider extends AppWidgetProvider {
 
 			for(int j = 0; j < times.length; j++) {
 				views.setTextViewText(times[j], timeFormat.format(schedule[j].getTime()));
-				views.setTextViewText(am_pms[j], amPmFormat.format(schedule[j].getTime()));
+				if(VARIABLE.settings.getInt("timeFormatIndex", CONSTANT.DEFAULT_TIME_FORMAT) == CONSTANT.DEFAULT_TIME_FORMAT) {
+					views.setTextViewText(am_pms[j], amPmFormat.format(schedule[j].getTime()));
+				} else {
+
+					views.setTextViewText(am_pms[j], "");
+				}
 				views.setTextViewText(markers[j], j == Schedule.today().nextTimeIndex() ? context.getString(R.string.next_time_marker_reverse) : "");
 			}
 			appWidgetManager.updateAppWidget(appWidgetIds[i], views);

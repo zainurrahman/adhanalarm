@@ -37,12 +37,19 @@ public class FillDailyTimetableService extends Service {
 		try {
 			GregorianCalendar[] schedule = day.getTimes();
 			SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
+			if(VARIABLE.settings.getInt("timeFormatIndex", CONSTANT.DEFAULT_TIME_FORMAT) != CONSTANT.DEFAULT_TIME_FORMAT) {
+				timeFormat = new SimpleDateFormat("k:mm ");
+			}
 
 			for(short i = CONSTANT.FAJR; i <= CONSTANT.NEXT_FAJR; i++) {
 				String fullTime = timeFormat.format(schedule[i].getTime());
 				timetable.get(i).put("mark", ""); // Clear all existing markers since we're going to set the next one
 				timetable.get(i).put("time", fullTime.substring(0, fullTime.lastIndexOf(" ")));
-				timetable.get(i).put("time_am_pm", fullTime.substring(fullTime.lastIndexOf(" ") + 1, fullTime.length()) + (day.isExtreme(i) ? "*" : ""));
+				if(VARIABLE.settings.getInt("timeFormatIndex", CONSTANT.DEFAULT_TIME_FORMAT) == CONSTANT.DEFAULT_TIME_FORMAT) {
+					timetable.get(i).put("time_am_pm", fullTime.substring(fullTime.lastIndexOf(" ") + 1, fullTime.length()) + (day.isExtreme(i) ? "*" : ""));
+				} else {
+					timetable.get(i).put("time_am_pm", day.isExtreme(i) ? "*" : "");
+				}
 				if(day.isExtreme(i)) ((TextView)parent.findViewById(R.id.notes)).setText("* " + getString(R.string.extreme));
 			}
 			timetable.get(day.nextTimeIndex()).put("mark", getString(R.string.next_time_marker));
