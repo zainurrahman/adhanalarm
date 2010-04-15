@@ -15,9 +15,9 @@ public class WakeLock {
 	}
 
 	public static void release() {
-		if(wakeLock != null) {
+		if(wakeLock != null && wakeLock.isHeld()) {
 			wakeLock.release();
-			wakeLock = null;
 		}
+		wakeLock = null;
 	}
 }

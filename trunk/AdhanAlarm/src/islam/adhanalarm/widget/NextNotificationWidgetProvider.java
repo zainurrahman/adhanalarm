@@ -1,6 +1,7 @@
 package islam.adhanalarm.widget;
 
 import islam.adhanalarm.AdhanAlarm;
+import islam.adhanalarm.CONSTANT;
 import islam.adhanalarm.R;
 import islam.adhanalarm.Schedule;
 import islam.adhanalarm.VARIABLE;
@@ -18,7 +19,6 @@ import android.widget.RemoteViews;
 
 public class NextNotificationWidgetProvider extends AppWidgetProvider {
 	private static final int[] times = new int[]{R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr, R.string.maghrib, R.string.ishaa, R.string.next_fajr};
-	private static final SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
 
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -33,6 +33,10 @@ public class NextNotificationWidgetProvider extends AppWidgetProvider {
 	}
 	private static void setNextTime(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 		if(VARIABLE.settings == null) VARIABLE.settings = context.getSharedPreferences("settingsFile", Context.MODE_PRIVATE);
+		SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
+		if(VARIABLE.settings.getInt("timeFormatIndex", CONSTANT.DEFAULT_TIME_FORMAT) != CONSTANT.DEFAULT_TIME_FORMAT) {
+			timeFormat = new SimpleDateFormat("k:mm");
+		}
 
 		final int nextTimeIndex = Schedule.today().nextTimeIndex();
 		final GregorianCalendar nextTime = Schedule.today().getTimes()[nextTimeIndex];
