@@ -5,6 +5,7 @@ import islam.adhanalarm.CONSTANT;
 import islam.adhanalarm.R;
 import islam.adhanalarm.Schedule;
 import islam.adhanalarm.VARIABLE;
+import islam.adhanalarm.util.LocaleManager;
 
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
@@ -32,12 +33,14 @@ public class NextNotificationWidgetProvider extends AppWidgetProvider {
 		setNextTime(context, appWidgetManager, appWidgetIds);
 	}
 	private static void setNextTime(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-		if(VARIABLE.settings == null) VARIABLE.settings = context.getSharedPreferences("settingsFile", Context.MODE_PRIVATE);
+		VARIABLE.context = context.getApplicationContext();
+		VARIABLE.settings = VARIABLE.context.getSharedPreferences("settingsFile", Context.MODE_PRIVATE);
+		new LocaleManager();
+
 		SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
 		if(VARIABLE.settings.getInt("timeFormatIndex", CONSTANT.DEFAULT_TIME_FORMAT) != CONSTANT.DEFAULT_TIME_FORMAT) {
 			timeFormat = new SimpleDateFormat("k:mm");
 		}
-
 		final int nextTimeIndex = Schedule.today().nextTimeIndex();
 		final GregorianCalendar nextTime = Schedule.today().getTimes()[nextTimeIndex];
 		for(int i = 0; i < appWidgetIds.length; i++) {

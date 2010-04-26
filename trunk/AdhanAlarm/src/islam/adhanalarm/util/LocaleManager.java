@@ -1,13 +1,13 @@
 package islam.adhanalarm.util;
 
+import islam.adhanalarm.VARIABLE;
+
 import java.util.Locale;
 
-import android.app.Activity;
 import android.content.res.Configuration;
 
 public class LocaleManager {
 
-	private Activity activity;
 	private boolean languageDirty = false;
 	private int languageIndex = DEFAULT_LANGUAGE;
 
@@ -19,11 +19,9 @@ public class LocaleManager {
 	 * This class should be instantiated after an activity's super.onCreate() call but before setContentView()
 	 * @param a The activity which will get set to the language specified in settings
 	 */
-	public LocaleManager(Activity a) {
-		activity = a;
-
+	public LocaleManager() {
 		// Set the language based on settings
-		String languageKey = activity.getSharedPreferences("settingsFile", Activity.MODE_PRIVATE).getString("locale", LANGUAGE_KEYS[DEFAULT_LANGUAGE]);
+		String languageKey = VARIABLE.settings.getString("locale", LANGUAGE_KEYS[DEFAULT_LANGUAGE]);
 		if(languageKey.equals("default")) {
 			languageKey = Locale.getDefault().getCountry();
 		}
@@ -33,7 +31,7 @@ public class LocaleManager {
 		Configuration config = new Configuration();
 		config.locale = locale;
 		
-		activity.getBaseContext().getResources().updateConfiguration(config, activity.getBaseContext().getResources().getDisplayMetrics());
+		VARIABLE.context.getResources().updateConfiguration(config, VARIABLE.context.getResources().getDisplayMetrics());
 
 		// Set the language index into the local LANGUAGE_KEYS array
 		for(int i = 0; i < LANGUAGE_KEYS.length; i++) {
