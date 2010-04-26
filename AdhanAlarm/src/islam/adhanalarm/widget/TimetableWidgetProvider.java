@@ -5,6 +5,7 @@ import islam.adhanalarm.CONSTANT;
 import islam.adhanalarm.R;
 import islam.adhanalarm.Schedule;
 import islam.adhanalarm.VARIABLE;
+import islam.adhanalarm.util.LocaleManager;
 
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
@@ -18,6 +19,8 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 
 public class TimetableWidgetProvider extends AppWidgetProvider {
+	private static final int[] text = new int[]{R.id.fajr_text, R.id.sunrise_text, R.id.dhuhr_text, R.id.asr_text, R.id.maghrib_text, R.id.ishaa_text, R.id.next_fajr_text};
+	private static final int[] locale_text = new int[]{R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr, R.string.maghrib, R.string.ishaa, R.string.next_fajr};
 	private static final int[] times = new int[]{R.id.fajr, R.id.sunrise, R.id.dhuhr, R.id.asr, R.id.maghrib, R.id.ishaa, R.id.next_fajr};
 	private static final int[] am_pms = new int[]{R.id.fajr_am_pm, R.id.sunrise_am_pm, R.id.dhuhr_am_pm, R.id.asr_am_pm, R.id.maghrib_am_pm, R.id.ishaa_am_pm, R.id.next_fajr_am_pm};
 	private static final int[] markers = new int[]{R.id.fajr_marker, R.id.sunrise_marker, R.id.dhuhr_marker, R.id.asr_marker, R.id.maghrib_marker, R.id.ishaa_marker, R.id.next_fajr_marker};
@@ -34,7 +37,9 @@ public class TimetableWidgetProvider extends AppWidgetProvider {
 		setLatestTimetable(context, appWidgetManager, appWidgetIds);
 	}
 	private static void setLatestTimetable(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-		if(VARIABLE.settings == null) VARIABLE.settings = context.getSharedPreferences("settingsFile", Context.MODE_PRIVATE);
+		VARIABLE.context = context.getApplicationContext();
+		VARIABLE.settings = VARIABLE.context.getSharedPreferences("settingsFile", Context.MODE_PRIVATE);
+		new LocaleManager();
 
 		SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm");
 		if(VARIABLE.settings.getInt("timeFormatIndex", CONSTANT.DEFAULT_TIME_FORMAT) != CONSTANT.DEFAULT_TIME_FORMAT) {
@@ -50,6 +55,7 @@ public class TimetableWidgetProvider extends AppWidgetProvider {
 			views.setOnClickPendingIntent(R.id.widget_timetable, pendingIntent);
 
 			for(int j = 0; j < times.length; j++) {
+				views.setTextViewText(text[j], context.getText(locale_text[j]));
 				views.setTextViewText(times[j], timeFormat.format(schedule[j].getTime()));
 				if(VARIABLE.settings.getInt("timeFormatIndex", CONSTANT.DEFAULT_TIME_FORMAT) == CONSTANT.DEFAULT_TIME_FORMAT) {
 					views.setTextViewText(am_pms[j], amPmFormat.format(schedule[j].getTime()));

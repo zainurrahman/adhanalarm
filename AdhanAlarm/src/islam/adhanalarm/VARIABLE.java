@@ -10,7 +10,7 @@ import android.location.LocationManager;
 
 public class VARIABLE {
 
-	public static AdhanAlarm context;
+	public static Context context;
 	public static SharedPreferences settings;
 	public static boolean mainActivityIsRunning = false;
 

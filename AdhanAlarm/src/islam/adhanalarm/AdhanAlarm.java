@@ -60,7 +60,7 @@ public class AdhanAlarm extends Activity {
 		themeManager = new ThemeManager(this);
 		super.onCreate(icicle);
 
-		localeManager = new LocaleManager(this);
+		localeManager = new LocaleManager();
 		setTitle(Schedule.today().hijriDateToString(this));
 		setContentView(R.layout.main);
 
@@ -169,6 +169,7 @@ public class AdhanAlarm extends Activity {
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
 		if(hasFocus && (themeManager.isDirty() || localeManager.isDirty())) {
+			VARIABLE.updateWidgets(this);
 			restart();
 		} else if(hasFocus) {
 			if(VARIABLE.settings.contains("latitude") && VARIABLE.settings.contains("longitude")) {
