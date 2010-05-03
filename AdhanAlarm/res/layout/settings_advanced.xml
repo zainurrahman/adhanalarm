@@ -37,9 +37,15 @@
 				<EditText android:id="@+id/pressure" android:text="1010"
 					android:layout_width="fill_parent" android:layout_height="wrap_content"
 					android:numeric="signed|decimal" android:singleLine="true" />
-				<EditText android:id="@+id/temperature" android:text="10"
-					android:layout_width="fill_parent" android:layout_height="wrap_content"
-					android:numeric="signed|decimal" android:singleLine="true" />
+				<LinearLayout android:orientation="horizontal"
+					android:layout_height="wrap_content" android:layout_width="fill_parent">
+					<EditText android:id="@+id/temperature" android:text="10"
+						android:layout_width="90dip" android:layout_height="wrap_content"
+						android:numeric="signed|decimal" android:singleLine="true" />
+					<TextView android:layout_width="wrap_content"
+						android:layout_height="wrap_content" android:text="@string/degrees_celsius"
+						android:padding="5px" />
+				</LinearLayout>
 				<Spinner android:id="@+id/rounding_types"
 					android:layout_width="fill_parent" android:layout_height="wrap_content"
 					android:drawSelectorOnTop="true" />

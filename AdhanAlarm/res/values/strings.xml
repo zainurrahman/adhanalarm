@@ -66,6 +66,7 @@
     <string name="altitude">Altitude</string>
     <string name="pressure">Pressure</string>
     <string name="temperature">Temperature</string>
+    <string name="degrees_celsius">°C</string>
     <string name="rounding">Rounding</string>
     <string name="normal">Normal</string>
     <string name="special">Special</string>
