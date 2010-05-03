@@ -14,11 +14,11 @@
     <string name="more_applications">Aplikasi lain</string>
     <string name="today">Hari Ini</string>
     <string name="fajr">Subuh</string>
-    <string name="sunrise">Matahari Terbit</string>
-    <string name="dhuhr">Dhuhur</string>
+    <string name="sunrise">Syuruq</string>
+    <string name="dhuhr">Zhuhur</string>
     <string name="asr">Ashar</string>
-    <string name="ishaa">Isya'</string>
-    <string name="next_fajr">Subuh Berikutnya</string>
+    <string name="ishaa">Isya</string>
+    <string name="next_fajr">Subuh Esok</string>
     <string name="error_playing_alert">Gagal Menggunakan Alert</string>
     <string name="error_playing_custom_file">Gagal Membuka File</string>
     <string name="location_not_set"><u>Lokasi Belum Dipilih</u>\n\nHarap menyalakan GPS di perangkat, atau masukkan lokasi anda melalui pengaturan.</string>
@@ -55,7 +55,7 @@
     <string name="north_america">Persatuan Islam Amerika Utara</string>
     <string name="muslim_league">Perkumpulan Umat Muslim Dunia</string>
     <string name="umm_alqurra">Ummul Qura, Arab Saudi</string>
-    <string name="fixed_ishaa">Jeda Tetap Isya' (selalu 90)</string>
+    <string name="fixed_ishaa">Jeda Tetap Isya\' (selalu 90)</string>
     <string name="time_format">Tampilan Waktu</string>
     <string name="clock_24_hour">Tampilan 24 Jam</string>
     <string name="altitude">Ketinggian</string>
@@ -74,15 +74,15 @@
     <string name="light">Terang</string>
     <string name="month0">Muharram</string>
     <string name="month1">Syafar</string>
-    <string name="month2">Rabi'ul Awal</string>
-    <string name="month3">Rabi'ul Akir</string>
+    <string name="month2">Rabi\'ul Awal</string>
+    <string name="month3">Rabi\'ul Akir</string>
     <string name="month4">Jumadil Awal</string>
     <string name="month5">Jumadil Akir</string>
     <string name="month6">Rajab</string>
-    <string name="month7">Sya'ban</string>
+    <string name="month7">Sya\'ban</string>
     <string name="month8">Ramadhan</string>
     <string name="month9">Syawal</string>
-    <string name="month10">Dzulqa'idah</string>
+    <string name="month10">Dzulqa\'idah</string>
     <string name="month11">Dzulhijjah</string>
     <string name="anno_hegirae">H</string>
 </resources>
