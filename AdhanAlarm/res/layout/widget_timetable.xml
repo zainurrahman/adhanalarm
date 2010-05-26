@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_height="fill_parent" android:layout_width="fill_parent"
-	android:orientation="vertical" android:background="@drawable/appwidget_bg"
-	android:id="@+id/widget_timetable">
+	android:orientation="vertical" android:background="@drawable/appwidget_background"
+	android:id="@+id/widget_timetable" android:focusable="true"
+	android:clickable="true">
 	<LinearLayout android:layout_height="fill_parent"
 		android:layout_width="fill_parent" android:orientation="vertical">
 		<LinearLayout android:layout_height="fill_parent"
