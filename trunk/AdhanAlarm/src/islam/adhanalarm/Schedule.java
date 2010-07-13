@@ -61,9 +61,17 @@ public class Schedule {
 		return now.after(schedule[CONSTANT.MAGHRIB]);
 	}
 	public String hijriDateToString(Context context) {
-		String day = String.valueOf(hijriDate.getDay() + (currentlyAfterSunset() ? 1 : 0));
+		boolean addedDay = false;
+		if(currentlyAfterSunset()) {
+			addedDay = true;
+			hijriDate.addDays(1);
+		}
+		String day = String.valueOf(hijriDate.getDay());
 		String month = context.getResources().getStringArray(R.array.hijri_months)[hijriDate.getMonth() - 1];
 		String year = String.valueOf(hijriDate.getYear());
+		if(addedDay) {
+			hijriDate.addDays(-1); // Revert to the day independent of sunset
+		}
 		return day + " " + month + ", " + year + " " + context.getResources().getString(R.string.anno_hegirae);
 	}
 
