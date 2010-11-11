@@ -700,17 +700,22 @@ public class Jitl {
 	}
 	
 	static double getAssr(double Lat, double dec, Mathhab mathhab) {
-		double part1, part2, part3, part4;
+		double part1, part2, part3, part4, ndec;
 		int mathhabValue = (mathhab == Mathhab.SHAAFI ? 1 : 2);
+		double rlat = Utils.DEG_TO_RAD(Lat);
 		
-		part1 = mathhabValue + Math.tan(Utils.DEG_TO_RAD(Lat) - dec);
-		if (part1 < 1 || Lat < 0)
-			part1 = mathhabValue - Math.tan(Utils.DEG_TO_RAD(Lat) - dec);
+		/* Reverse if at or near the southern hemisphere - Modified by Imran, copied from libitl-0.7.0 */
+		ndec = dec;
+		if (Lat < 0)
+			ndec = -dec;
+		part1 = mathhabValue + Math.tan(rlat - ndec);
+		if (part1 < 1)
+			part1 = mathhabValue - Math.tan(rlat - ndec);
 		
 		part2 = (Utils.PI / 2.0) - Math.atan(part1);
-		part3 = Math.sin(part2) - Math.sin(Utils.DEG_TO_RAD(Lat))
-		* Math.sin(dec);
-		part4 = (part3 / (Math.cos(Utils.DEG_TO_RAD(Lat)) * Math.cos(dec)));
+		/* Compute the hour angle - Modified by Imran, copied from libitl-0.7.0 */
+		part3 = Math.sin(part2) - Math.sin(rlat) * Math.sin(ndec);
+		part4 = (part3 / (Math.cos(rlat) * Math.cos(ndec)));
 		
 		/*  if (part4 > 1) */
 		/*      return 99; */
