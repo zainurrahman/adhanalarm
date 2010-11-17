@@ -42,8 +42,9 @@
     </array>
     <array name="languages">
         <item>@string/sdefault</item>
-        <item>English</item>
         <item>Deutsch</item>
+        <item>English</item>
+        <item>Español</item>
         <item>Français</item>
         <item>Indonesia</item>
         <item>Italiano</item>
