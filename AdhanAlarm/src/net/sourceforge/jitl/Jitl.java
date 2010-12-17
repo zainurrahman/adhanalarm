@@ -706,15 +706,17 @@ public class Jitl {
 		
 		/* Reverse if at or near the southern hemisphere - Modified by Imran, copied from libitl-0.7.0 */
 		ndec = dec;
-		if (Lat < 0)
+		if (Lat < 0.0) {
 			ndec = -dec;
+		}
 		part1 = mathhabValue + Math.tan(rlat - ndec);
-		if (part1 < 1)
+		if (part1 < 1.0) {
 			part1 = mathhabValue - Math.tan(rlat - ndec);
+		}
 		
 		part2 = (Utils.PI / 2.0) - Math.atan(part1);
 		/* Compute the hour angle - Modified by Imran, copied from libitl-0.7.0 */
-		part3 = Math.sin(part2) - Math.sin(rlat) * Math.sin(ndec);
+		part3 = Math.sin(part2) - (Math.sin(rlat) * Math.sin(ndec));
 		part4 = (part3 / (Math.cos(rlat) * Math.cos(ndec)));
 		
 		/*  if (part4 > 1) */
