@@ -41,9 +41,9 @@ public class TimetableWidgetProvider extends AppWidgetProvider {
 		VARIABLE.settings = VARIABLE.context.getSharedPreferences("settingsFile", Context.MODE_PRIVATE);
 		new LocaleManager();
 
-		SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm");
+		SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm");
 		if(VARIABLE.settings.getInt("timeFormatIndex", CONSTANT.DEFAULT_TIME_FORMAT) != CONSTANT.DEFAULT_TIME_FORMAT) {
-			timeFormat = new SimpleDateFormat("k:mm");
+			timeFormat = new SimpleDateFormat("HH:mm");
 		}
 		final SimpleDateFormat amPmFormat = new SimpleDateFormat("a");
 
