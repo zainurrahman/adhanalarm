@@ -77,11 +77,15 @@ public class FillDailyTimetableService extends Service {
 			((TextView)parent.findViewById(R.id.current_qibla_min)).setText(String.valueOf(qibla.getMinute()));
 			((TextView)parent.findViewById(R.id.current_qibla_sec)).setText(df.format(qibla.getSecond()));
 		} catch(Exception ex) {
-			java.io.StringWriter sw = new java.io.StringWriter();
-			java.io.PrintWriter pw = new java.io.PrintWriter(sw, true);
-			ex.printStackTrace(pw);
-			pw.flush(); sw.flush();
-			((TextView)parent.findViewById(R.id.notes)).setText(sw.toString());
+			try {
+				java.io.StringWriter sw = new java.io.StringWriter();
+				java.io.PrintWriter pw = new java.io.PrintWriter(sw, true);
+				ex.printStackTrace(pw);
+				pw.flush(); sw.flush();
+				((TextView)parent.findViewById(R.id.notes)).setText(sw.toString());
+			} catch(Exception ex2) {
+				// App must not be open (ex. killed from app history), prevent a force close
+			}
 		}
 	}
 
